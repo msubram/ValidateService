@@ -15,9 +15,48 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_validate" >
+            android:name=".RegistrationStep1"
+            android:label="@string/app_name"
+            android:imeOptions="actionDone|flagNoExtractUi"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:configChanges="orientation|screenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity
+            android:name=".RegistrationStep2"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:label="@string/registration_step2_title_textview"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:imeOptions="actionDone|flagNoExtractUi"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize">
+
+        </activity>
+        <activity
+            android:name=".UpdateScreen"
+            android:label="@string/user_info_title"
+            android:imeOptions="actionDone|flagNoExtractUi"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:configChanges="orientation|screenSize">
+
+        </activity>
+
+        <activity
+            android:name=".ValidateScreen"
+            android:label="@string/validation_title"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:imeOptions="actionDone|flagNoExtractUi"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize"/>
+
 
     </application>
 
