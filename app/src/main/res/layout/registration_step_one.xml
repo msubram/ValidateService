@@ -24,10 +24,11 @@
             android:layout_height="match_parent">
         <ImageView
             android:id="@+id/imageview_logo"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
            android:layout_gravity="center"
+            android:src="@drawable/app_logo"
             android:gravity="center"/>
         </RelativeLayout>
 
@@ -87,30 +88,28 @@
             android:paddingRight="60dp"
             android:paddingLeft="60dp"
             android:layout_weight="1">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:textSize="@dimen/small_textsize"
-                android:textColor="@color/Black"
-                android:gravity="center"
-                android:lineSpacingExtra="2dp"
-                android:text="@string/registration_step1_mobile_number_textview"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:textSize="@dimen/small_textsize"
-                android:inputType="number"
-                android:layout_weight="1"
-                android:id="@+id/edittext_mobile_number"
-                android:gravity="center"/>
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:textColor="@color/Black"
+                    android:textSize="@dimen/small_textsize"
+                    android:gravity="center"
+                    android:lineSpacingExtra="2dp"
+                    android:text="@string/registration_step1_country"/>
+                <Spinner
+                    android:id="@+id/country_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/small_textsize"
+                    android:entries="@array/registration_step1_country_array"
+                    android:prompt="@string/registration_step1_country_prompt" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -137,22 +136,25 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:textColor="@color/Black"
                 android:textSize="@dimen/small_textsize"
+                android:textColor="@color/Black"
                 android:gravity="center"
                 android:lineSpacingExtra="2dp"
-                android:text="@string/registration_step1_country"/>
-            <Spinner
-                android:id="@+id/spinner_country"
+                android:text="@string/registration_step1_mobile_number_textview"/>
+            <EditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:textSize="@dimen/small_textsize"
-                android:entries="@array/registration_step1_country_array"
-                android:prompt="@string/registration_step1_country_prompt" />
-        </LinearLayout>
+                android:inputType="number"
+                android:layout_weight="1"
+                android:id="@+id/user_mobile_number"
+                android:gravity="center"/>
+            </LinearLayout>
         </RelativeLayout>
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -170,14 +172,13 @@
                 android:paddingLeft="60dp"
                 android:layout_height="match_parent">
             <Button
+                android:id="@+id/button_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:layout_centerInParent="true"
                 android:textSize="@dimen/small_textsize"
-                android:background="@drawable/bluebuttonshape"
-                android:id="@+id/button_register"
                 android:text="@string/registration_step1_register_button"
                 android:gravity="center"/>
             </RelativeLayout>

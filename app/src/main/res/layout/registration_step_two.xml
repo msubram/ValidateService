@@ -27,10 +27,11 @@
             android:layout_height="match_parent">
         <ImageView
             android:id="@+id/imageview_logo"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
+            android:src="@drawable/app_logo"
             android:gravity="center"/>
         </RelativeLayout>
 
@@ -237,7 +238,6 @@
                 android:layout_weight="1"
                 android:textSize="@dimen/small_textsize"
                 android:id="@+id/button_retry"
-                android:background="@drawable/redbuttonshape"
                 android:layout_marginRight="5dp"
                 android:text="@string/registration_step2_retry_button"
                 android:gravity="center"/>
@@ -248,7 +248,6 @@
                 android:layout_weight="1"
                 android:textSize="@dimen/small_textsize"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/bluebuttonshape"
                 android:id="@+id/button_complete"
                 android:text="@string/registration_step2_complete_button"
                 android:gravity="center"/>

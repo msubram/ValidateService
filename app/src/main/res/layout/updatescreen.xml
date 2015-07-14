@@ -26,10 +26,11 @@
                 android:layout_height="match_parent">
                 <ImageView
                     android:id="@+id/imageview_logo"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center"
+                    android:src="@drawable/app_logo"
                     android:gravity="center"/>
             </RelativeLayout>
 
@@ -96,7 +97,7 @@
                         android:windowSoftInputMode="adjustResize|stateHidden"
                         android:inputType="number"
                         android:layout_weight="1"
-                        android:id="@+id/edittext_work_number"
+                        android:id="@+id/work_number"
                         android:gravity="center"/>
                 </LinearLayout>
             </RelativeLayout>
@@ -140,7 +141,7 @@
                         android:textSize="@dimen/small_textsize"
                         android:windowSoftInputMode="adjustResize|stateHidden"
                         android:inputType="number"
-                        android:id="@+id/edittext_home_number"
+                        android:id="@+id/home_number"
                         android:gravity="center"/>
                 </LinearLayout>
             </RelativeLayout>
@@ -171,7 +172,6 @@
                         android:layout_weight="1"
                         android:textSize="@dimen/small_textsize"
                         android:id="@+id/button_update"
-                        android:background="@drawable/bluebuttonshape"
                         android:layout_marginRight="5dp"
                         android:text="@string/user_info_update_button"
                         android:gravity="center"/>

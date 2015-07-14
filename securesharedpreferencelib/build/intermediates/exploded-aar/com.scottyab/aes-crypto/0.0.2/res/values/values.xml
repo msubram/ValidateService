@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/Users/scottab/dev/code/lib/java-aes-crypto/aes-crypto/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="app_name">Aes-crypto</string>
+</resources>

@@ -11,14 +11,11 @@
     <string name="registration_step1_register_button">Register</string>
     <string name="registration_step1_country_prompt">Choose a country</string>
     <string name="registration_step1_title_textview">Registration : Step-1</string>
+
     <string-array name="registration_step1_country_array">
         <item>United Kingdom</item>
-        <item>Spain</item>
-        <item>France</item>
-        <item>Italy</item>
-        <item>Denmark</item>
-        <item>Hungary</item>
-        <item>Austria</item>
+        <item>India</item>
+
     </string-array>
 
 

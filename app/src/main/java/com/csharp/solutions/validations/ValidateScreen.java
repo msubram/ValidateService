@@ -27,9 +27,6 @@ public class ValidateScreen extends ActionBarActivity {
         setContentView(R.layout.validatescreen);
         add_views();
 
-        Drawable logo_drawable = getResources().getDrawable(getResources().getIdentifier("logo", "drawable", getPackageName()));
-        Bitmap logo_bitmap = ((BitmapDrawable) logo_drawable).getBitmap();
-        logo.setImageBitmap(logo_bitmap);
 
         validate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +61,8 @@ public class ValidateScreen extends ActionBarActivity {
         }
     }
 
+
+    /** Method to refer the views that have been created in xml. Using te id of the view the widgets can be refered*/
     public void add_views(){
         context=this;
         validate=(Button)findViewById(R.id.button_validate);
