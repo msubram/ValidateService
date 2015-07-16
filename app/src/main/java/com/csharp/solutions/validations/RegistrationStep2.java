@@ -315,6 +315,10 @@ public class RegistrationStep2 extends Activity {
 
                 System.out.println(globalClass.TAG+"complete registration result"+result);
 
+                SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
+                editor.putBoolean("login",true);
+                editor.commit();
+
                 Intent intent = new Intent(RegistrationStep2.this, UpdateScreen.class);
                 startActivity(intent);
             }

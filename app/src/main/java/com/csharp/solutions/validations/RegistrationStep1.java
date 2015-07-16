@@ -54,42 +54,52 @@ public class RegistrationStep1 extends Activity {
         sharedPreferences = new SecurePreferences(this);
         globalClass = (GlobalClass) getApplicationContext();
 
-        /** Storing the counrty code values for the country.
-         * Key - country name, value - country code*/
-        SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-        editor.putString("United Kingdom","44");
-        editor.putString("India","91");
-        editor.commit();
+        if(sharedPreferences.getBoolean("login",false))
+        {
+            Intent intent = new Intent(RegistrationStep1.this, ValidateScreen.class);
+            startActivity(intent);
+        }
+        else
+        {
+            /** Storing the counrty code values for the country.
+             * Key - country name, value - country code*/
+            SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
+            editor.putString("United Kingdom","44");
+            editor.putString("India","91");
+            editor.commit();
 
 
-        /** Initialising the UI Widgets*/
-        add_views();
+            /** Initialising the UI Widgets*/
+            add_views();
 
 
 
-        /** Setting the listener for Register button click event.*/
-        registration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
+            /** Setting the listener for Register button click event.*/
+            registration.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
 
-                /**Validate mobile number and throw alert when mobile number is empty*/
+                    /**Validate mobile number and throw alert when mobile number is empty*/
 
-                if(user_mobile_number.getText().length()!=0)
-                {
-                    /** Asynctask to register the mobile number along with country code*/
-                    new RegistrationStep1_Task().execute(globalClass.getBase_url());
+                    if(user_mobile_number.getText().length()!=0)
+                    {
+                        /** Asynctask to register the mobile number along with country code*/
+                        new RegistrationStep1_Task().execute(globalClass.getBase_url());
+
+                    }
+                    else
+                    {
+                        Toast.makeText(RegistrationStep1.this,"Please fill your mobile number",
+                                Toast.LENGTH_SHORT).show();
+                    }
+
 
                 }
-                else
-                {
-                    Toast.makeText(RegistrationStep1.this,"Please fill your mobile number",
-                            Toast.LENGTH_SHORT).show();
-                }
+            });
+        }
 
 
-            }
-        });
 
     }
 

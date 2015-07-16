@@ -17,6 +17,7 @@ public class GlobalClass extends Application{
 
     public static final String TAG = "Validations";
     String base_url = "http://www.csharpsolutions.co.uk/ValidateApp/api/v1/";
+    String port = "38798";
     int statuscode;
     String response_from_server = null;
 
@@ -27,6 +28,11 @@ public class GlobalClass extends Application{
         return base_url;
     }
 
+    /**Port to listen and send messages*/
+    public String get_Udp_port()
+    {
+        return port;
+    }
 
     /**Get methods*/
     public int getStatusCode()
