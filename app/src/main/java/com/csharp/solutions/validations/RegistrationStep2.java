@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.securepreferences.SecurePreferences;
@@ -22,6 +23,7 @@ import com.securepreferences.SecurePreferences;
 import org.json.JSONObject;
 
 import util.GlobalClass;
+import util.TypefaceUtil;
 
 /**
  * Created by Arputha on 04/07/2015.
@@ -33,6 +35,7 @@ public class RegistrationStep2 extends Activity {
     Button complete,retry;
     ImageView logo;
     EditText firstdigit,seconddigit,thirddigit,fourthdigit,fifthdigit;
+    TextView id_reg_step2_label1,id_reg_step2_label2,id_reg_step2_label3,id_reg_note;
 
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
     SharedPreferences sharedPreferences;
@@ -63,8 +66,19 @@ public class RegistrationStep2 extends Activity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
 
-                /** Asynctask to call when complete button is pressed*/
-                new Complete_registration_Task().execute(globalClass.getBase_url());
+
+                if(firstdigit.getText().length()==0 || seconddigit.getText().length()==0 || thirddigit.getText().length()==0 || fourthdigit.getText().length()==0 || fifthdigit.getText().length()==0)
+                {
+                    Toast.makeText(RegistrationStep2.this, getResources().getString(R.string.empty_fields),
+                            Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    /** Asynctask to call when complete button is pressed*/
+                    new Complete_registration_Task().execute(globalClass.getBase_url());
+                }
+
+
 
             }
         });
@@ -149,6 +163,26 @@ public class RegistrationStep2 extends Activity {
         fourthdigit=(EditText)findViewById(R.id.edittext_ota_fourth_digit);
         fifthdigit=(EditText)findViewById(R.id.edittext_ota_fifth_digit);
 
+
+        id_reg_step2_label1=(TextView)findViewById(R.id.id_reg_step2_label1);
+        id_reg_step2_label2=(TextView)findViewById(R.id.id_reg_step2_label1);
+        id_reg_step2_label3=(TextView)findViewById(R.id.id_reg_step2_label1);
+        id_reg_note=(TextView)findViewById(R.id.id_reg_step2_label1);
+
+        /** Setting typeface for views*/
+        id_reg_step2_label1.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        id_reg_step2_label2.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        id_reg_step2_label3.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        id_reg_note.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+
+        firstdigit.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        seconddigit.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        thirddigit.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        fourthdigit.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        fifthdigit.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        complete.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        retry.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+
         firstdigit.setInputType(InputType.TYPE_CLASS_NUMBER);
         complete.setTransformationMethod(null);
         retry.setTransformationMethod(null);
@@ -208,8 +242,8 @@ public class RegistrationStep2 extends Activity {
             }
 
             /** Sometimes response can be in negatve value so it indicates error.*/
-            if(!result.equals("error")&&!result.equals("-1"))
-            {
+                if(!result.equals("error")&&!result.equals("-1"))
+                {
                 String reg_code = null;
                 try{
                     JSONObject response_from_server = new JSONObject(result);

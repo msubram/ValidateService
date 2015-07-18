@@ -39,5 +39,7 @@
     <string name="validation_menu_update">Update</string>
     <string name="validation_menu_validate">Validate</string>
 
+    <string name="check_wifi_string">Please Check your Wifi Connection</string>
+    <string name="empty_fields">Please fill the empty fields</string>
 
 </resources>

@@ -4,6 +4,9 @@ package util;
  * Created by srinath on 14-07-2015.
  */
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import org.json.JSONObject;
 
@@ -76,6 +79,21 @@ public class GlobalClass extends Application{
 
         return response_from_server;
     }
+
+
+    public boolean checkWifiConnectivity()
+    {
+        boolean wifi_availability = false;
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (mWifi.isConnected()) {
+            // Do whatever
+            wifi_availability = true;
+        }
+        return wifi_availability;
+    }
+
 
 
     public String sendGet(String url, int connection_timeout) throws Exception {
