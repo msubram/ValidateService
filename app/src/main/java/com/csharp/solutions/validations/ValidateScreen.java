@@ -296,7 +296,7 @@ public class ValidateScreen extends ActionBarActivity {
 
             /** Setting the broadcast*/
             socket.setBroadcast(true);
-            System.out.println( tag+"setBroadcast" ) ;
+            System.out.println( tag+"setBroadcast" );
 
             byte [] data = broadcaste_message_json.toString().getBytes() ;
 
