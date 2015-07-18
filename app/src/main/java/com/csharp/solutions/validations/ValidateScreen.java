@@ -304,7 +304,7 @@ public class ValidateScreen extends ActionBarActivity {
              * data - JSON data
              * host - Broadcast address
              * port - Port on which the data is going to broadcast*/
-            DatagramPacket packet = new DatagramPacket( data, data.length,host,UDP_SERVER_PORT );
+            DatagramPacket packet = new DatagramPacket( data, data.length,host,32233 );
 
             // Send the packet in the socket
             socket.send( packet ) ;
