@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,14 +15,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.securepreferences.SecurePreferences;
 
+import org.apache.http.conn.util.InetAddressUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
+
 import util.GlobalClass;
+import util.TypefaceUtil;
 
 /** RegistrationStep1 - This class will get the users mobile number and their country code. */
 public class RegistrationStep1 extends Activity {
@@ -30,7 +39,7 @@ public class RegistrationStep1 extends Activity {
     Button registration;
     EditText user_mobile_number;
     Spinner country_list;
-
+    TextView id_reg_step1_label1,id_reg_step1_label2,id_reg_country_label,id_reg_mobile_label;
 
 
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
@@ -53,6 +62,7 @@ public class RegistrationStep1 extends Activity {
 
         sharedPreferences = new SecurePreferences(this);
         globalClass = (GlobalClass) getApplicationContext();
+
 
         if(sharedPreferences.getBoolean("login",false))
         {
@@ -100,7 +110,6 @@ public class RegistrationStep1 extends Activity {
         }
 
 
-
     }
 
 
@@ -111,6 +120,17 @@ public class RegistrationStep1 extends Activity {
         user_mobile_number=(EditText)findViewById(R.id.user_mobile_number);
         country_list=(Spinner)findViewById(R.id.country_list);
         country_list.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        id_reg_step1_label1=(TextView)findViewById(R.id.id_reg_step1_label1);
+        id_reg_step1_label2=(TextView)findViewById(R.id.id_reg_step1_label2);
+        id_reg_country_label=(TextView)findViewById(R.id.id_reg_country_label);
+        id_reg_mobile_label=(TextView)findViewById(R.id.id_reg_mobile_label);
+        /** Setting typeface for views*/
+        registration.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        user_mobile_number.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        id_reg_step1_label1.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        id_reg_step1_label2.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        id_reg_country_label.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        id_reg_mobile_label.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
     }
 
 
@@ -158,7 +178,6 @@ public class RegistrationStep1 extends Activity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return response_from_server;
         }
 

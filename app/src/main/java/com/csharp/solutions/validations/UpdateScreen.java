@@ -14,8 +14,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.securepreferences.SecurePreferences;
+
+import util.TypefaceUtil;
 
 /**
  * Created by Arputha on 04/07/2015.
@@ -24,6 +28,7 @@ public class UpdateScreen extends ActionBarActivity {
     Button update;
     ImageView logo;
     EditText work_number,home_number;
+    TextView update_screen_label1,update_work_telephone_label,update_home_telephone_label;
 
 
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
@@ -35,6 +40,10 @@ public class UpdateScreen extends ActionBarActivity {
         add_views();
         sharedPreferences = new SecurePreferences(this);
 
+        /** Show the updated values in the respective fields*/
+
+        work_number.setText(sharedPreferences.getString("work_number",""));
+        home_number.setText(sharedPreferences.getString("home_number",""));
 
 
         update.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +60,11 @@ public class UpdateScreen extends ActionBarActivity {
 
                     Intent intent = new Intent(UpdateScreen.this, ValidateScreen.class);
                     startActivity(intent);
+                }
+                else
+                {
+                    Toast.makeText(UpdateScreen.this, getResources().getString(R.string.empty_fields),
+                            Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -88,6 +102,19 @@ public class UpdateScreen extends ActionBarActivity {
         work_number = (EditText)findViewById(R.id.work_number);
         home_number = (EditText)findViewById(R.id.home_number);
         update.setTransformationMethod(null);
+
+
+        update_screen_label1 = (TextView)findViewById(R.id.update_screen_label1);
+        update_work_telephone_label = (TextView)findViewById(R.id.update_work_telephone_label);
+        update_home_telephone_label = (TextView)findViewById(R.id.update_home_telephone_label);
+
+        /** Setting typeface for views*/
+        update_screen_label1.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        update_work_telephone_label.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        update_home_telephone_label.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        update.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        work_number.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        home_number.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
 
     }
     public void onBackPressed() {
