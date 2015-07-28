@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">csharp</string>
+    <string name="action_settings">paramètres</string>
+
+
+    <string name="registration_step1_instruction_textview">S\'il vous plaît entrer votre numéro de téléphone mobile pour vous inscrire pour le service</string>
+    <string name="registration_step1_mobile_number_textview">Ton Numéro De Téléphone</string>
+    <string name="registration_step1_country">pays</string>
+    <string name="registration_step1_register_button">Inscription</string>
+    <string name="registration_step1_country_prompt">Choisissez un pays</string>
+    <string name="registration_step1_title_textview">Inscription: Étape 1 -</string>
+
+    <string-array name="registration_step1_country_array">
+        <item>Royaume-Uni</item>
+        <item>Inde</item>
+
+    </string-array>
+
+
+    <string name="registration_step2_instruction1_textview">Vous devriez bientôt recevoir un code d\'enregistrement à 5 chiffres par texte</string>
+    <string name="registration_step2_instruction2_textview">Dès réception s\'il vous plaît entrez le code d\'enregistrement à 5 chiffres ci-dessous</string>
+    <string name="registration_step2_instruction2_note">Remarque: Cette application va automatiquement extraire le code de texte reçu. Dans ce cas , le code sera affiché . Il suffit de cliquer complète pour vous inscrire  </string>
+    <string name="registration_step2_retry_button">refaire</string>
+    <string name="registration_step2_title_textview">Inscription: Step- 2</string>
+    <string name="registration_step2_complete_button">complet</string>
+
+    <string name="user_info_title">Informations utilisateur</string>
+    <string name="user_info_instruction_textview">S\'il vous plaît mettre à jour les informations suivantes</string>
+    <string name="user_info_work_number_textview">Votre numéro de téléphone au travail</string>
+    <string name="user_info_home_number_textview">ta Maison téléphone numéro</string>
+    <string name="user_info_update_button">Mise À Jour</string>
+
+    <string name="validation_validate_button">valider</string>
+    <string name="validation_title">validation</string>
+    <string name="validation_ack_title">validation succès</string>
+    <string name="validation_ack_message">valider</string>
+    <string name="validation_menu_update">Mise À Jour</string>
+    <string name="validation_menu_validate">valider</string>
+
+    <string name="check_wifi_string">S\'il vous plaît vérifier votre connexion Wifi</string>
+    <string name="empty_fields">S\'il vous plaît remplir les champs vides</string>
+
+</resources>

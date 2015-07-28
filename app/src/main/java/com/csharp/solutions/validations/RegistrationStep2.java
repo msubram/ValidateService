@@ -2,12 +2,15 @@ package com.csharp.solutions.validations;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -47,6 +50,8 @@ public class RegistrationStep2 extends Activity {
     ProgressDialog progressDialog;
 
     Context context;
+
+    public static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,8 +150,9 @@ public class RegistrationStep2 extends Activity {
         });
 
         /** Asynctask to get the RegCode - Testing purpose. In production the app will automatically read the 5-digit code from the Inbox. In some mobiles automatic sms reading cant be done. In that case user has to manually enter the 5-digit code*/
-        new RegCode_Task().execute(globalClass.getBase_url());
-
+       // new RegCode_Task().execute(globalClass.getBase_url());
+        IntentFilter filter = new IntentFilter(SMS_RECEIVED);
+        registerReceiver(receiver_SMS, filter);
 
 
 
@@ -310,7 +316,13 @@ public class RegistrationStep2 extends Activity {
                 /** body_in_post  POST data in JSON format.
                  * RegCode, Mobile number and CountryCode - Obtained in the first step
                  * */
-                String body_in_post = new JSONObject().put("RegCode",Integer.parseInt(sharedPreferences.getString("RegCode",""))).put("MobileInfo",new JSONObject().put("CountryCode",sharedPreferences.getString("country_code","")).put("MobileNumber",sharedPreferences.getString("mobile_number",""))).toString();
+
+                String reg_code = firstdigit.getText().toString()+seconddigit.getText().toString()+thirddigit.getText().toString()+fourthdigit.getText().toString()+fifthdigit.getText().toString();
+                SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
+                editor.putString("RegCode",reg_code);
+                editor.commit();
+
+                 String body_in_post = new JSONObject().put("RegCode",Integer.parseInt(sharedPreferences.getString("RegCode",""))).put("MobileInfo",new JSONObject().put("CountryCode",sharedPreferences.getString("country_code","")).put("MobileNumber",sharedPreferences.getString("mobile_number",""))).toString();
 
                 System.out.println(globalClass.TAG+"Complete_registration_Task"+body_in_post);
 
@@ -369,6 +381,60 @@ public class RegistrationStep2 extends Activity {
 
         }
     }
+
+
+
+    /** Broadcast Receiver to get the 5-digit code from SMS*/
+    BroadcastReceiver receiver_SMS = new BroadcastReceiver()
+    {
+        public void onReceive(Context context, Intent intent)
+        {
+            if (intent.getAction().equals(SMS_RECEIVED))
+            {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null)
+                {
+                    Object[] pdus = (Object[]) bundle.get("pdus");
+                    SmsMessage[] messages = new SmsMessage[pdus.length];
+
+                    for (int i = 0; i < pdus.length; i++)
+                        messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+
+                    for (SmsMessage message : messages)
+                    {
+                        /** Now 9566510535 is the number which is sender later it will get changed. Before production change the number*/
+                        if(message.getDisplayOriginatingAddress().contains("9566510535"))
+                        {
+                            String reg_code = message.getDisplayMessageBody();
+                            System.out.println(globalClass.TAG+"reg_code"+reg_code);
+                            Toast.makeText(context, "----"+reg_code, Toast.LENGTH_LONG).show();
+
+                            SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
+                            editor.putString("RegCode",reg_code);
+                            editor.commit();
+
+
+
+                            /** Code to get the individual digit in the 5-digit code*/
+                            if(reg_code.length()==5)
+                            {
+                                firstdigit.setText(Character.toString(reg_code.charAt(0)));
+                                seconddigit.setText(Character.toString(reg_code.charAt(1)));
+                                thirddigit.setText(Character.toString(reg_code.charAt(2)));
+                                fourthdigit.setText(Character.toString(reg_code.charAt(3)));
+                                fifthdigit.setText(Character.toString(reg_code.charAt(4)));
+                            }
+
+                        }
+
+
+
+
+                    }
+                }
+            }
+        }
+    };
 
 
     /** Method to be called when back button is pressed in this activity*/

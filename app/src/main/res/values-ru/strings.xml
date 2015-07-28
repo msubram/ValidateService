@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Csharp</string>
+    <string name="action_settings">настройки</string>
+
+
+    <string name="registration_step1_instruction_textview">Пожалуйста, введите номер вашего мобильного телефона , чтобы зарегистрироваться для обслуживания</string>
+    <string name="registration_step1_mobile_number_textview">Номер Вашего Мобильного число</string>
+    <string name="registration_step1_country">страна</string>
+    <string name="registration_step1_register_button">Регистр</string>
+    <string name="registration_step1_country_prompt">выбирать a страна</string>
+    <string name="registration_step1_title_textview">Регистрация : Шаг -1</string>
+
+    <string-array name="registration_step1_country_array">
+        <item>Великобритания</item>
+        <item>Индия</item>
+
+    </string-array>
+
+
+    <string name="registration_step2_instruction1_textview">Вы должны в ближайшее время получить 5 - значный регистрационный код по тексту</string>
+    <string name="registration_step2_instruction2_textview">После получения введите 5 - значный регистрационный код ниже</string>
+    <string name="registration_step2_instruction2_note">Примечание : Это приложение будет автоматически извлекать код из текста получил . В этом случае, the будет отображатьсякод. Просто нажмите реестру</string>
+    <string name="registration_step2_retry_button">Повторите</string>
+    <string name="registration_step2_title_textview">Регистрация : Шаг 2</string>
+    <string name="registration_step2_complete_button">полный</string>
+
+    <string name="user_info_title">информация О Пользователе</string>
+    <string name="user_info_instruction_textview">Пожалуйста, обновите следующую информацию</string>
+    <string name="user_info_work_number_textview">Ваш Рабочий телефон Количество</string>
+    <string name="user_info_home_number_textview">Ваш Домашний телефон</string>
+    <string name="user_info_update_button">обновление</string>
+
+    <string name="validation_validate_button">действительный</string>
+    <string name="validation_title">действительный</string>
+    <string name="validation_ack_title">действительный успех</string>
+    <string name="validation_ack_message">действительный</string>
+    <string name="validation_menu_update">обновление</string>
+    <string name="validation_menu_validate">действительный</string>
+
+    <string name="check_wifi_string">Пожалуйста, проверьте ваши WiFi соединение</string>
+    <string name="empty_fields">Пожалуйста, заполните пустые поля</string>
+
+</resources>

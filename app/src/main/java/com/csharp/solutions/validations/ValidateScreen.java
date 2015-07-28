@@ -3,9 +3,6 @@ package com.csharp.solutions.validations;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
@@ -29,7 +26,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
+import java.net.SocketAddress;
+import java.net.SocketException;
 import java.util.Enumeration;
 
 import util.GlobalClass;
@@ -58,9 +58,13 @@ public class ValidateScreen extends ActionBarActivity {
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
     SharedPreferences sharedPreferences;
 
+
+    DatagramSocket rSocket = null ;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.validatescreen);
+        System.out.println( tag+"onCreate" ) ;
         add_views();
         globalClass = (GlobalClass) getApplicationContext();
        // UDP_SERVER_PORT = Integer.parseInt(globalClass.get_Udp_port());
@@ -81,8 +85,18 @@ public class ValidateScreen extends ActionBarActivity {
                     Toast.makeText(context, "Validation Success", Toast.LENGTH_LONG).show();
 
                     /**Asynctasks to send and receive broadcast messages*/
-                    new SendBroadcast(context).execute("");
-                    new RunServer(context).execute("");
+
+                   // startService(new Intent(ValidateScreen.this, UDPListenerService.class));
+
+                        System.out.println("myDatagramReceiver Start");
+                        myDatagramReceiver = new MyDatagramReceiver();
+                        myDatagramReceiver.start();
+
+
+                        new SendBroadcast(context).execute("");
+                   //new ListenerTask(context).execute("");
+
+
                 }
                 else
                 {
@@ -139,11 +153,11 @@ public class ValidateScreen extends ActionBarActivity {
 
 
     /** Asynctask to RunServer message*/
-    private class RunServer extends
+    private class ListenerTask extends
             AsyncTask<String, Void, String> {
         Context mContext;
         double type;
-        public RunServer(Context context) {
+        public ListenerTask(Context context) {
             super();
             mContext = context;
         }
@@ -153,8 +167,8 @@ public class ValidateScreen extends ActionBarActivity {
         protected String doInBackground(String... params) {
             String text=null;
 
-            runserver();
-            return text;
+            mlistener();
+            return "";
 
         }
         protected void onPostExecute(String result) {
@@ -176,8 +190,16 @@ public class ValidateScreen extends ActionBarActivity {
         protected String doInBackground(String... params) {
             String text=null;
 
-            sendbroadcastmessage();
-            return text;
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            finally {
+                sendbroadcastmessage();
+            }
+
+            return "";
 
         }
         protected void onPostExecute(String result) {
@@ -220,54 +242,6 @@ public class ValidateScreen extends ActionBarActivity {
         }
 
     }
-
-
-    /** Method to run the Server on the Specified port*/
-    private void runserver()  {
-
-
-        DatagramSocket socket = null ;
-        try
-        {
-            // Convert the argument to ensure that is it valid
-
-            // Construct the socket
-            socket = new DatagramSocket( UDP_SERVER_PORT ) ;
-
-            System.out.println( tag+"The server is ready..." ) ;
-
-
-            for( ;; )
-            {
-                // Create a packet
-                DatagramPacket packet = new DatagramPacket( new byte[PACKETSIZE], PACKETSIZE ) ;
-
-                // Receive a packet (blocking)
-                socket.receive( packet ) ;
-
-                // Print the packet
-                //  System.out.println(tag+ packet.getAddress() + " " + packet.getPort() + ": " + new String(packet.getData()) ) ;
-
-                final String data = new String(packet.getData());
-                System.out.println(tag+data ) ;
-
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setText("received data "+data);
-                    }
-                });
-               // new FillEndPointUrl(context).execute(data);
-
-            }
-        }
-        catch( Exception e )
-        {
-            System.out.println( tag+e ) ;
-        }
-    }
-
     /** Method to send the broadcast message with the following items
      * CountryCode, MobileNumber, IP, Name, EndPoint and UDPListenPort
      * Construct the JSON format of the above items and send the message in the DatagramPacket.
@@ -308,20 +282,95 @@ public class ValidateScreen extends ActionBarActivity {
 
             // Send the packet in the socket
             socket.send( packet ) ;
-            System.out.println( tag+"message sent" ) ;
 
+            Thread.sleep(500);
+
+
+            /*DatagramSocket rsocket = new DatagramSocket( UDP_SERVER_PORT ) ;
+            byte[] buf = new byte[1000];
+            DatagramPacket rpacket = new DatagramPacket(buf, buf.length);
+            rsocket.receive(rpacket);
+            final String rdata = new String(rpacket.getData());
+            System.out.println(tag+rdata ) ;
+
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setText("received data "+rdata);
+
+                }
+            });*/
 
         }
         catch( Exception e )
         {
             System.out.println(tag+e ) ;
         }
-        finally
+
+    }
+
+    /** Method to run the Server on the Specified port*/
+    private void mlistener()  {
+
+
+
+        try
         {
-            if( socket != null )
-                socket.close() ;
+            // Convert the argument to ensure that is it valid
+
+            // Construct the socket
+            //InetAddress broadcastIP = InetAddress.getByName(getLocalIpAddress());
+            rSocket = new DatagramSocket( UDP_SERVER_PORT ) ;
+
+            System.out.println( tag+"The server is ready..." ) ;
+
+
+            while (true)
+            {
+                System.out.println(tag+"Checking socket data" ) ;
+                // Create a packet
+                DatagramPacket packet = new DatagramPacket( new byte[PACKETSIZE], PACKETSIZE ) ;
+
+                // Receive a packet (blocking)
+                rSocket.setReuseAddress(true);
+                rSocket.receive( packet ) ;
+
+                // Print the packet
+                //  System.out.println(tag+ packet.getAddress() + " " + packet.getPort() + ": " + new String(packet.getData()) ) ;
+
+                final String data = new String(packet.getData());
+                System.out.println(tag+data ) ;
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.setText("received data "+data);
+
+                    }
+                });
+               // new FillEndPointUrl(context).execute(data);
+
+            }
+        }
+        catch( SocketException e )
+        {
+            System.out.println( tag+e ) ;
+        }
+        catch( IOException e )
+        {
+            System.out.println( tag+e ) ;
+        }
+        finally {
+
+                    System.out.println(tag+"socket connected" ) ;
+                   // socket.close();
+
         }
     }
+
+
 
     /** Method to fill the endpoint url with the Mobile, Home and Work Telephone numbers */
     private String fillEndPointurl(String url)  {
@@ -384,5 +433,87 @@ public class ValidateScreen extends ActionBarActivity {
         Intent intent = new Intent(ValidateScreen.this,UpdateScreen.class);
         startActivity(intent);
     }
+
+    private MyDatagramReceiver myDatagramReceiver = null;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println( tag+"onResume" ) ;
+     //   myDatagramReceiver = new MyDatagramReceiver();
+       // myDatagramReceiver.start();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        System.out.println( tag+"onPause" ) ;
+
+        if(myDatagramReceiver!=null)
+        {
+            myDatagramReceiver.kill();
+        }
+
+
+    }
+
+    private class MyDatagramReceiver extends Thread {
+        private boolean bKeepRunning = true;
+        private String lastMessage = "";
+
+        public void run() {
+            String message;
+            byte[] lmessage = new byte[PACKETSIZE];
+            DatagramPacket packet = new DatagramPacket(lmessage, lmessage.length);
+            System.out.println(tag + "MyDatagramReceiver run");
+            try {
+                rSocket= new DatagramSocket(null);
+                rSocket.setReuseAddress(true);
+                SocketAddress socketAddr=new InetSocketAddress(UDP_SERVER_PORT);
+
+               // rSocket.setBroadcast(true);
+                rSocket.bind(socketAddr);
+
+                while(bKeepRunning) {
+                    System.out.println(tag + "MyDatagramReceiver waiting for message");
+                    rSocket.receive(packet);
+                    message = new String(lmessage, 0, packet.getLength());
+                    lastMessage = message;
+                    System.out.println(tag + "Received"+lastMessage);
+                    runOnUiThread(updateTextMessage);
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+                System.out.println(tag + e);
+                if (rSocket != null) {
+                    System.out.println(tag + "Throwable rSocket close");
+                    rSocket.close();
+                   // rSocket.disconnect();
+                }
+            }
+
+
+        }
+
+        public void kill() {
+            bKeepRunning = false;
+        }
+
+        public String getLastMessage() {
+            return lastMessage;
+        }
+    }
+
+    private Runnable updateTextMessage = new Runnable() {
+        public void run() {
+            if (myDatagramReceiver == null) return;
+            System.out.println(tag + "Received"+myDatagramReceiver.getLastMessage());
+            textView.setText(myDatagramReceiver.getLastMessage());
+            if (rSocket != null) {
+                System.out.println(tag + "rSocket close");
+                rSocket.close();
+                rSocket.disconnect();
+            }
+        }
+    };
 
 }

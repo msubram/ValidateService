@@ -41,15 +41,12 @@ public class RegistrationStep1 extends Activity {
     Spinner country_list;
     TextView id_reg_step1_label1,id_reg_step1_label2,id_reg_country_label,id_reg_mobile_label;
 
-
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
     SharedPreferences sharedPreferences;
-
     String country_code;
 
     /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
     GlobalClass globalClass;
-
     Context context  = this;
 
     /** Progress dialog*/
