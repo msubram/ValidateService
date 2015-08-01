@@ -138,6 +138,7 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    style="@style/editext_background_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -150,6 +151,7 @@
                     android:id="@+id/edittext_ota_first_digit"
                     android:gravity="center"/>
                 <EditText
+                    style="@style/editext_background_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -162,6 +164,7 @@
                     android:id="@+id/edittext_ota_second_digit"
                     android:gravity="center"/>
                 <EditText
+                    style="@style/editext_background_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -174,6 +177,7 @@
                     android:id="@+id/edittext_ota_third_digit"
                     android:gravity="center"/>
                 <EditText
+                    style="@style/editext_background_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -186,6 +190,7 @@
                     android:id="@+id/edittext_ota_fourth_digit"
                     android:gravity="center"/>
                 <EditText
+                    style="@style/editext_background_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -235,6 +240,7 @@
                     android:layout_centerInParent="true"
                     android:orientation="horizontal">
             <Button
+                style="@style/normal_red_button_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -245,11 +251,11 @@
                 android:text="@string/registration_step2_retry_button"
                 android:gravity="center"/>
             <Button
+                style="@style/normal_blue_button_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_weight="1"
-                android:textSize="@dimen/small_textsize"
                 android:layout_marginRight="5dp"
                 android:id="@+id/button_complete"
                 android:text="@string/registration_step2_complete_button"

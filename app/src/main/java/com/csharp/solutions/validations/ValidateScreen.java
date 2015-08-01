@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.securepreferences.SecurePreferences;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -89,6 +90,12 @@ public class ValidateScreen extends ActionBarActivity {
                    // startService(new Intent(ValidateScreen.this, UDPListenerService.class));
 
                         System.out.println("myDatagramReceiver Start");
+                    WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+                    if (wifi != null){
+                        WifiManager.MulticastLock lock = wifi.createMulticastLock("mylock");
+                        lock.acquire();
+                    }
+
                         myDatagramReceiver = new MyDatagramReceiver();
                         myDatagramReceiver.start();
 
@@ -152,28 +159,7 @@ public class ValidateScreen extends ActionBarActivity {
     }
 
 
-    /** Asynctask to RunServer message*/
-    private class ListenerTask extends
-            AsyncTask<String, Void, String> {
-        Context mContext;
-        double type;
-        public ListenerTask(Context context) {
-            super();
-            mContext = context;
-        }
 
-
-        @Override
-        protected String doInBackground(String... params) {
-            String text=null;
-
-            mlistener();
-            return "";
-
-        }
-        protected void onPostExecute(String result) {
-        }
-    }
 
     /** Asynctask to SendBroadcast message*/
     private class SendBroadcast extends
@@ -282,25 +268,10 @@ public class ValidateScreen extends ActionBarActivity {
 
             // Send the packet in the socket
             socket.send( packet ) ;
+            System.out.println( tag+"message sent" );
 
             Thread.sleep(500);
 
-
-            /*DatagramSocket rsocket = new DatagramSocket( UDP_SERVER_PORT ) ;
-            byte[] buf = new byte[1000];
-            DatagramPacket rpacket = new DatagramPacket(buf, buf.length);
-            rsocket.receive(rpacket);
-            final String rdata = new String(rpacket.getData());
-            System.out.println(tag+rdata ) ;
-
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    textView.setText("received data "+rdata);
-
-                }
-            });*/
 
         }
         catch( Exception e )
@@ -310,89 +281,58 @@ public class ValidateScreen extends ActionBarActivity {
 
     }
 
-    /** Method to run the Server on the Specified port*/
-    private void mlistener()  {
 
-
-
-        try
-        {
-            // Convert the argument to ensure that is it valid
-
-            // Construct the socket
-            //InetAddress broadcastIP = InetAddress.getByName(getLocalIpAddress());
-            rSocket = new DatagramSocket( UDP_SERVER_PORT ) ;
-
-            System.out.println( tag+"The server is ready..." ) ;
-
-
-            while (true)
-            {
-                System.out.println(tag+"Checking socket data" ) ;
-                // Create a packet
-                DatagramPacket packet = new DatagramPacket( new byte[PACKETSIZE], PACKETSIZE ) ;
-
-                // Receive a packet (blocking)
-                rSocket.setReuseAddress(true);
-                rSocket.receive( packet ) ;
-
-                // Print the packet
-                //  System.out.println(tag+ packet.getAddress() + " " + packet.getPort() + ": " + new String(packet.getData()) ) ;
-
-                final String data = new String(packet.getData());
-                System.out.println(tag+data ) ;
-
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setText("received data "+data);
-
-                    }
-                });
-               // new FillEndPointUrl(context).execute(data);
-
-            }
-        }
-        catch( SocketException e )
-        {
-            System.out.println( tag+e ) ;
-        }
-        catch( IOException e )
-        {
-            System.out.println( tag+e ) ;
-        }
-        finally {
-
-                    System.out.println(tag+"socket connected" ) ;
-                   // socket.close();
-
-        }
-    }
 
 
 
     /** Method to fill the endpoint url with the Mobile, Home and Work Telephone numbers */
     private String fillEndPointurl(String url)  {
         String response_from_server=null;
-            try{
-                response_from_server = globalClass.sendGet(url,5000);
-                /** Parsing response to get Status code and response from server*/
-                globalClass.parseServerResponseJSON(response_from_server);
+    /** Format of the POST body content*/
 
-                if(globalClass.getStatusCode() == 200)
-                {
-                    response_from_server = globalClass.getServerResponse();
+        /*     {
+                "Email": "email@domain.com",
+                "HomeNumber": "02098999899",
+                "WorkNumber": "02011123344",
+                "MobileNumber": "07988676543",
+                "MobileCountryCode": "44"
                 }
-                else
-                {
-                    response_from_server = "error";
-                }
-            }
-            catch(Exception e)
+        */
+
+        /** Forming JSON to send the body of the POST*/
+        try {
+
+
+
+            JSONObject endpointbodyJSON = new JSONObject().put("Email","")
+                                                          .put("HomeNumber",sharedPreferences.getString("home_number",""))
+                                                          .put("WorkNumber",sharedPreferences.getString("work_number",""))
+                                                          .put("MobileNumber",sharedPreferences.getString("mobile_number",""))
+                                                          .put("MobileCountryCode",sharedPreferences.getString("country_code",""));
+
+            System.out.println("Fillendpoint body"+endpointbodyJSON.toString());
+
+            response_from_server = globalClass.sendPost(url,endpointbodyJSON.toString());
+            /** Parsing response to get Status code and response from server*/
+            globalClass.parseServerResponseJSON(response_from_server);
+
+            if(globalClass.getStatusCode() == 200)
             {
-                e.printStackTrace();
+                response_from_server = globalClass.getServerResponse();
             }
+            else
+            {
+                response_from_server = "error";
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
         return response_from_server;
     }
 
@@ -447,7 +387,15 @@ public class ValidateScreen extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         System.out.println( tag+"onPause" ) ;
+        WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        if (wifi != null){
+            WifiManager.MulticastLock lock = wifi.createMulticastLock("mylock");
+            if(lock.isHeld())
+            {
+                lock.release();
+            }
 
+        }
         if(myDatagramReceiver!=null)
         {
             myDatagramReceiver.kill();
@@ -462,23 +410,27 @@ public class ValidateScreen extends ActionBarActivity {
 
         public void run() {
             String message;
-            byte[] lmessage = new byte[PACKETSIZE];
-            DatagramPacket packet = new DatagramPacket(lmessage, lmessage.length);
+
             System.out.println(tag + "MyDatagramReceiver run");
             try {
-                rSocket= new DatagramSocket(null);
+                rSocket= new DatagramSocket(UDP_SERVER_PORT);
                 rSocket.setReuseAddress(true);
-                SocketAddress socketAddr=new InetSocketAddress(UDP_SERVER_PORT);
+               // SocketAddress socketAddr=new InetSocketAddress(UDP_SERVER_PORT);
 
-               // rSocket.setBroadcast(true);
-                rSocket.bind(socketAddr);
+                rSocket.setBroadcast(true);
+               // rSocket.bind(socketAddr);
+                rSocket.setSoTimeout(10000);
 
                 while(bKeepRunning) {
+                    byte[] lmessage = new byte[PACKETSIZE];
                     System.out.println(tag + "MyDatagramReceiver waiting for message");
+                    DatagramPacket packet = new DatagramPacket(lmessage, lmessage.length);
+
                     rSocket.receive(packet);
+                    System.out.println(tag + "Received"+new String(packet.getData()));
                     message = new String(lmessage, 0, packet.getLength());
                     lastMessage = message;
-                    System.out.println(tag + "Received"+lastMessage);
+
                     runOnUiThread(updateTextMessage);
                 }
             } catch (Throwable e) {
@@ -508,11 +460,12 @@ public class ValidateScreen extends ActionBarActivity {
             if (myDatagramReceiver == null) return;
             System.out.println(tag + "Received"+myDatagramReceiver.getLastMessage());
             textView.setText(myDatagramReceiver.getLastMessage());
-            if (rSocket != null) {
+            new FillEndPointUrl(context).execute(myDatagramReceiver.getLastMessage());
+           /* if (rSocket != null) {
                 System.out.println(tag + "rSocket close");
                 rSocket.close();
                 rSocket.disconnect();
-            }
+            }*/
         }
     };
 

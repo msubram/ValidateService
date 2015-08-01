@@ -51,6 +51,8 @@ public class RegistrationStep2 extends Activity {
 
     Context context;
 
+    String originIncomingAddress = "644188";
+
     public static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,20 @@ public class RegistrationStep2 extends Activity {
                     /** Asynctask to call when complete button is pressed*/
                     new Complete_registration_Task().execute(globalClass.getBase_url());
                 }
+
+
+
+            }
+        });
+
+        /** Complete button action listener. */
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+
+                Intent start = new Intent(RegistrationStep2.this,UpdateScreen.class);
+                startActivity(start);
 
 
 
@@ -403,7 +419,7 @@ public class RegistrationStep2 extends Activity {
                     for (SmsMessage message : messages)
                     {
                         /** Now 9566510535 is the number which is sender later it will get changed. Before production change the number*/
-                        if(message.getDisplayOriginatingAddress().contains("9566510535"))
+                        if(message.getDisplayOriginatingAddress().contains(originIncomingAddress))
                         {
                             String reg_code = message.getDisplayMessageBody();
                             System.out.println(globalClass.TAG+"reg_code"+reg_code);

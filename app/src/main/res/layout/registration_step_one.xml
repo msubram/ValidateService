@@ -146,6 +146,7 @@
                 android:lineSpacingExtra="2dp"
                 android:text="@string/registration_step1_mobile_number_textview"/>
             <EditText
+                style="@style/editext_background_style"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -176,13 +177,13 @@
                 android:paddingLeft="60dp"
                 android:layout_height="match_parent">
             <Button
+                style="@style/normal_blue_button_style"
                 android:id="@+id/button_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:layout_centerInParent="true"
-                android:textSize="@dimen/small_textsize"
                 android:text="@string/registration_step1_register_button"
                 android:gravity="center"/>
             </RelativeLayout>

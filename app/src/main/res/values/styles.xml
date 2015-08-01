@@ -5,4 +5,22 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="normal_blue_button_style">
+        <item name="android:background">@color/Blue</item>
+        <item name="android:textSize">@dimen/small_button_textsize</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    <style name="normal_red_button_style">
+        <item name="android:background">@color/Red</item>
+        <item name="android:textSize">@dimen/small_button_textsize</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    <style name="editext_background_style">
+        <item name="android:background">@drawable/roundedcorners_selection</item>
+    </style>
+
 </resources>

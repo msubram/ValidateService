@@ -42,4 +42,12 @@
     <string name="check_wifi_string">S\'il vous plaît vérifier votre connexion Wifi</string>
     <string name="empty_fields">S\'il vous plaît remplir les champs vides</string>
 
+    <string name="already_registered">Device is already registered on server.</string>
+    <string name="gcm_registered">From GCM: device successfully registered!</string>
+    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
+    <string name="gcm_message">From GCM: you got message!</string>
+    <string name="gcm_error">From GCM: error (%1$s).</string>
+    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
+    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+
 </resources>
