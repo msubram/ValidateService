@@ -1,9 +1,11 @@
 package com.csharp.solutions.validations;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -21,12 +23,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gcm.GCMRegistrar;
 import com.securepreferences.SecurePreferences;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+
+import gcm.WakeLocker;
 import util.GlobalClass;
 import util.TypefaceUtil;
+
+
+import static gcm.CommonUtilities.DISPLAY_MESSAGE_ACTION;
+import static gcm.CommonUtilities.EXTRA_MESSAGE;
+import static gcm.CommonUtilities.SENDER_ID;
 
 /**
  * Created by Arputha on 04/07/2015.
@@ -53,7 +68,11 @@ public class RegistrationStep2 extends Activity {
 
     String originIncomingAddress = "644188";
 
+
     public static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+
+    /**GCM*/
+    String GCMregId="";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -377,12 +396,15 @@ public class RegistrationStep2 extends Activity {
 
                 System.out.println(globalClass.TAG+"complete registration result"+result);
 
+
+
                 SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
                 editor.putBoolean("login",true);
                 editor.commit();
 
-                Intent intent = new Intent(RegistrationStep2.this, UpdateScreen.class);
-                startActivity(intent);
+                new GCMCredentials(context).execute();
+                /*Intent intent = new Intent(RegistrationStep2.this, UpdateScreen.class);
+                startActivity(intent);*/
             }
 
             else
@@ -398,6 +420,61 @@ public class RegistrationStep2 extends Activity {
         }
     }
 
+
+    class GCMCredentials extends AsyncTask<String, String, String> {
+        private final ProgressDialog progressDialog;
+        public GCMCredentials(Context ctx) {
+            progressDialog = CustomProgressDialog.ctor(context);
+            progressDialog.show();
+        }
+
+
+        // Download Music File from Internet
+        @Override
+        protected String doInBackground(String... params) {
+            /**GCM*/
+            GCMRegistrar.checkDevice(RegistrationStep2.this);
+            // Make sure the manifest was properly set - comment out this line
+            // while developing the app, then uncomment it when it's ready.
+            GCMRegistrar.checkManifest(RegistrationStep2.this);
+
+            registerReceiver(mHandleMessageReceiver, new IntentFilter(
+                    DISPLAY_MESSAGE_ACTION));
+
+            // Get GCM registration id
+
+
+
+            // Check if regid already presents
+            if (GCMregId.equals("")) {
+                // Registration is not present, register now with GCM
+                GCMRegistrar.register(RegistrationStep2.this, SENDER_ID);
+                // Log.i("regId", "new");
+                //  new SubmitGcmIdTask().execute("http://www.meliosystems.com/android/push_notifications");
+
+
+            } else {
+                // Device is already registered on GCM
+                // Log.i("regId", "already");
+                if (GCMRegistrar.isRegisteredOnServer(RegistrationStep2.this)) {
+                    // Skips registration.
+                    Toast.makeText(getApplicationContext(), "Already registered with GCM", Toast.LENGTH_LONG).show();
+                }
+            }
+            return "success";
+        }
+
+
+        // Once Music File is downloaded
+        @Override
+        protected void onPostExecute(String file_url) {
+            progressDialog.dismiss();
+            Intent intent = new Intent(RegistrationStep2.this, UpdateScreen.class);
+            startActivity(intent);
+            /*Toast show = Toast.makeText(context,"Updated GCM"+GCMRegistrar.getRegistrationId(RegistrationActivity.this),Toast.LENGTH_LONG);
+            show.show();*/
+        }
+    }
 
 
     /** Broadcast Receiver to get the 5-digit code from SMS*/
@@ -453,10 +530,43 @@ public class RegistrationStep2 extends Activity {
     };
 
 
+
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString(EXTRA_MESSAGE);
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
+
+            /**
+             * Take appropriate action on this message
+             * depending upon your app requirement
+             * For now i am just displaying it on the screen
+             * */
+
+            // Showing received message
+
+            Toast.makeText(getApplicationContext(), "New Message: " + newMessage, Toast.LENGTH_LONG).show();
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
+
     /** Method to be called when back button is pressed in this activity*/
     public void onBackPressed() {
+
         Intent intent = new Intent(RegistrationStep2.this,RegistrationStep1.class);
         startActivity(intent);
     }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+      //  unregisterReceiver(receiver_SMS);
+    }
+
+
 
 }

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- Base application theme. -->
@@ -11,7 +12,6 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-
     <style name="normal_red_button_style">
         <item name="android:background">@color/Red</item>
         <item name="android:textSize">@dimen/small_button_textsize</item>
@@ -19,8 +19,29 @@
     </style>
 
 
+    <style name="normal_text_style">
+        <item name="android:textSize">@dimen/normal_textsize</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
     <style name="editext_background_style">
         <item name="android:background">@drawable/roundedcorners_selection</item>
     </style>
+
+    <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="metaButtonBarStyle">@style/ButtonBar</item>
+        <item name="metaButtonBarButtonStyle">@style/ButtonBarButton</item>
+    </style>
+
+    <style name="ButtonBar">
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:background">@android:drawable/bottom_bar</item>
+    </style>
+
+    <style name="ButtonBarButton" />
 
 </resources>

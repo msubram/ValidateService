@@ -1,7 +1,4 @@
-package gcm;
-
-import static gcm.CommonUtilities.SENDER_ID;
-import static gcm.CommonUtilities.displayMessage;
+package com.csharp.solutions.validations;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -10,14 +7,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.csharp.solutions.validations.R;
-import com.csharp.solutions.validations.ValidateScreen;
 import com.google.android.gcm.GCMBaseIntentService;
+
+import static gcm.CommonUtilities.SENDER_ID;
+import static gcm.CommonUtilities.displayMessage;
 
 public class GCMIntentService extends GCMBaseIntentService {
 Context context=this;

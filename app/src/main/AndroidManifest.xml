@@ -19,10 +19,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- Creates a custom permission so only this app can receive its messages. -->
     <permission
-        android:name="com.csharp.solutions..permission.C2D_MESSAGE"
+        android:name="com.csharp.solutions.validations.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.csharp.solutions..permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.csharp.solutions.validations.permission.C2D_MESSAGE" />
     <!-- This app has permission to register and receive data message. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
@@ -67,13 +67,11 @@
         <activity
             android:name=".ValidateScreen"
             android:configChanges="orientation|screenSize"
+            android:excludeFromRecents="true"
             android:imeOptions="actionDone|flagNoExtractUi"
             android:label="@string/validation_title"
             android:screenOrientation="portrait"
-            android:excludeFromRecents="true"
             android:theme="@style/Theme.AppCompat.Light" />
-
-
 
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
@@ -89,8 +87,13 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="gcm.GCMIntentService" />
+        <service android:name=".GCMIntentService" />
 
+        <activity
+            android:name=".NotificationHandleActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
     </application>
-
 </manifest>
