@@ -62,6 +62,18 @@ public class ValidateScreen extends ActionBarActivity {
 
     DatagramSocket rSocket = null ;
 
+    /** Tags declaration*/
+    String tag_country_code = GlobalClass.country_code;
+    String tag_mobile_number = GlobalClass.mobile_number;
+    String tag_work_number = GlobalClass.work_number;
+    String tag_home_number  = GlobalClass.home_number;
+    String tag_ip  = GlobalClass.ip_address;
+    String tag_name  = GlobalClass.sender_name;
+    String tag_endpoint  = GlobalClass.endPoint;
+    String tag_udplistenerport  = GlobalClass.udpListenPort;
+    String tag_email  = GlobalClass.email;
+    String tag_mobile_countrycode  = GlobalClass.mobile_country_code;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.validatescreen);
@@ -165,7 +177,7 @@ public class ValidateScreen extends ActionBarActivity {
     private class SendBroadcast extends
             AsyncTask<String, Void, String> {
         Context mContext;
-        double type;
+
         public SendBroadcast(Context context) {
             super();
             mContext = context;
@@ -174,7 +186,7 @@ public class ValidateScreen extends ActionBarActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String text=null;
+
 
             try {
                 Thread.sleep(2000);
@@ -234,8 +246,8 @@ public class ValidateScreen extends ActionBarActivity {
      * */
     private void sendbroadcastmessage()  {
         //String msg = "{CountryCode:'44', MobileNumber:'9566510535', IP: '192.168.0.12', Name: 'Srinath', EndPoint: '', UDPListenPort: '38798'}";
-        String coutry_code = sharedPreferences.getString("country_code","");
-        String mobile_number = sharedPreferences.getString("mobile_number","");
+        String coutry_code = sharedPreferences.getString(tag_country_code,"");
+        String mobile_number = sharedPreferences.getString(tag_mobile_number,"");
         String IP = getLocalIpAddress();
         String port = Integer.toString(UDP_SERVER_PORT);
 
@@ -244,7 +256,7 @@ public class ValidateScreen extends ActionBarActivity {
         try {
 
             /** Broadcast data JSON formation*/
-            JSONObject broadcaste_message_json = new JSONObject().put("CountryCode",coutry_code).put("MobileNumber",mobile_number).put("IP",IP).put("Name","motoe").put("EndPoint","").put("UDPListenPort",port);
+            JSONObject broadcaste_message_json = new JSONObject().put(tag_country_code,coutry_code).put(tag_mobile_number,mobile_number).put(tag_ip,IP).put(tag_name,"motoe").put(tag_endpoint,"").put(tag_udplistenerport,port);
             System.out.println( tag+"message"+broadcaste_message_json.toString() ) ;
 
             /** To get the broadcast address of a WIFI on which device is connected*/
@@ -304,11 +316,11 @@ public class ValidateScreen extends ActionBarActivity {
 
 
 
-            JSONObject endpointbodyJSON = new JSONObject().put("Email","")
-                                                          .put("HomeNumber",sharedPreferences.getString("home_number",""))
-                                                          .put("WorkNumber",sharedPreferences.getString("work_number",""))
-                                                          .put("MobileNumber",sharedPreferences.getString("mobile_number",""))
-                                                          .put("MobileCountryCode",sharedPreferences.getString("country_code",""));
+            JSONObject endpointbodyJSON = new JSONObject().put(tag_email,"")
+                                                          .put(tag_home_number,sharedPreferences.getString(tag_home_number,""))
+                                                          .put(tag_work_number,sharedPreferences.getString(tag_work_number,""))
+                                                          .put(tag_mobile_number,sharedPreferences.getString(tag_mobile_number,""))
+                                                          .put(tag_mobile_countrycode,sharedPreferences.getString(tag_country_code,""));
 
             System.out.println("Fillendpoint body"+endpointbodyJSON.toString());
 
@@ -458,7 +470,7 @@ public class ValidateScreen extends ActionBarActivity {
     private Runnable updateTextMessage = new Runnable() {
         public void run() {
             if (myDatagramReceiver == null) return;
-            System.out.println(tag + "Received"+myDatagramReceiver.getLastMessage());
+            System.out.println(tag + "updateTextMessage Received"+myDatagramReceiver.getLastMessage());
             textView.setText(myDatagramReceiver.getLastMessage());
             new FillEndPointUrl(context).execute(myDatagramReceiver.getLastMessage());
            /* if (rSocket != null) {

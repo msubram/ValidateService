@@ -19,16 +19,73 @@ import java.net.URL;
 public class GlobalClass extends Application{
 
     public static final String TAG = "Validations";
+
+    /** URL's to access the server*/
     String base_url = "http://www.csharpsolutions.co.uk/ValidateApp/api/v1/";
+    String registration_request = "RegistrationRequest/";
+    String complete_registration_request = "Registrations/";
+    String gcm_registration_request = "GCMRegistrationRequest/";
+
     String port = "38798";
+
+    /** SharedPreference and JSON TAGS*/
+    public static String check_login = "login";
+    public static String country_code = "CountryCode";
+    public static String mobile_country_code = "MobileCountryCode";
+    public static String mobile_number = "MobileNumber";
+    public static String mobile_info = "MobileInfo";
+    public static String gcm_token = "Token";
+    public static String ip_address = "IP";
+    public static String sender_name = "Name";
+    public static String endPoint = "EndPoint";
+    public static String udpListenPort = "UDPListenPort";
+    public static String instance_id = "InstanceId";
+    public static String email = "Email";
+    public static String reg_id = "reg_id";
+    public static String reg_code = "RegCode";
+    public static String work_number = "WorkNumber";
+    public static String home_number = "HomeNumber";
+    public static String check_gcmisregistered = "isgcmregistered";
+
+
+
     int statuscode;
     String response_from_server = null;
+
+
+    /**GCM Tags*/
+    public static String notification_bodytag = "gcm.notification.body";
+    public static String notification_titletag = "gcm.notification.title";
 
 
     /** Base url to access the API*/
     public String getBase_url()
     {
         return base_url;
+    }
+
+    /** Routes for Registration Request*/
+    public String getRegistration_request_routes()
+    {
+        return registration_request;
+    }
+
+    /** Routes for Completing Registration Request*/
+    public String get_Complete_Registration_request_routes()
+    {
+        return complete_registration_request;
+    }
+
+    /** Routes for GCM Registration Request*/
+    public String get_gcm_registration_request()
+    {
+        return gcm_registration_request;
+    }
+
+    /** Routes for Completing Registration Request*/
+    public String get_check_login()
+    {
+        return check_login;
     }
 
     /**Port to listen and send messages*/

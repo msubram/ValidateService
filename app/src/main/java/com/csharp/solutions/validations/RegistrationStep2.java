@@ -74,6 +74,12 @@ public class RegistrationStep2 extends Activity {
     /**GCM*/
     String GCMregId="";
 
+    /** Tags declaration*/
+    String tag_country_code = GlobalClass.country_code;
+    String tag_mobile_number = GlobalClass.mobile_number;
+    String tag_reg_code = GlobalClass.reg_code;
+    String tag_mobile_info  = GlobalClass.mobile_info;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registration_step_two);
@@ -230,103 +236,6 @@ public class RegistrationStep2 extends Activity {
     }
 
 
-    /** Background task to get the RegCode but it is for testing purpose actual pulling of RegCode will done through Sms read operation automatically*/
-    private class RegCode_Task extends AsyncTask<String, Integer, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // publishProgress("");
-
-            /** Custom progressdialog to show loading symbol*/
-            progressDialog = CustomProgressDialog.ctor(context);
-            progressDialog.show();
-        }
-
-        protected String doInBackground(String... urls) {
-
-
-            /** Sending the get data in JSON format in the body*/
-            String response_from_server = null;
-
-            try {
-
-                /** Calling Registrations(http://www.csharpsolutions.co.uk/ValidateApp/api/v1/Registrations/{id}) API  and the response will be a statuscode and actual response from server in JSON format.*/
-                System.out.println(globalClass.TAG+"reg_id"+sharedPreferences.getString("reg_id",""));
-                response_from_server = globalClass.sendGet(urls[0]+"Registrations/"+sharedPreferences.getString("reg_id",""),5000);
-
-                /** Parsing response to get Status code and response from server*/
-                globalClass.parseServerResponseJSON(response_from_server);
-
-                if(globalClass.getStatusCode() == 200)
-                {
-                    response_from_server = globalClass.getServerResponse();
-                }
-                else
-                {
-                    response_from_server = "error";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println(globalClass.TAG+e.toString());
-            }
-
-            return response_from_server;
-        }
-
-
-
-        protected void onPostExecute(String result) {
-            if(progressDialog.isShowing())
-            {
-                progressDialog.dismiss();
-            }
-
-            /** Sometimes response can be in negatve value so it indicates error.*/
-                if(!result.equals("error")&&!result.equals("-1"))
-                {
-                String reg_code = null;
-                try{
-                    JSONObject response_from_server = new JSONObject(result);
-
-                    reg_code = Integer.toString(response_from_server.getInt("RegCode"));
-
-                    SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                    editor.putString("RegCode",reg_code);
-                    editor.commit();
-
-                    System.out.println(globalClass.TAG+"reg_code"+reg_code);
-
-                    /** Code to get the individual digit in the 5-digit code*/
-                    if(reg_code.length()==5)
-                    {
-                        firstdigit.setText(Character.toString(reg_code.charAt(0)));
-                        seconddigit.setText(Character.toString(reg_code.charAt(1)));
-                        thirddigit.setText(Character.toString(reg_code.charAt(2)));
-                        fourthdigit.setText(Character.toString(reg_code.charAt(3)));
-                        fifthdigit.setText(Character.toString(reg_code.charAt(4)));
-                    }
-
-
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-
-            else
-            {
-
-                Toast.makeText(RegistrationStep2.this,
-                        "Server error : ",
-                        Toast.LENGTH_SHORT).show();
-            }
-
-
-
-        }
-    }
 
 
     /** Background network operation can be performed in a separate thread. We must use AsyncTask for that.*/
@@ -354,15 +263,15 @@ public class RegistrationStep2 extends Activity {
 
                 String reg_code = firstdigit.getText().toString()+seconddigit.getText().toString()+thirddigit.getText().toString()+fourthdigit.getText().toString()+fifthdigit.getText().toString();
                 SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                editor.putString("RegCode",reg_code);
+                editor.putString(tag_reg_code,reg_code);
                 editor.commit();
 
-                 String body_in_post = new JSONObject().put("RegCode",Integer.parseInt(sharedPreferences.getString("RegCode",""))).put("MobileInfo",new JSONObject().put("CountryCode",sharedPreferences.getString("country_code","")).put("MobileNumber",sharedPreferences.getString("mobile_number",""))).toString();
+                 String body_in_post = new JSONObject().put(tag_reg_code,Integer.parseInt(sharedPreferences.getString(tag_reg_code,""))).put(tag_mobile_info,new JSONObject().put(tag_country_code,sharedPreferences.getString(tag_country_code,"")).put(tag_mobile_number,sharedPreferences.getString(tag_mobile_number,""))).toString();
 
                 System.out.println(globalClass.TAG+"Complete_registration_Task"+body_in_post);
 
                 /** Calling Registrations(http://www.csharpsolutions.co.uk/ValidateApp/api/v1/Registrations/) API  and the response will be a statuscode and actual response from server in JSON format.*/
-                response_from_server = globalClass.sendPost(urls[0]+"Registrations/",body_in_post);
+                response_from_server = globalClass.sendPost(urls[0]+globalClass.get_Complete_Registration_request_routes(),body_in_post);
 
                 /** Parsing response to get Status code and response from server*/
                 globalClass.parseServerResponseJSON(response_from_server);
@@ -399,7 +308,7 @@ public class RegistrationStep2 extends Activity {
 
 
                 SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                editor.putBoolean("login",true);
+                editor.putBoolean(globalClass.get_check_login(),true);
                 editor.commit();
 
                 new GCMCredentials(context).execute();
@@ -503,7 +412,7 @@ public class RegistrationStep2 extends Activity {
                             Toast.makeText(context, "----"+reg_code, Toast.LENGTH_LONG).show();
 
                             SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                            editor.putString("RegCode",reg_code);
+                            editor.putString(tag_reg_code,reg_code);
                             editor.commit();
 
 

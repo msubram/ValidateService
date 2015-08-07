@@ -52,6 +52,12 @@ public class RegistrationStep1 extends Activity {
     /** Progress dialog*/
     ProgressDialog progressDialog;
 
+
+    /** Tags declaration*/
+    String tag_country_code = GlobalClass.country_code;
+    String tag_mobile_number = GlobalClass.mobile_number;
+    String tag_reg_id = GlobalClass.reg_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +67,7 @@ public class RegistrationStep1 extends Activity {
         globalClass = (GlobalClass) getApplicationContext();
 
 
-        if(sharedPreferences.getBoolean("login",false))
+        if(sharedPreferences.getBoolean(GlobalClass.check_login,false))
         {
             Intent intent = new Intent(RegistrationStep1.this, ValidateScreen.class);
             startActivity(intent);
@@ -155,11 +161,12 @@ public class RegistrationStep1 extends Activity {
                  * Country code - Selected by user
                  * MobileNumber - Users mobile number
                  * */
-                String body_in_post = new JSONObject().put("CountryCode",country_code).put("MobileNumber",user_mobile_number.getText().toString()).toString();
+                String body_in_post = new JSONObject().put(tag_country_code,country_code).put(tag_mobile_number,user_mobile_number.getText().toString()).toString();
                 System.out.println(globalClass.TAG+body_in_post);
 
                 /** Calling RegistrationRequest(http://www.csharpsolutions.co.uk/ValidateApp/api/v1/RegistrationRequest/) API  and the response will be a statuscode and actual response from server in JSON format.*/
-                response_from_server = globalClass.sendPost(urls[0]+"RegistrationRequest/",body_in_post);
+                System.out.println(globalClass.TAG+urls[0]+globalClass.getRegistration_request_routes()+body_in_post);
+                response_from_server = globalClass.sendPost(urls[0]+globalClass.getRegistration_request_routes(),body_in_post);
 
                /** Parsing response to get Status code and response from server*/
                 globalClass.parseServerResponseJSON(response_from_server);
@@ -191,13 +198,13 @@ public class RegistrationStep1 extends Activity {
             if(!result.equals("error")&&!result.equals("-1"))
             {
                 SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                editor.putString("reg_id",result);
-                editor.putString("mobile_number",user_mobile_number.getText().toString());
-                editor.putString("country_code",country_code);
+                editor.putString(tag_reg_id,result);
+                editor.putString(tag_mobile_number,user_mobile_number.getText().toString());
+                editor.putString(tag_country_code,country_code);
                 editor.commit();
 
 
-                System.out.println(globalClass.TAG+"reg_id"+sharedPreferences.getString("reg_id",""));
+                System.out.println(globalClass.TAG+tag_reg_id+sharedPreferences.getString(tag_reg_id,""));
                 Intent intent = new Intent(RegistrationStep1.this, RegistrationStep2.class);
                 startActivity(intent);
             }
