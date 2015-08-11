@@ -23,6 +23,14 @@
         <item name="android:textSize">@dimen/normal_textsize</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+
+    <style name="normal_note_style">
+        <item name="android:textSize">@dimen/small_note_textsize</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+    </style>
+
     <style name="editext_background_style">
         <item name="android:background">@drawable/roundedcorners_selection</item>
     </style>

@@ -49,5 +49,11 @@
     <string name="gcm_error">From GCM: error (%1$s).</string>
     <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+    <string name="title_activity_notification_handle">NotificationHandleActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="success">Success</string>
+    <string name="try_again">Something went wrong.Please try again.</string>
 
 </resources>

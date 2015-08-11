@@ -2,52 +2,58 @@
 <resources>
 
     <string name="app_name">Csharp</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Impostazioni</string>
 
 
-    <string name="registration_step1_instruction_textview">Please enter your mobile number to register for the service</string>
-    <string name="registration_step1_mobile_number_textview">Your Mobile Number</string>
-    <string name="registration_step1_country">Country</string>
+    <string name="registration_step1_instruction_textview">Inserisci il tuo numero di cellulare per la registrazione al servizio</string>
+    <string name="registration_step1_mobile_number_textview">Il tuo numero di cellulare</string>
+    <string name="registration_step1_country">Nazione</string>
     <string name="registration_step1_register_button">Register</string>
-    <string name="registration_step1_country_prompt">Choose a country</string>
-    <string name="registration_step1_title_textview">Registration : Step-1</string>
+    <string name="registration_step1_country_prompt">Scegli una nazione</string>
+    <string name="registration_step1_title_textview">Registrazione : Fase - 1</string>
 
     <string-array name="registration_step1_country_array">
-        <item>United Kingdom</item>
+        <item>Regno Unito</item>
         <item>India</item>
 
     </string-array>
 
 
-    <string name="registration_step2_instruction1_textview">You should shortly receive  a 5-digit registration code by text</string>
-    <string name="registration_step2_instruction2_textview">Upon receipt please enter 5-digit registration code below</string>
-    <string name="registration_step2_instruction2_note">Note: This app will automatically extract the code  from text received. In this case, the code will be displayed. Simply click complete to register  </string>
-    <string name="registration_step2_retry_button">Retry</string>
-    <string name="registration_step2_title_textview">Registration : Step-2</string>
-    <string name="registration_step2_complete_button">Complete</string>
+    <string name="registration_step2_instruction1_textview">Dovreste breve riceverà un 5 cifre codice di registrazione per il testo</string>
+    <string name="registration_step2_instruction2_textview">Al ricevimento inserisci il codice di registrazione a 5 cifre in basso</string>
+    <string name="registration_step2_instruction2_note">Nota : Questa applicazione estrarrà automaticamente il codice di testo ricevuto . In questo caso , viene visualizzato il codice . Basta fare clic completa per la registrazione</string>
+    <string name="registration_step2_retry_button">Riprova</string>
+    <string name="registration_step2_title_textview">Registrazione : Step- 2</string>
+    <string name="registration_step2_complete_button">completo</string>
 
-    <string name="user_info_title">User Information </string>
-    <string name="user_info_instruction_textview">Please update the following information </string>
-    <string name="user_info_work_number_textview">Your Work Telephone Number</string>
-    <string name="user_info_home_number_textview">Your Home Telephone Number</string>
-    <string name="user_info_update_button">Update</string>
+    <string name="user_info_title">Informazioni Utente</string>
+    <string name="user_info_instruction_textview">Si prega di aggiornare i seguenti dati</string>
+    <string name="user_info_work_number_textview">Il tuo lavoro Numero di telefono</string>
+    <string name="user_info_home_number_textview">Your Home Numero di telefono</string>
+    <string name="user_info_update_button">aggiornare</string>
 
-    <string name="validation_validate_button">Validate</string>
-    <string name="validation_title">Validation </string>
-    <string name="validation_ack_title">Validation Success</string>
-    <string name="validation_ack_message">Validate</string>
-    <string name="validation_menu_update">Update</string>
-    <string name="validation_menu_validate">Validate</string>
+    <string name="validation_validate_button">convalidare</string>
+    <string name="validation_title">Validazione</string>
+    <string name="validation_ack_title">Successo di convalida</string>
+    <string name="validation_ack_message">convalidare</string>
+    <string name="validation_menu_update">aggiornare</string>
+    <string name="validation_menu_validate">convalidare</string>
 
-    <string name="check_wifi_string">Please Check your Wifi Connection</string>
-    <string name="empty_fields">Please fill the empty fields</string>
+    <string name="check_wifi_string">Si prega di controllare la connessione Wifi</string>
+    <string name="empty_fields">Si prega di compilare i campi vuoti</string>
 
-    <string name="already_registered">Device is already registered on server.</string>
-    <string name="gcm_registered">From GCM: device successfully registered!</string>
-    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
-    <string name="gcm_message">From GCM: you got message!</string>
-    <string name="gcm_error">From GCM: error (%1$s).</string>
-    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
-    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+    <string name="already_registered">Il dispositivo è già registrato su un server.</string>
+    <string name="gcm_registered">Da GCM : dispositivo con successo registrato!</string>
+    <string name="gcm_unregistered">Da GCM : dispositivo registrato con successo!</string>
+    <string name="gcm_message">Da GCM : hai un messaggio!</string>
+    <string name="gcm_error">Da GCM : Errore(%1$s).</string>
+    <string name="gcm_recoverable_error">Da GCM : errore recuperabile(%1$s).</string>
+    <string name="gcm_deleted">Da GCM : server eliminato %1$d messaggi in sospeso!</string>
+    <string name="title_activity_notification_handle">NotificationHandleActivity</string>
+    <string name="dummy_button">Button Dummy</string>
+    <string name="dummy_content">DUMMY\CONTENUTO</string>
+
+    <string name="success">successo</string>
+    <string name="try_again">Qualcosa è andato wrong.Please riprovare.</string>
 
 </resources>

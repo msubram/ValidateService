@@ -46,14 +46,13 @@
             android:layout_weight="1"
             android:layout_height="match_parent">
             <TextView
+                style="@style/normal_text_style"
                 android:id="@+id/id_reg_step2_label1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/Black"
                 android:layout_centerInParent="true"
-                android:textSize="@dimen/small_textsize"
                 android:lineSpacingExtra="2dp"
                 android:text="@string/registration_step2_title_textview"/>
         </RelativeLayout>
@@ -69,14 +68,13 @@
             android:layout_height="match_parent">
 
             <TextView
+                style="@style/normal_text_style"
                 android:id="@+id/id_reg_step2_label2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/Black"
                 android:layout_centerInParent="true"
-                android:textSize="@dimen/small_textsize"
                 android:lineSpacingExtra="2dp"
                 android:text="@string/registration_step2_instruction1_textview"/>
 
@@ -95,14 +93,13 @@
             android:layout_height="match_parent">
 
             <TextView
+                style="@style/normal_text_style"
                 android:id="@+id/id_reg_step2_label3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/Black"
                 android:layout_centerInParent="true"
-                android:textSize="@dimen/small_textsize"
                 android:lineSpacingExtra="2dp"
                 android:text="@string/registration_step2_instruction2_textview"/>
 
@@ -281,15 +278,14 @@
 
 
             <TextView
+                style="@style/normal_note_style"
                 android:id="@+id/id_reg_note"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/Black"
                 android:layout_centerInParent="true"
                 android:textSize="@dimen/small_note_textsize"
-                android:lineSpacingExtra="2dp"
                 android:text="@string/registration_step2_instruction2_note"/>
 
 

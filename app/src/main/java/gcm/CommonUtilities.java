@@ -20,7 +20,7 @@ public final class CommonUtilities {
     /**
      * Tag used on log messages.
      */
-    static final String TAG = "Validations";
+    public static final String TAG = "Validations";
 
     public static final String DISPLAY_MESSAGE_ACTION =
             "com.csharp.solutions.validations.DISPLAY_MESSAGE";

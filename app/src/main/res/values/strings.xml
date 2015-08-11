@@ -34,6 +34,7 @@
     <string name="validation_menu_validate">Validate</string>
     <string name="check_wifi_string">Please Check your Wifi Connection</string>
     <string name="empty_fields">Please fill the empty fields</string>
+    <string name="empty_phonenumber">Please fill your mobile number</string>
     <string name="already_registered">Device is already registered on server.</string>
     <string name="gcm_registered">From GCM: device successfully registered!</string>
     <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
@@ -41,8 +42,13 @@
     <string name="gcm_error">From GCM: error (%1$s).</string>
     <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+
     <string name="title_activity_notification_handle">NotificationHandleActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="success">Success</string>
+    <string name="try_again">Something went wrong.Please try again.</string>
+    <string name="reg_code_message">Thank you for registering with our validations service. To complete your registration, please enter the following 5-digit code and click on complete</string>
 
 </resources>

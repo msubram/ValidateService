@@ -42,12 +42,18 @@
     <string name="check_wifi_string">S\'il vous plaît vérifier votre connexion Wifi</string>
     <string name="empty_fields">S\'il vous plaît remplir les champs vides</string>
 
-    <string name="already_registered">Device is already registered on server.</string>
+    <string name="already_registered">Périphérique est déjà enregistré sur le serveur.</string>
     <string name="gcm_registered">From GCM: device successfully registered!</string>
-    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
-    <string name="gcm_message">From GCM: you got message!</string>
-    <string name="gcm_error">From GCM: error (%1$s).</string>
-    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
-    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+    <string name="gcm_unregistered">De GCM : dispositif enregistré avec succès!</string>
+    <string name="gcm_message">De GCM : vous avez un message!</string>
+    <string name="gcm_error">De GCM : erreur(%1$s).</string>
+    <string name="gcm_recoverable_error">De GCM : erreur récupérable(%1$s).</string>
+    <string name="gcm_deleted">De GCM : serveur supprimé %1$d les messages en attente!</string>
+    <string name="title_activity_notification_handle">NotificationHandleActivity</string>
+    <string name="dummy_button">Bouton dummy</string>
+    <string name="dummy_content">MANNEQUIN\CONTENU</string>
+
+    <string name="success">succès</string>
+    <string name="try_again">Une erreur sS\'est produite. Veuillez réessayer.</string>
 
 </resources>

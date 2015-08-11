@@ -8,11 +8,11 @@ import android.widget.ImageView;
 
 
 public class CustomProgressDialog extends ProgressDialog {
-  AnimationDrawable animation;
-   static Context context=null;
+    AnimationDrawable animation;
+    static Context context=null;
     ProgressDialog  dialog=null;
     public static ProgressDialog ctor(Context ctxt) {
-        CustomProgressDialog dialog = new CustomProgressDialog(ctxt);
+    CustomProgressDialog dialog = new CustomProgressDialog(ctxt);
     dialog.setIndeterminate(true);
     dialog.setCancelable(false);
       context = ctxt;

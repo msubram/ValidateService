@@ -1,5 +1,6 @@
 package com.csharp.solutions.validations;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,10 +28,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
-import java.net.SocketAddress;
-import java.net.SocketException;
 import java.util.Enumeration;
 
 import util.GlobalClass;
@@ -48,10 +46,11 @@ public class ValidateScreen extends ActionBarActivity {
 
 
     Context context = this;
-    String tag = "UDP";
+    String mTag = GlobalClass.TAG;
 
     /**UDP Port and Packet Size*/
-    private static final int UDP_SERVER_PORT = 38798;
+    private static final int UDP_LISTENER_PORT = 38798;
+    private static final int UDP_BROADCAST_PORT = 32233;
     private final static int PACKETSIZE = 1000 ;
 
     /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
@@ -59,34 +58,38 @@ public class ValidateScreen extends ActionBarActivity {
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
     SharedPreferences sharedPreferences;
 
-
+    /** Receiving Socket*/
     DatagramSocket rSocket = null ;
 
     /** Tags declaration*/
-    String tag_country_code = GlobalClass.country_code;
-    String tag_mobile_number = GlobalClass.mobile_number;
-    String tag_work_number = GlobalClass.work_number;
-    String tag_home_number  = GlobalClass.home_number;
-    String tag_ip  = GlobalClass.ip_address;
-    String tag_name  = GlobalClass.sender_name;
-    String tag_endpoint  = GlobalClass.endPoint;
-    String tag_udplistenerport  = GlobalClass.udpListenPort;
-    String tag_email  = GlobalClass.email;
-    String tag_mobile_countrycode  = GlobalClass.mobile_country_code;
+    String mTagCountryCode = GlobalClass.COUNTRY_CODE;
+    String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
+    String mTagWorkNumber = GlobalClass.WORK_NUMBER;
+    String mTagHomeNumber = GlobalClass.HOME_NUMBER;
+    String mTagIpAddress = GlobalClass.IP_ADDRESS;
+    String mTagName = GlobalClass.SENDER_NAME;
+    String mTagEndPoint = GlobalClass.END_POINT;
+    String mTagUdpListenPort = GlobalClass.UDP_LISTEN_PORT;
+    String mTagEmail = GlobalClass.EMAIL;
+    String mTagMobileCountryCode = GlobalClass.MOBILE_COUNTRY_CODE;
+
+    /** Progress dialog*/
+    ProgressDialog progressDialog;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.validatescreen);
-        System.out.println( tag+"onCreate" ) ;
-        add_views();
+        System.out.println( mTag +"onCreate" ) ;
+
+        addViews();
+
         globalClass = (GlobalClass) getApplicationContext();
        // UDP_SERVER_PORT = Integer.parseInt(globalClass.get_Udp_port());
-
         sharedPreferences = new SecurePreferences(this);
 
 
         /** Validate button click event
-         * Send the broadcast message and start the server to receive the data.
+         * Send the broadcast message and start the Datagramreceiver  to receive the UDP data.
          * */
         validate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,26 +98,25 @@ public class ValidateScreen extends ActionBarActivity {
 
                 if(globalClass.checkWifiConnectivity())
                 {
-                    Toast.makeText(context, "Validation Success", Toast.LENGTH_LONG).show();
 
-                    /**Asynctasks to send and receive broadcast messages*/
+                    System.out.println("myDatagramReceiver Start");
 
-                   // startService(new Intent(ValidateScreen.this, UDPListenerService.class));
-
-                        System.out.println("myDatagramReceiver Start");
                     WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
                     if (wifi != null){
                         WifiManager.MulticastLock lock = wifi.createMulticastLock("mylock");
                         lock.acquire();
                     }
 
-                        myDatagramReceiver = new MyDatagramReceiver();
-                        myDatagramReceiver.start();
+                    /** show progress dialog*/
+                    progressDialog = CustomProgressDialog.ctor(context);
+                    progressDialog.show();
 
+                    /** Start a thread to listen for incoming udp messages*/
+                    myDatagramReceiver = new MyDatagramReceiver();
+                    myDatagramReceiver.start();
 
-                        new SendBroadcast(context).execute("");
-                   //new ListenerTask(context).execute("");
-
+                    /** Asynctask to Broadcast the message*/
+                    new SendBroadcast(context).execute("");
 
                 }
                 else
@@ -157,12 +159,11 @@ public class ValidateScreen extends ActionBarActivity {
 
 
     /** Method to refer the views that have been created in xml. Using te id of the view the widgets can be refered*/
-    public void add_views(){
+    public void addViews(){
         context=this;
         validate=(Button)findViewById(R.id.button_validate);
         logo=(ImageView)findViewById(R.id.imageview_logo);
         validate.setTransformationMethod(null);
-
         textView = (TextView) findViewById(R.id.client_text);
 
         /** Setting typeface for views*/
@@ -171,104 +172,34 @@ public class ValidateScreen extends ActionBarActivity {
     }
 
 
-
-
-    /** Asynctask to SendBroadcast message*/
-    private class SendBroadcast extends
-            AsyncTask<String, Void, String> {
-        Context mContext;
-
-        public SendBroadcast(Context context) {
-            super();
-            mContext = context;
-        }
-
-
-        @Override
-        protected String doInBackground(String... params) {
-
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            finally {
-                sendbroadcastmessage();
-            }
-
-            return "";
-
-        }
-        protected void onPostExecute(String result) {
-        }
-    }
-
-    /** Asynctask to Fill the message in the Endpoint URL*/
-    private class FillEndPointUrl extends
-            AsyncTask<String, Void, String> {
-        Context mContext;
-        double type;
-        public FillEndPointUrl(Context context) {
-            super();
-            mContext = context;
-        }
-
-
-        @Override
-        protected String doInBackground(String... params) {
-            String text=null;
-
-
-            return  fillEndPointurl(params[0]);
-
-        }
-        protected void onPostExecute(String result) {
-            /** Sometimes response can be in negatve value so it indicates error.*/
-            if(!result.equals("error")&&!result.equals("-1"))
-            {
-                Toast.makeText(ValidateScreen.this,
-                        "Success : ",
-                        Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                Toast.makeText(ValidateScreen.this,
-                        "Server error : ",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-
-    }
     /** Method to send the broadcast message with the following items
      * CountryCode, MobileNumber, IP, Name, EndPoint and UDPListenPort
      * Construct the JSON format of the above items and send the message in the DatagramPacket.
      * */
-    private void sendbroadcastmessage()  {
-        //String msg = "{CountryCode:'44', MobileNumber:'9566510535', IP: '192.168.0.12', Name: 'Srinath', EndPoint: '', UDPListenPort: '38798'}";
-        String coutry_code = sharedPreferences.getString(tag_country_code,"");
-        String mobile_number = sharedPreferences.getString(tag_mobile_number,"");
-        String IP = getLocalIpAddress();
-        String port = Integer.toString(UDP_SERVER_PORT);
+    private void sendBroadcastMessage()  {
+        String mcountryCode = sharedPreferences.getString(mTagCountryCode,"");
+        String mMobileNumber = sharedPreferences.getString(mTagMobileNumber,"");
+        String mLocalIpAddress = getLocalIpAddress();
+        String mListenPort = Integer.toString(UDP_LISTENER_PORT);
 
         DatagramSocket socket = null ;
 
         try {
 
             /** Broadcast data JSON formation*/
-            JSONObject broadcaste_message_json = new JSONObject().put(tag_country_code,coutry_code).put(tag_mobile_number,mobile_number).put(tag_ip,IP).put(tag_name,"motoe").put(tag_endpoint,"").put(tag_udplistenerport,port);
-            System.out.println( tag+"message"+broadcaste_message_json.toString() ) ;
+            JSONObject broadcaste_message_json = new JSONObject().put(mTagCountryCode,mcountryCode).put(mTagMobileNumber,mMobileNumber).put(mTagIpAddress,mLocalIpAddress).put(mTagName,"motoe").put(mTagEndPoint,"").put(mTagUdpListenPort,mListenPort);
+            System.out.println( mTag +"message"+broadcaste_message_json.toString() ) ;
 
             /** To get the broadcast address of a WIFI on which device is connected*/
             InetAddress host = getBroadcastAddress() ;
-            System.out.println( tag+host.toString() ) ;
+            System.out.println( mTag +host.toString() ) ;
 
             // Construct the socket
             socket = new DatagramSocket();
 
             /** Setting the broadcast*/
             socket.setBroadcast(true);
-            System.out.println( tag+"setBroadcast" );
+            System.out.println( mTag +"setBroadcast" );
 
             byte [] data = broadcaste_message_json.toString().getBytes() ;
 
@@ -276,11 +207,11 @@ public class ValidateScreen extends ActionBarActivity {
              * data - JSON data
              * host - Broadcast address
              * port - Port on which the data is going to broadcast*/
-            DatagramPacket packet = new DatagramPacket( data, data.length,host,32233 );
+            DatagramPacket packet = new DatagramPacket( data, data.length,host, UDP_BROADCAST_PORT);
 
             // Send the packet in the socket
             socket.send( packet ) ;
-            System.out.println( tag+"message sent" );
+            System.out.println( mTag +"message sent" );
 
             Thread.sleep(500);
 
@@ -288,13 +219,10 @@ public class ValidateScreen extends ActionBarActivity {
         }
         catch( Exception e )
         {
-            System.out.println(tag+e ) ;
+            System.out.println(mTag +e ) ;
         }
 
     }
-
-
-
 
 
     /** Method to fill the endpoint url with the Mobile, Home and Work Telephone numbers */
@@ -316,11 +244,11 @@ public class ValidateScreen extends ActionBarActivity {
 
 
 
-            JSONObject endpointbodyJSON = new JSONObject().put(tag_email,"")
-                                                          .put(tag_home_number,sharedPreferences.getString(tag_home_number,""))
-                                                          .put(tag_work_number,sharedPreferences.getString(tag_work_number,""))
-                                                          .put(tag_mobile_number,sharedPreferences.getString(tag_mobile_number,""))
-                                                          .put(tag_mobile_countrycode,sharedPreferences.getString(tag_country_code,""));
+            JSONObject endpointbodyJSON = new JSONObject().put(mTagEmail,"")
+                                                          .put(mTagHomeNumber,sharedPreferences.getString(mTagHomeNumber,""))
+                                                          .put(mTagWorkNumber,sharedPreferences.getString(mTagWorkNumber,""))
+                                                          .put(mTagMobileNumber,sharedPreferences.getString(mTagMobileNumber,""))
+                                                          .put(mTagMobileCountryCode,sharedPreferences.getString(mTagCountryCode,""));
 
             System.out.println("Fillendpoint body"+endpointbodyJSON.toString());
 
@@ -381,24 +309,98 @@ public class ValidateScreen extends ActionBarActivity {
         return null;
     }
 
-    public void onBackPressed() {
-        Intent intent = new Intent(ValidateScreen.this,UpdateScreen.class);
-        startActivity(intent);
+
+
+    /** Asynctask to SendBroadcast message*/
+    private class SendBroadcast extends
+            AsyncTask<String, Void, String> {
+        Context mContext;
+
+        public SendBroadcast(Context context) {
+            super();
+            mContext = context;
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            finally {
+                sendBroadcastMessage();
+            }
+
+            return "";
+
+        }
+        protected void onPostExecute(String result) {
+        }
     }
+
+    /** Asynctask to Fill the message in the Endpoint URL*/
+    private class FillEndPointUrl extends
+            AsyncTask<String, Void, String> {
+        Context mContext;
+        double type;
+        public FillEndPointUrl(Context context) {
+            super();
+            mContext = context;
+          /*  progressDialog = CustomProgressDialog.ctor(context);
+            progressDialog.show();*/
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String text=null;
+
+
+            return  fillEndPointurl(params[0]);
+
+        }
+        protected void onPostExecute(String result) {
+            /** Sometimes response can be in negatve value so it indicates error.*/
+            if(progressDialog.isShowing())
+            {
+                progressDialog.dismiss();
+            }
+
+            if(!result.equals("error")&&!result.equals("-1"))
+            {
+                Toast.makeText(ValidateScreen.this,
+                        getResources().getString(R.string.success),
+                        Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(ValidateScreen.this,
+                        getResources().getString(R.string.try_again),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+
 
     private MyDatagramReceiver myDatagramReceiver = null;
 
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println( tag+"onResume" ) ;
+        System.out.println( mTag +"onResume" ) ;
      //   myDatagramReceiver = new MyDatagramReceiver();
        // myDatagramReceiver.start();
     }
     @Override
     protected void onPause() {
         super.onPause();
-        System.out.println( tag+"onPause" ) ;
+        System.out.println( mTag +"onPause" ) ;
         WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
         if (wifi != null){
             WifiManager.MulticastLock lock = wifi.createMulticastLock("mylock");
@@ -416,6 +418,7 @@ public class ValidateScreen extends ActionBarActivity {
 
     }
 
+    /** Thread to listen for the UDP Message on the specified port*/
     private class MyDatagramReceiver extends Thread {
         private boolean bKeepRunning = true;
         private String lastMessage = "";
@@ -423,35 +426,40 @@ public class ValidateScreen extends ActionBarActivity {
         public void run() {
             String message;
 
-            System.out.println(tag + "MyDatagramReceiver run");
+            System.out.println(mTag + "MyDatagramReceiver run");
             try {
-                rSocket= new DatagramSocket(UDP_SERVER_PORT);
+                rSocket= new DatagramSocket(UDP_LISTENER_PORT);
                 rSocket.setReuseAddress(true);
-               // SocketAddress socketAddr=new InetSocketAddress(UDP_SERVER_PORT);
+                // SocketAddress socketAddr=new InetSocketAddress(UDP_SERVER_PORT);
 
                 rSocket.setBroadcast(true);
-               // rSocket.bind(socketAddr);
+                // rSocket.bind(socketAddr);
                 rSocket.setSoTimeout(10000);
 
                 while(bKeepRunning) {
                     byte[] lmessage = new byte[PACKETSIZE];
-                    System.out.println(tag + "MyDatagramReceiver waiting for message");
+                    System.out.println(mTag + "MyDatagramReceiver waiting for message");
                     DatagramPacket packet = new DatagramPacket(lmessage, lmessage.length);
 
                     rSocket.receive(packet);
-                    System.out.println(tag + "Received"+new String(packet.getData()));
+                    System.out.println(mTag + "Received"+new String(packet.getData()));
                     message = new String(lmessage, 0, packet.getLength());
                     lastMessage = message;
 
-                    runOnUiThread(updateTextMessage);
+                    /** Once the message is received call the endpoint url and send the data stored by the user.*/
+                    runOnUiThread(updateMessage);
                 }
             } catch (Throwable e) {
                 e.printStackTrace();
-                System.out.println(tag + e);
+                System.out.println(mTag + e);
                 if (rSocket != null) {
-                    System.out.println(tag + "Throwable rSocket close");
+                    System.out.println(mTag + "Throwable rSocket close");
                     rSocket.close();
-                   // rSocket.disconnect();
+                    if(progressDialog.isShowing())
+                    {
+                        progressDialog.dismiss();
+                    }
+                    // rSocket.disconnect();
                 }
             }
 
@@ -467,18 +475,24 @@ public class ValidateScreen extends ActionBarActivity {
         }
     }
 
-    private Runnable updateTextMessage = new Runnable() {
+    private Runnable updateMessage = new Runnable() {
         public void run() {
             if (myDatagramReceiver == null) return;
-            System.out.println(tag + "updateTextMessage Received"+myDatagramReceiver.getLastMessage());
-            textView.setText(myDatagramReceiver.getLastMessage());
+            System.out.println(mTag + "updateTextMessage Received"+myDatagramReceiver.getLastMessage());
             new FillEndPointUrl(context).execute(myDatagramReceiver.getLastMessage());
-           /* if (rSocket != null) {
-                System.out.println(tag + "rSocket close");
-                rSocket.close();
-                rSocket.disconnect();
-            }*/
+
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
+        finish();
+    }
+
+
 
 }

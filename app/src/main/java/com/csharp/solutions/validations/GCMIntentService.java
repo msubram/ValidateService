@@ -9,14 +9,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.securepreferences.SecurePreferences;
-
-import java.util.Arrays;
-import java.util.List;
 
 import util.GlobalClass;
 
@@ -45,7 +41,7 @@ Context context=this;
         GlobalClass globalClass = (GlobalClass) getApplicationContext();
 
         SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-        editor.putString(globalClass.gcm_token,registrationId);
+        editor.putString(globalClass.GCM_TOKEN,registrationId);
         editor.commit();
 
         displayMessage(context, "Your device registred with GCM");
@@ -68,13 +64,13 @@ Context context=this;
     protected void onMessage(Context context, Intent intent) {
         Bundle extras = intent.getExtras();
         GlobalClass globalClass = (GlobalClass) getApplicationContext();
-        Log.i("onMessage", extras.getString("gcm.notification.body"));
+        //Log.i("onMessage", extras.getString("gcm.notification.body"));
 
 
         sharedPreferences = new SecurePreferences(this);
 
-        String title = extras.getString("gcm.notification.title");
-        String message = extras.getString("gcm.notification.body");
+        String title = extras.getString(GlobalClass.NOTIFICATION_TITLE_TAG);
+        String message = extras.getString(GlobalClass.NOTIFICATION_BODY_TAG);
 
 
 
@@ -122,12 +118,12 @@ Context context=this;
 	private static void generateNotification(Context context,String title, String message) {
 
 
-        int notif_id = sharedPreferences.getInt("notif_id",1);
+        int mNotifId = sharedPreferences.getInt("notif_id",1);
 
 
 
         SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-        editor.putInt("notif_id", notif_id + 1);
+        editor.putInt("notif_id", mNotifId + 1);
         editor.commit();
 
 
@@ -139,6 +135,7 @@ Context context=this;
 
 
         Intent notificationIntent = new Intent(context, NotificationHandleActivity.class);
+        notificationIntent.putExtra(GlobalClass.NOTIFICATION_MESSAGE,message);
         // set intent so it does not start a new activity
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -147,12 +144,6 @@ Context context=this;
         notification.setLatestEventInfo(context, title, message, intent);
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
-        // Play default notification sound
-        //notification.defaults |= Notification.DEFAULT_SOUND;
-
-        // notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.siren);
-
-        // Vibrate if vibrate is enabled
         notification.defaults |= Notification.DEFAULT_VIBRATE;
         notificationManager.notify(1, notification);
 

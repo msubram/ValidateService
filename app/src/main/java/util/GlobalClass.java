@@ -21,31 +21,32 @@ public class GlobalClass extends Application{
     public static final String TAG = "Validations";
 
     /** URL's to access the server*/
-    String base_url = "http://www.csharpsolutions.co.uk/ValidateApp/api/v1/";
-    String registration_request = "RegistrationRequest/";
-    String complete_registration_request = "Registrations/";
-    String gcm_registration_request = "GCMRegistrationRequest/";
+    String mBase_url = "http://www.csharpsolutions.co.uk/ValidateApp/api/v1/";
+    String mRegistration_request = "RegistrationRequest/";
+    String mComplete_registration_request = "Registrations/";
+    String mGcm_registration_request = "GCMRegistrationRequest/";
 
-    String port = "38798";
+    /** UDP Port to listen*/
+    String mPort = "38798";
 
     /** SharedPreference and JSON TAGS*/
-    public static String check_login = "login";
-    public static String country_code = "CountryCode";
-    public static String mobile_country_code = "MobileCountryCode";
-    public static String mobile_number = "MobileNumber";
-    public static String mobile_info = "MobileInfo";
-    public static String gcm_token = "Token";
-    public static String ip_address = "IP";
-    public static String sender_name = "Name";
-    public static String endPoint = "EndPoint";
-    public static String udpListenPort = "UDPListenPort";
-    public static String instance_id = "InstanceId";
-    public static String email = "Email";
-    public static String reg_id = "reg_id";
-    public static String reg_code = "RegCode";
-    public static String work_number = "WorkNumber";
-    public static String home_number = "HomeNumber";
-    public static String check_gcmisregistered = "isgcmregistered";
+    public static final String CHECK_LOGIN = "login";
+    public static final String COUNTRY_CODE = "CountryCode";
+    public static final String MOBILE_COUNTRY_CODE = "MobileCountryCode";
+    public static final String MOBILE_NUMBER = "MobileNumber";
+    public static final String MOBILE_INFO = "MobileInfo";
+    public static final String GCM_TOKEN = "Token";
+    public static final String IP_ADDRESS = "IP";
+    public static final String SENDER_NAME = "Name";
+    public static final String END_POINT = "EndPoint";
+    public static final String UDP_LISTEN_PORT = "UDPListenPort";
+    public static final String INSTANCE_ID = "InstanceId";
+    public static final String EMAIL = "Email";
+    public static final String REG_ID = "reg_id";
+    public static final String REG_CODE = "RegCode";
+    public static final String WORK_NUMBER = "WorkNumber";
+    public static final String HOME_NUMBER = "HomeNumber";
+    public static final String CHECK_GCMISREGISTERED = "isgcmregistered";
 
 
 
@@ -54,44 +55,44 @@ public class GlobalClass extends Application{
 
 
     /**GCM Tags*/
-    public static String notification_bodytag = "gcm.notification.body";
-    public static String notification_titletag = "gcm.notification.title";
-
+    public static final String NOTIFICATION_BODY_TAG = "gcm.notification.body";
+    public static final String NOTIFICATION_TITLE_TAG = "gcm.notification.title";
+    public static final String NOTIFICATION_MESSAGE = "notif_message";
 
     /** Base url to access the API*/
     public String getBase_url()
     {
-        return base_url;
+        return mBase_url;
     }
 
     /** Routes for Registration Request*/
-    public String getRegistration_request_routes()
+    public String getRegistration_Request_Routes()
     {
-        return registration_request;
+        return mRegistration_request;
     }
 
     /** Routes for Completing Registration Request*/
-    public String get_Complete_Registration_request_routes()
+    public String getComplete_Registration_Request_Routes()
     {
-        return complete_registration_request;
+        return mComplete_registration_request;
     }
 
     /** Routes for GCM Registration Request*/
-    public String get_gcm_registration_request()
+    public String getGcm_Registration_Request()
     {
-        return gcm_registration_request;
+        return mGcm_registration_request;
     }
 
     /** Routes for Completing Registration Request*/
-    public String get_check_login()
+    public String getCheck_Login()
     {
-        return check_login;
+        return CHECK_LOGIN;
     }
 
     /**Port to listen and send messages*/
     public String get_Udp_port()
     {
-        return port;
+        return mPort;
     }
 
     /**Get methods*/

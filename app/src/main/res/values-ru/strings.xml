@@ -42,12 +42,18 @@
     <string name="check_wifi_string">Пожалуйста, проверьте ваши WiFi соединение</string>
     <string name="empty_fields">Пожалуйста, заполните пустые поля</string>
 
-    <string name="already_registered">Device is already registered on server.</string>
-    <string name="gcm_registered">From GCM: device successfully registered!</string>
-    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
-    <string name="gcm_message">From GCM: you got message!</string>
-    <string name="gcm_error">From GCM: error (%1$s).</string>
-    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
-    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+    <string name="already_registered">Устройство уже зарегистрированы на сервере.</string>
+    <string name="gcm_registered">От ГКМ : устройство успешно зарегистрирован!</string>
+    <string name="gcm_unregistered">От ГКМ : устройство успешно незарегистрированный!</string>
+    <string name="gcm_message">От ГКМ : вы получили сообщение!</string>
+    <string name="gcm_error">От ГКМ : ошибки (%1$s).</string>
+    <string name="gcm_recoverable_error">От ГКМ : возмещаемой ошибки (%1$s).</string>
+    <string name="gcm_deleted">От ГКМ : сервер удаляется %1$d до сообщения!</string>
+    <string name="title_activity_notification_handle">NotificationHandleActivity</string>
+    <string name="dummy_button">фиктивная кнопка</string>
+    <string name="dummy_content">МАНЕКЕН\nСОДЕРЖАНИЕ</string>
+
+    <string name="success">успех</string>
+    <string name="try_again">Что-то пошло не так. Пожалуйста, попробуйте еще раз.</string>
 
 </resources>

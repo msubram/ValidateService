@@ -1,11 +1,9 @@
 package com.csharp.solutions.validations;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -26,13 +24,10 @@ import android.widget.Toast;
 import com.google.android.gcm.GCMRegistrar;
 import com.securepreferences.SecurePreferences;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.Arrays;
+import java.util.List;
 
 import gcm.WakeLocker;
 import util.GlobalClass;
@@ -52,7 +47,7 @@ public class RegistrationStep2 extends Activity {
     /**Widgets*/
     Button complete,retry;
     ImageView logo;
-    EditText firstdigit,seconddigit,thirddigit,fourthdigit,fifthdigit;
+    EditText firstdigit_regcode, seconddigit_regcode, thirddigit_regcode, fourthdigit_regcode, fifthdigit_regcode;
     TextView id_reg_step2_label1,id_reg_step2_label2,id_reg_step2_label3,id_reg_note;
 
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
@@ -69,23 +64,25 @@ public class RegistrationStep2 extends Activity {
     String originIncomingAddress = "644188";
 
 
+    /** Intent filter to filter the incoming messages*/
     public static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
     /**GCM*/
     String GCMregId="";
 
     /** Tags declaration*/
-    String tag_country_code = GlobalClass.country_code;
-    String tag_mobile_number = GlobalClass.mobile_number;
-    String tag_reg_code = GlobalClass.reg_code;
-    String tag_mobile_info  = GlobalClass.mobile_info;
+    String mTagCountryCode = GlobalClass.COUNTRY_CODE;
+    String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
+    String mRegCode = GlobalClass.REG_CODE;
+    String mTagMobileInfo = GlobalClass.MOBILE_INFO;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registration_step_two);
         context=this;
 
-        add_views();
+        /** Method to refer the views from xml*/
+        addViews();
 
 
         sharedPreferences = new SecurePreferences(this);
@@ -99,15 +96,26 @@ public class RegistrationStep2 extends Activity {
                 // TODO Auto-generated method stub
 
 
-                if(firstdigit.getText().length()==0 || seconddigit.getText().length()==0 || thirddigit.getText().length()==0 || fourthdigit.getText().length()==0 || fifthdigit.getText().length()==0)
+                if(firstdigit_regcode.getText().length()==0 || seconddigit_regcode.getText().length()==0 || thirddigit_regcode.getText().length()==0 || fourthdigit_regcode.getText().length()==0 || fifthdigit_regcode.getText().length()==0)
                 {
                     Toast.makeText(RegistrationStep2.this, getResources().getString(R.string.empty_fields),
                             Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    /** Asynctask to call when complete button is pressed*/
-                    new Complete_registration_Task().execute(globalClass.getBase_url());
+
+                    if(globalClass.checkWifiConnectivity()) {
+
+                        /** Asynctask to call when complete button is pressed*/
+                        new Complete_Registration_Task().execute(globalClass.getBase_url());
+                    }
+                    else
+                    {
+                        Toast.makeText(context, getResources().getString(R.string.check_wifi_string), Toast.LENGTH_LONG).show();
+
+                    }
+
+
                 }
 
 
@@ -115,100 +123,110 @@ public class RegistrationStep2 extends Activity {
             }
         });
 
-        /** Complete button action listener. */
+        /** Retry button action listener.
+         * If for some reason the API does not succeed, a value of -1 will be returned.
+         * Because of wrong mobile number or delay of SMS. So retry with the mobile number.
+         * */
         retry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
 
-                Intent start = new Intent(RegistrationStep2.this,UpdateScreen.class);
-                startActivity(start);
-
+                Intent retryintent = new Intent(RegistrationStep2.this, RegistrationStep1.class);
+                retryintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(retryintent);
 
 
             }
         });
 
-        /**  5 digit code placeholders*/
+            /**  5 digit code placeholders*/
 
-        /** First digit placeholder - 1st digit falls here and the onTextChanged will get called and move to the next digit placeholder*/
-        firstdigit.addTextChangedListener(new TextWatcher() {
+            /** First digit RegCode placeholder - 1st digit falls here and the onTextChanged will get called and move to the next digit placeholder*/
+            firstdigit_regcode.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
 
             }
+
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(firstdigit.getText().length()==1) {
-                    firstdigit.clearFocus();
-                    seconddigit.requestFocus();
+                if (firstdigit_regcode.getText().length() == 1) {
+                    firstdigit_regcode.clearFocus();
+                    seconddigit_regcode.requestFocus();
                 }
             }
-        });
+            });
 
-        /** Seecond digit placeholder - 2nd digit falls here and the onTextChanged will get called and move to the next digit placeholder*/
-        seconddigit.addTextChangedListener(new TextWatcher() {
+            /** Seecond digit RegCode placeholder - 2nd digit falls here and the onTextChanged will get called and move to the next digit placeholder*/
+            seconddigit_regcode.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
 
             }
+
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(seconddigit.getText().length()==1) {
-                    seconddigit.clearFocus();
-                    thirddigit.requestFocus();
+                if (seconddigit_regcode.getText().length() == 1) {
+                    seconddigit_regcode.clearFocus();
+                    thirddigit_regcode.requestFocus();
                 }
             }
-        });
+            });
 
-        /** Third digit placeholder - 3rd digit falls here and the onTextChanged will get called and move to the next digit placeholder*/
-        thirddigit.addTextChangedListener(new TextWatcher() {
+            /** Third digit RegCode placeholder - 3rd digit falls here and the onTextChanged will get called and move to the next digit placeholder*/
+            thirddigit_regcode.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (thirddigit_regcode.getText().length() == 1) {
+                        thirddigit_regcode.clearFocus();
+                        fourthdigit_regcode.requestFocus();
+                    }
+                }
+            });
+
+            /** Fourth digit RegCode placeholder - 4th digit falls here and the onTextChanged will get called and move to the next digit placeholder*/
+            fourthdigit_regcode.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
             }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(thirddigit.getText().length()==1) {
-                    thirddigit.clearFocus();
-                    fourthdigit.requestFocus();
-                }
-            }
-        });
 
-        /** Fourth digit placeholder - 4th digit falls here and the onTextChanged will get called and move to the next digit placeholder*/
-        fourthdigit.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-            }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(fourthdigit.getText().length()==1) {
-                    fourthdigit.clearFocus();
-                    fifthdigit.requestFocus();
+                if (fourthdigit_regcode.getText().length() == 1) {
+                    fourthdigit_regcode.clearFocus();
+                    fifthdigit_regcode.requestFocus();
                 }
             }
 
-        });
+            });
 
-        /** Asynctask to get the RegCode - Testing purpose. In production the app will automatically read the 5-digit code from the Inbox. In some mobiles automatic sms reading cant be done. In that case user has to manually enter the 5-digit code*/
-       // new RegCode_Task().execute(globalClass.getBase_url());
-        IntentFilter filter = new IntentFilter(SMS_RECEIVED);
-        registerReceiver(receiver_SMS, filter);
+            /** Code to listen the incoming SMS to get the RegCode*/
+            IntentFilter filter = new IntentFilter(SMS_RECEIVED);
+            registerReceiver(receiver_SMS, filter);
 
 
 
     }
 
-    /** Method to refer the views that have been created in xml. Using te id of the view the widgets can be refered*/
-    public void add_views(){
+        /** Method to refer the views that have been created in xml. Using te id of the view the widgets can be refered*/
+        public void addViews(){
         complete=(Button)findViewById(R.id.button_complete);
         retry=(Button)findViewById(R.id.button_retry);
         logo=(ImageView)findViewById(R.id.imageview_logo);
-        firstdigit=(EditText)findViewById(R.id.edittext_ota_first_digit);
-        seconddigit=(EditText)findViewById(R.id.edittext_ota_second_digit);
-        thirddigit=(EditText)findViewById(R.id.edittext_ota_third_digit);
-        fourthdigit=(EditText)findViewById(R.id.edittext_ota_fourth_digit);
-        fifthdigit=(EditText)findViewById(R.id.edittext_ota_fifth_digit);
+        firstdigit_regcode =(EditText)findViewById(R.id.edittext_ota_first_digit);
+        seconddigit_regcode =(EditText)findViewById(R.id.edittext_ota_second_digit);
+        thirddigit_regcode =(EditText)findViewById(R.id.edittext_ota_third_digit);
+        fourthdigit_regcode =(EditText)findViewById(R.id.edittext_ota_fourth_digit);
+        fifthdigit_regcode =(EditText)findViewById(R.id.edittext_ota_fifth_digit);
 
 
         id_reg_step2_label1=(TextView)findViewById(R.id.id_reg_step2_label1);
@@ -221,25 +239,24 @@ public class RegistrationStep2 extends Activity {
         id_reg_step2_label2.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
         id_reg_step2_label3.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
         id_reg_note.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
-
-        firstdigit.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
-        seconddigit.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
-        thirddigit.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
-        fourthdigit.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
-        fifthdigit.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        firstdigit_regcode.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        seconddigit_regcode.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        thirddigit_regcode.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        fourthdigit_regcode.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
+        fifthdigit_regcode.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
         complete.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
         retry.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
 
-        firstdigit.setInputType(InputType.TYPE_CLASS_NUMBER);
+        firstdigit_regcode.setInputType(InputType.TYPE_CLASS_NUMBER);
         complete.setTransformationMethod(null);
         retry.setTransformationMethod(null);
-    }
+        }
 
 
 
 
     /** Background network operation can be performed in a separate thread. We must use AsyncTask for that.*/
-    private class Complete_registration_Task extends AsyncTask<String, Integer, String> {
+    private class Complete_Registration_Task extends AsyncTask<String, Integer, String> {
 
         @Override
         protected void onPreExecute() {
@@ -250,65 +267,66 @@ public class RegistrationStep2 extends Activity {
             progressDialog.show();
         }
 
-        protected String doInBackground(String... urls) {
+        protected String doInBackground(String... urls)
+        {
 
 
             /** Sending the post data in JSON format in the body of the post*/
-            String response_from_server = null;
+            String mResponseFromServer = null;
 
             try {
                 /** body_in_post  POST data in JSON format.
                  * RegCode, Mobile number and CountryCode - Obtained in the first step
                  * */
 
-                String reg_code = firstdigit.getText().toString()+seconddigit.getText().toString()+thirddigit.getText().toString()+fourthdigit.getText().toString()+fifthdigit.getText().toString();
+                String mRegCode = firstdigit_regcode.getText().toString()+ seconddigit_regcode.getText().toString()+ thirddigit_regcode.getText().toString()+ fourthdigit_regcode.getText().toString()+ fifthdigit_regcode.getText().toString();
                 SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                editor.putString(tag_reg_code,reg_code);
+                editor.putString(RegistrationStep2.this.mRegCode,mRegCode);
                 editor.commit();
 
-                 String body_in_post = new JSONObject().put(tag_reg_code,Integer.parseInt(sharedPreferences.getString(tag_reg_code,""))).put(tag_mobile_info,new JSONObject().put(tag_country_code,sharedPreferences.getString(tag_country_code,"")).put(tag_mobile_number,sharedPreferences.getString(tag_mobile_number,""))).toString();
+                String mPostBodyData = new JSONObject().put(RegistrationStep2.this.mRegCode,Integer.parseInt(sharedPreferences.getString(RegistrationStep2.this.mRegCode,""))).put(mTagMobileInfo,new JSONObject().put(mTagCountryCode,sharedPreferences.getString(mTagCountryCode,"")).put(mTagMobileNumber,sharedPreferences.getString(mTagMobileNumber,""))).toString();
 
-                System.out.println(globalClass.TAG+"Complete_registration_Task"+body_in_post);
+                System.out.println(globalClass.TAG+"Complete_registration_Task"+mPostBodyData);
 
                 /** Calling Registrations(http://www.csharpsolutions.co.uk/ValidateApp/api/v1/Registrations/) API  and the response will be a statuscode and actual response from server in JSON format.*/
-                response_from_server = globalClass.sendPost(urls[0]+globalClass.get_Complete_Registration_request_routes(),body_in_post);
+                mResponseFromServer = globalClass.sendPost(urls[0]+globalClass.getComplete_Registration_Request_Routes(),mPostBodyData);
 
                 /** Parsing response to get Status code and response from server*/
-                globalClass.parseServerResponseJSON(response_from_server);
+                globalClass.parseServerResponseJSON(mResponseFromServer);
 
                 if(globalClass.getStatusCode() == 200)
                 {
-                    response_from_server = globalClass.getServerResponse();
+                    mResponseFromServer = globalClass.getServerResponse();
                 }
                 else
                 {
-                    response_from_server = "error";
+                    mResponseFromServer = "error";
                 }
-            } catch (Exception e) {
+                } catch (Exception e) {
                 e.printStackTrace();
-            }
+                }
 
-            return response_from_server;
+                return mResponseFromServer;
         }
 
 
 
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(String mResult) {
             if(progressDialog.isShowing())
             {
                 progressDialog.dismiss();
             }
 
             /** Sometimes response can be in negatve value so it indicates error.*/
-            if(!result.equals("error")&&!result.equals("-1"))
+            if(!mResult.equals("error")&&!mResult.equals("-1"))
             {
 
-                System.out.println(globalClass.TAG+"complete registration result"+result);
+                System.out.println(globalClass.TAG+"complete registration result"+mResult);
 
 
 
                 SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                editor.putBoolean(globalClass.get_check_login(),true);
+                editor.putBoolean(globalClass.getCheck_Login(),true);
                 editor.commit();
 
                 new GCMCredentials(context).execute();
@@ -320,7 +338,7 @@ public class RegistrationStep2 extends Activity {
             {
 
                 Toast.makeText(RegistrationStep2.this,
-                        "Server error : ",
+                        getResources().getString(R.string.try_again),
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -359,7 +377,6 @@ public class RegistrationStep2 extends Activity {
                 // Registration is not present, register now with GCM
                 GCMRegistrar.register(RegistrationStep2.this, SENDER_ID);
                 // Log.i("regId", "new");
-                //  new SubmitGcmIdTask().execute("http://www.meliosystems.com/android/push_notifications");
 
 
             } else {
@@ -367,7 +384,7 @@ public class RegistrationStep2 extends Activity {
                 // Log.i("regId", "already");
                 if (GCMRegistrar.isRegisteredOnServer(RegistrationStep2.this)) {
                     // Skips registration.
-                    Toast.makeText(getApplicationContext(), "Already registered with GCM", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.already_registered), Toast.LENGTH_LONG).show();
                 }
             }
             return "success";
@@ -405,26 +422,30 @@ public class RegistrationStep2 extends Activity {
                     for (SmsMessage message : messages)
                     {
                         /** Now 9566510535 is the number which is sender later it will get changed. Before production change the number*/
-                        if(message.getDisplayOriginatingAddress().contains(originIncomingAddress))
+                        //if(message.getDisplayOriginatingAddress().contains(originIncomingAddress))
+                        if(message.getDisplayMessageBody().contains(getResources().getString(R.string.reg_code_message)))
                         {
-                            String reg_code = message.getDisplayMessageBody();
-                            System.out.println(globalClass.TAG+"reg_code"+reg_code);
-                            Toast.makeText(context, "----"+reg_code, Toast.LENGTH_LONG).show();
+
+                            String mMessageBody = message.getDisplayMessageBody();
+                            List<String> mMessageBodyItems = Arrays.asList(mMessageBody.split(":"));
+                            System.out.println(globalClass.TAG+"mMessageBodyItems"+mMessageBodyItems.toString());
+                            String mRegCode = mMessageBodyItems.get(1);
+                            System.out.println(globalClass.TAG+"reg_code"+mRegCode);
 
                             SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                            editor.putString(tag_reg_code,reg_code);
+                            editor.putString(RegistrationStep2.this.mRegCode,mRegCode);
                             editor.commit();
 
 
 
                             /** Code to get the individual digit in the 5-digit code*/
-                            if(reg_code.length()==5)
+                            if(mRegCode.length()==5)
                             {
-                                firstdigit.setText(Character.toString(reg_code.charAt(0)));
-                                seconddigit.setText(Character.toString(reg_code.charAt(1)));
-                                thirddigit.setText(Character.toString(reg_code.charAt(2)));
-                                fourthdigit.setText(Character.toString(reg_code.charAt(3)));
-                                fifthdigit.setText(Character.toString(reg_code.charAt(4)));
+                                firstdigit_regcode.setText(Character.toString(mRegCode.charAt(0)));
+                                seconddigit_regcode.setText(Character.toString(mRegCode.charAt(1)));
+                                thirddigit_regcode.setText(Character.toString(mRegCode.charAt(2)));
+                                fourthdigit_regcode.setText(Character.toString(mRegCode.charAt(3)));
+                                fifthdigit_regcode.setText(Character.toString(mRegCode.charAt(4)));
                             }
 
                         }

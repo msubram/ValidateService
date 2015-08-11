@@ -7,27 +7,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.securepreferences.SecurePreferences;
 
-import org.apache.http.conn.util.InetAddressUtils;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.Enumeration;
 
 import util.GlobalClass;
 import util.TypefaceUtil;
@@ -35,7 +25,7 @@ import util.TypefaceUtil;
 /** RegistrationStep1 - This class will get the users mobile number and their country code. */
 public class RegistrationStep1 extends Activity {
 
-    /**Widgets*/
+    /**UI Widgets*/
     Button registration;
     EditText user_mobile_number;
     Spinner country_list;
@@ -43,7 +33,7 @@ public class RegistrationStep1 extends Activity {
 
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
     SharedPreferences sharedPreferences;
-    String country_code;
+
 
     /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
     GlobalClass globalClass;
@@ -53,10 +43,12 @@ public class RegistrationStep1 extends Activity {
     ProgressDialog progressDialog;
 
 
-    /** Tags declaration*/
-    String tag_country_code = GlobalClass.country_code;
-    String tag_mobile_number = GlobalClass.mobile_number;
-    String tag_reg_id = GlobalClass.reg_id;
+    /** Tags used to access the Global Variables*/
+    String mTagCountryCode = GlobalClass.COUNTRY_CODE;
+    String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
+    String mTagRegId = GlobalClass.REG_ID;
+
+    String mcountryCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +58,8 @@ public class RegistrationStep1 extends Activity {
         sharedPreferences = new SecurePreferences(this);
         globalClass = (GlobalClass) getApplicationContext();
 
-
-        if(sharedPreferences.getBoolean(GlobalClass.check_login,false))
+        /** Code to check the login status of the user*/
+        if(sharedPreferences.getBoolean(GlobalClass.CHECK_LOGIN,false))
         {
             Intent intent = new Intent(RegistrationStep1.this, ValidateScreen.class);
             startActivity(intent);
@@ -83,11 +75,11 @@ public class RegistrationStep1 extends Activity {
 
 
             /** Initialising the UI Widgets*/
-            add_views();
+            addViews();
 
 
 
-            /** Setting the listener for Register button click event.*/
+            /** Code to listen when Register button is clicked*/
             registration.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -95,15 +87,23 @@ public class RegistrationStep1 extends Activity {
 
                     /**Validate mobile number and throw alert when mobile number is empty*/
 
-                    if(user_mobile_number.getText().length()!=0)
-                    {
-                        /** Asynctask to register the mobile number along with country code*/
-                        new RegistrationStep1_Task().execute(globalClass.getBase_url());
+                    if (user_mobile_number.getText().length() != 0) {
 
-                    }
-                    else
-                    {
-                        Toast.makeText(RegistrationStep1.this,"Please fill your mobile number",
+
+                        if(globalClass.checkWifiConnectivity())
+                        {
+                            /** Asynctask to register the mobile number along with country code*/
+                            new RegistrationStep1_Task().execute(globalClass.getBase_url());
+                        }
+                        else
+                        {
+                            Toast.makeText(context, getResources().getString(R.string.check_wifi_string), Toast.LENGTH_LONG).show();
+
+                        }
+
+
+                    } else {
+                        Toast.makeText(RegistrationStep1.this, getResources().getString(R.string.empty_phonenumber),
                                 Toast.LENGTH_SHORT).show();
                     }
 
@@ -117,16 +117,17 @@ public class RegistrationStep1 extends Activity {
 
 
     /** Method to refer the views that have been created in xml. Using te id of the view the widgets can be refered*/
-    public void add_views(){
-        registration=(Button)findViewById(R.id.button_register);
+    public void addViews(){
+        registration = (Button)findViewById(R.id.button_register);
         registration.setTransformationMethod(null);
-        user_mobile_number=(EditText)findViewById(R.id.user_mobile_number);
-        country_list=(Spinner)findViewById(R.id.country_list);
+        user_mobile_number = (EditText)findViewById(R.id.user_mobile_number);
+        country_list = (Spinner)findViewById(R.id.country_list);
         country_list.setOnItemSelectedListener(new CustomOnItemSelectedListener());
-        id_reg_step1_label1=(TextView)findViewById(R.id.id_reg_step1_label1);
-        id_reg_step1_label2=(TextView)findViewById(R.id.id_reg_step1_label2);
-        id_reg_country_label=(TextView)findViewById(R.id.id_reg_country_label);
-        id_reg_mobile_label=(TextView)findViewById(R.id.id_reg_mobile_label);
+        id_reg_step1_label1 = (TextView)findViewById(R.id.id_reg_step1_label1);
+        id_reg_step1_label2 = (TextView)findViewById(R.id.id_reg_step1_label2);
+        id_reg_country_label = (TextView)findViewById(R.id.id_reg_country_label);
+        id_reg_mobile_label = (TextView)findViewById(R.id.id_reg_mobile_label);
+
         /** Setting typeface for views*/
         registration.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
         user_mobile_number.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
@@ -154,66 +155,76 @@ public class RegistrationStep1 extends Activity {
 
 
             /** Sending the post data in JSON format in the body*/
-            String response_from_server = null;
+                String mResponseFromServer = null;
 
-            try {
+                try {
                 /** body_in_post  POST data in JSON format.
                  * Country code - Selected by user
                  * MobileNumber - Users mobile number
                  * */
-                String body_in_post = new JSONObject().put(tag_country_code,country_code).put(tag_mobile_number,user_mobile_number.getText().toString()).toString();
-                System.out.println(globalClass.TAG+body_in_post);
+                String mPostBodyData = new JSONObject().put(mTagCountryCode, mcountryCode).put(mTagMobileNumber,user_mobile_number.getText().toString()).toString();
+                System.out.println(globalClass.TAG+mPostBodyData);
 
                 /** Calling RegistrationRequest(http://www.csharpsolutions.co.uk/ValidateApp/api/v1/RegistrationRequest/) API  and the response will be a statuscode and actual response from server in JSON format.*/
-                System.out.println(globalClass.TAG+urls[0]+globalClass.getRegistration_request_routes()+body_in_post);
-                response_from_server = globalClass.sendPost(urls[0]+globalClass.getRegistration_request_routes(),body_in_post);
+                System.out.println(globalClass.TAG+urls[0]+globalClass.getRegistration_Request_Routes()+mPostBodyData);
+                mResponseFromServer = globalClass.sendPost(urls[0]+globalClass.getRegistration_Request_Routes(),mPostBodyData);
 
                /** Parsing response to get Status code and response from server*/
-                globalClass.parseServerResponseJSON(response_from_server);
+                globalClass.parseServerResponseJSON(mResponseFromServer);
 
                 if(globalClass.getStatusCode() == 200)
                 {
-                    response_from_server = globalClass.getServerResponse();
+                    mResponseFromServer = globalClass.getServerResponse();
                 }
                 else
                 {
-                    response_from_server = "error";
+                    mResponseFromServer = "error";
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return response_from_server;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return mResponseFromServer;
         }
 
 
 
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(String mResult) {
 
-            if(progressDialog.isShowing())
-            {
-                progressDialog.dismiss();
-            }
+
 
             /** Sometimes response can be in negatve value so it indicates error.*/
-            if(!result.equals("error")&&!result.equals("-1"))
+            if(!mResult.equals("error")&&!mResult.equals("-1"))
             {
+
+                /** Save RegId, MobileNumber and CountryCode in Sharedpreference*/
                 SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                editor.putString(tag_reg_id,result);
-                editor.putString(tag_mobile_number,user_mobile_number.getText().toString());
-                editor.putString(tag_country_code,country_code);
+                editor.putString(mTagRegId,mResult);
+                editor.putString(mTagMobileNumber,user_mobile_number.getText().toString());
+                editor.putString(mTagCountryCode, mcountryCode);
                 editor.commit();
 
 
-                System.out.println(globalClass.TAG+tag_reg_id+sharedPreferences.getString(tag_reg_id,""));
+                System.out.println(globalClass.TAG+ mTagRegId +sharedPreferences.getString(mTagRegId,""));
+
+                if(progressDialog.isShowing())
+                {
+                    progressDialog.dismiss();
+                }
+                Toast.makeText(context, getResources().getString(R.string.success), Toast.LENGTH_LONG).show();
+
+                /** When we successfully get RegId move from RegistrationStep1 to RegistrationStep1 Activity*/
                 Intent intent = new Intent(RegistrationStep1.this, RegistrationStep2.class);
                 startActivity(intent);
             }
 
             else
             {
-
+                if(progressDialog.isShowing())
+                {
+                    progressDialog.dismiss();
+                }
                 Toast.makeText(RegistrationStep1.this,
-                        "Server error : ",
+                        getResources().getString(R.string.try_again),
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -223,17 +234,13 @@ public class RegistrationStep1 extends Activity {
     }
 
 
-    /** Custom Listener for Spinner selection*/
+    /** Custom Listener for Country Spinner selection*/
     public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
 
-
-            /*Toast.makeText(parent.getContext(),
-                    "OnItemSelectedListener : " + sharedPreferences.getString(parent.getItemAtPosition(pos).toString(),""),
-                    Toast.LENGTH_SHORT).show();*/
             /** Here selecting the counrty is the key and we can retrieve the counrty code by using this key and get the value from sharedpreferences*/
-            country_code = sharedPreferences.getString(parent.getItemAtPosition(pos).toString(),"");
+            mcountryCode = sharedPreferences.getString(parent.getItemAtPosition(pos).toString(),"");
         }
 
         @Override

@@ -10,7 +10,6 @@
     android:paddingLeft="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-
     tools:context=".RegistrationActivity">
 
     <LinearLayout
@@ -44,14 +43,13 @@
             android:layout_weight="1"
             android:layout_height="match_parent">
             <TextView
+                style="@style/normal_text_style"
                 android:id="@+id/id_reg_step1_label1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/Black"
                 android:layout_centerInParent="true"
-                android:textSize="@dimen/small_textsize"
                 android:lineSpacingExtra="2dp"
                 android:text="@string/registration_step1_title_textview"/>
         </RelativeLayout>
@@ -66,14 +64,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
+                style="@style/normal_text_style"
                 android:id="@+id/id_reg_step1_label2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/Black"
                 android:layout_centerInParent="true"
-                android:textSize="@dimen/small_textsize"
                 android:lineSpacingExtra="2dp"
                 android:text="@string/registration_step1_instruction_textview"/>
             </RelativeLayout>
@@ -96,21 +93,20 @@
                 android:layout_centerInParent="true"
                 android:orientation="vertical">
                 <TextView
+                    style="@style/normal_text_style"
                     android:id="@+id/id_reg_country_label"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:textColor="@color/Black"
-                    android:textSize="@dimen/small_textsize"
                     android:gravity="center"
                     android:lineSpacingExtra="2dp"
                     android:text="@string/registration_step1_country"/>
                 <Spinner
+                    style="@style/normal_text_style"
                     android:id="@+id/country_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/small_textsize"
                     android:entries="@array/registration_step1_country_array"
                     android:prompt="@string/registration_step1_country_prompt" />
             </LinearLayout>
@@ -135,13 +131,12 @@
             android:layout_centerInParent="true"
             android:orientation="vertical">
             <TextView
+                style="@style/normal_text_style"
                 android:id="@+id/id_reg_mobile_label"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:textSize="@dimen/small_textsize"
-                android:textColor="@color/Black"
                 android:gravity="center"
                 android:lineSpacingExtra="2dp"
                 android:text="@string/registration_step1_mobile_number_textview"/>

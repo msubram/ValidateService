@@ -1,8 +1,5 @@
 package com.csharp.solutions.validations;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +29,7 @@ import util.TypefaceUtil;
  * Created by Arputha on 04/07/2015.
  */
 public class UpdateScreen extends ActionBarActivity {
+    /** Widgets declaration*/
     Button update;
     ImageView logo;
     EditText work_number,home_number;
@@ -41,9 +39,10 @@ public class UpdateScreen extends ActionBarActivity {
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
     SharedPreferences sharedPreferences;
 
-    String gcmID;
+
     /**GCM*/
-    String GCMregId="";
+    String mGcmregId ="";
+    String mGcmID;
 
     Context context = this;
     /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
@@ -53,75 +52,54 @@ public class UpdateScreen extends ActionBarActivity {
     ProgressDialog progressDialog;
 
     /** Tags declaration*/
-    String tag_country_code = GlobalClass.country_code;
-    String tag_mobile_number = GlobalClass.mobile_number;
-    String tag_work_number = GlobalClass.work_number;
-    String tag_home_number  = GlobalClass.home_number;
-    String tag_instance_id  = GlobalClass.instance_id;
-    String tag_gcm_token = GlobalClass.gcm_token;
-    String tag_isgcmregistered  = GlobalClass.check_gcmisregistered;
+    String mTagCountryCode = GlobalClass.COUNTRY_CODE;
+    String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
+    String mTagWorkNumber = GlobalClass.WORK_NUMBER;
+    String mTagHomeNumber = GlobalClass.HOME_NUMBER;
+    String mTagInstanceId = GlobalClass.INSTANCE_ID;
+    String mTagGcmToken = GlobalClass.GCM_TOKEN;
+    String mTagIsGcmRegistered = GlobalClass.CHECK_GCMISREGISTERED;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.updatescreen);
-        add_views();
+
+        addViews();
+
         sharedPreferences = new SecurePreferences(this);
         globalClass = (GlobalClass) getApplicationContext();
 
-        /** Show the updated values in the respective fields*/
+        /** Show the updated values in the respective fields by getting the data from sharedpreference*/
 
-        work_number.setText(sharedPreferences.getString(tag_work_number,""));
-        home_number.setText(sharedPreferences.getString(tag_home_number,""));
+        work_number.setText(sharedPreferences.getString(mTagWorkNumber,""));
+        home_number.setText(sharedPreferences.getString(mTagHomeNumber,""));
 
 
 
-        gcmID =  GCMRegistrar.getRegistrationId(UpdateScreen.this);
-        System.out.println("GCMID"+gcmID);
+        mGcmID =  GCMRegistrar.getRegistrationId(UpdateScreen.this);
 
-        if(!sharedPreferences.getBoolean(tag_isgcmregistered,false))
+        if(mGcmID.length()==0)
         {
-            if(gcmID.length()!=0)
+            mGcmID = sharedPreferences.getString(globalClass.GCM_TOKEN,"");
+        }
+        System.out.println("GCMID"+ mGcmID);
+
+        /** Code to Send the GCM RegId to the server.
+         * Check whether we sent the RegId already or not*/
+        if(!sharedPreferences.getBoolean(mTagIsGcmRegistered,false))
+        {
+            if(mGcmID.length()!=0)
             {
+                /** Commit the changes in the sharedpreference*/
                 SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                editor.putString(tag_gcm_token,gcmID);
-                editor.putBoolean(tag_isgcmregistered,true);
+                editor.putString(mTagGcmToken, mGcmID);
+                editor.putBoolean(mTagIsGcmRegistered,true);
                 editor.commit();
 
                 new GCMRegistrationRequest().execute(globalClass.getBase_url());
             }
         }
 
-
-
-
-        /** temp code to be remove*/
-
-        int icon = R.drawable.note_icon;
-        long when = System.currentTimeMillis();
-        String message="Message from server";
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification(icon, message, when);
-
-        String title = context.getString(R.string.app_name);
-
-        Intent notificationIntent = new Intent(context, NotificationHandleActivity.class);
-        // set intent so it does not start a new activity
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent intent = PendingIntent.getActivity(context, 1, notificationIntent, 0);
-
-        notification.setLatestEventInfo(context, title, message, intent);
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-        // Play default notification sound
-        //notification.defaults |= Notification.DEFAULT_SOUND;
-
-        // notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.siren);
-
-        // Vibrate if vibrate is enabled
-        notification.defaults |= Notification.DEFAULT_VIBRATE;
-        notificationManager.notify(1, notification);
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,11 +108,13 @@ public class UpdateScreen extends ActionBarActivity {
 
                 if(work_number.getText().toString().length()!=0&&work_number.getText().toString().length()!=0)
                 {
+                    /** Save the Work Telephone and Home Telephone number in sharepreference*/
                     SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                    editor.putString(tag_work_number,work_number.getText().toString());
-                    editor.putString(tag_home_number,home_number.getText().toString());
+                    editor.putString(mTagWorkNumber,work_number.getText().toString());
+                    editor.putString(mTagHomeNumber,home_number.getText().toString());
                     editor.commit();
 
+                    /** After successfully updated move from Update Screen to Validate Screen*/
                     Intent intent = new Intent(UpdateScreen.this, ValidateScreen.class);
                     startActivity(intent);
                 }
@@ -173,14 +153,12 @@ public class UpdateScreen extends ActionBarActivity {
     }
 
     /** Method to refer the views that have been created in xml. Using te id of the view the widgets can be refered*/
-    public void add_views(){
+    public void addViews(){
         update=(Button)findViewById(R.id.button_update);
         logo=(ImageView)findViewById(R.id.imageview_logo);
         work_number = (EditText)findViewById(R.id.work_number);
         home_number = (EditText)findViewById(R.id.home_number);
         update.setTransformationMethod(null);
-
-
         update_screen_label1 = (TextView)findViewById(R.id.update_screen_label1);
         update_work_telephone_label = (TextView)findViewById(R.id.update_work_telephone_label);
         update_home_telephone_label = (TextView)findViewById(R.id.update_home_telephone_label);
@@ -221,11 +199,11 @@ public class UpdateScreen extends ActionBarActivity {
                  * InstanceId - not mandatory
                  * Token - GCM Registration ID
                  * */
-                String body_in_post = new JSONObject().put(tag_country_code,sharedPreferences.getString(tag_country_code,"")).put(tag_mobile_number, sharedPreferences.getString(tag_mobile_number, "")).put(tag_instance_id, "").put(tag_gcm_token, sharedPreferences.getString(tag_gcm_token, "")).toString();
+                String body_in_post = new JSONObject().put(mTagCountryCode,sharedPreferences.getString(mTagCountryCode,"")).put(mTagMobileNumber, sharedPreferences.getString(mTagMobileNumber, "")).put(mTagInstanceId, "").put(mTagGcmToken, sharedPreferences.getString(mTagGcmToken, "")).toString();
                 System.out.println(globalClass.TAG+body_in_post);
 
                 /** Calling GCMRegistrationRequest(http://www.csharpsolutions.co.uk/ValidateApp/api/v1/GCMRegistrationRequest/) API  and the response will be a statuscode and actual response from server in JSON format.*/
-                response_from_server = globalClass.sendPost(urls[0]+globalClass.get_gcm_registration_request(),body_in_post);
+                response_from_server = globalClass.sendPost(urls[0]+globalClass.getGcm_Registration_Request(),body_in_post);
 
                 /** Parsing response to get Status code and response from server*/
                 globalClass.parseServerResponseJSON(response_from_server);
@@ -257,7 +235,7 @@ public class UpdateScreen extends ActionBarActivity {
             if(!result.equals("error")&&!result.equals("-1"))
             {
                 Toast.makeText(UpdateScreen.this,
-                        "Success",
+                        getResources().getString(R.string.success),
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -265,7 +243,7 @@ public class UpdateScreen extends ActionBarActivity {
             {
 
                 Toast.makeText(UpdateScreen.this,
-                        "Server error : ",
+                        getResources().getString(R.string.try_again),
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -274,9 +252,12 @@ public class UpdateScreen extends ActionBarActivity {
         }
     }
 
-
+    @Override
     public void onBackPressed() {
-        Intent intent = new Intent(UpdateScreen.this,RegistrationStep2.class);
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);
+        finish();
     }
 }
