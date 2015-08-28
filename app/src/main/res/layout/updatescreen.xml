@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:fillViewport="true"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <LinearLayout
         android:orientation="vertical"
@@ -49,9 +50,7 @@
                     android:id="@+id/update_screen_label1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
                     android:lineSpacingExtra="2dp"
                     android:text="@string/user_info_instruction_textview"/>
 
@@ -60,22 +59,16 @@
 
 
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingRight="60dp"
-                android:paddingLeft="60dp"
                 android:layout_weight="1">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
                     android:orientation="vertical">
 
 
@@ -84,10 +77,10 @@
                         android:id="@+id/update_work_telephone_label"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:lineSpacingExtra="2dp"
+
                         android:text="@string/user_info_work_number_textview"/>
                     <EditText
                         style="@style/editext_background_style"
@@ -104,7 +97,7 @@
             </RelativeLayout>
 
 
-        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -115,8 +108,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingRight="60dp"
-                android:paddingLeft="60dp"
                 android:layout_weight="1">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -128,9 +119,8 @@
                         android:id="@+id/update_home_telephone_label"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:lineSpacingExtra="2dp"
                         android:text="@string/user_info_home_number_textview"/>
 

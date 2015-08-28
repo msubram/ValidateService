@@ -1,10 +1,13 @@
 package com.csharp.solutions.validations;
 
 import com.csharp.solutions.validations.util.SystemUiHider;
+import com.securepreferences.SecurePreferences;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,20 +25,22 @@ import util.TypefaceUtil;
 public class NotificationHandleActivity extends Activity {
 
     TextView id_show_recv_notification;
+    /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
+    static SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_notification_handle);
-
-        Bundle extras = getIntent().getExtras();
+        sharedPreferences = new SecurePreferences(this);
         id_show_recv_notification = (TextView) findViewById(R.id.id_show_recv_notification);
 
-        if(extras!=null)
-        {
-            id_show_recv_notification.setText(extras.getString(GlobalClass.NOTIFICATION_MESSAGE));
-            id_show_recv_notification.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
-        }
+        setTitle(sharedPreferences.getString(GlobalClass.NOTIFICATION_TITLE_TAG,""));
+
+        id_show_recv_notification.setText(sharedPreferences.getString(GlobalClass.NOTIFICATION_MESSAGE,""));
+        id_show_recv_notification.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
 
     }
+
+
 }

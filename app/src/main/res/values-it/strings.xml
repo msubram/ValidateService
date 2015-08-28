@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Csharp</string>
+    <string name="app_name">Validazioni</string>
     <string name="action_settings">Impostazioni</string>
 
 
@@ -27,9 +27,9 @@
     <string name="registration_step2_complete_button">completo</string>
 
     <string name="user_info_title">Informazioni Utente</string>
-    <string name="user_info_instruction_textview">Si prega di aggiornare i seguenti dati</string>
-    <string name="user_info_work_number_textview">Il tuo lavoro Numero di telefono</string>
-    <string name="user_info_home_number_textview">Your Home Numero di telefono</string>
+    <string name="user_info_instruction_textview">Si prega di aggiornare i seguenti</string>
+    <string name="user_info_work_number_textview">Telefono lavoro</string>
+    <string name="user_info_home_number_textview">casa Telefono</string>
     <string name="user_info_update_button">aggiornare</string>
 
     <string name="validation_validate_button">convalidare</string>
@@ -46,14 +46,25 @@
     <string name="gcm_registered">Da GCM : dispositivo con successo registrato!</string>
     <string name="gcm_unregistered">Da GCM : dispositivo registrato con successo!</string>
     <string name="gcm_message">Da GCM : hai un messaggio!</string>
-    <string name="gcm_error">Da GCM : Errore(%1$s).</string>
+    <string name="gcm_error">App Registrazione presso GCM fallita.</string>
     <string name="gcm_recoverable_error">Da GCM : errore recuperabile(%1$s).</string>
     <string name="gcm_deleted">Da GCM : server eliminato %1$d messaggi in sospeso!</string>
     <string name="title_activity_notification_handle">NotificationHandleActivity</string>
     <string name="dummy_button">Button Dummy</string>
     <string name="dummy_content">DUMMY\CONTENUTO</string>
 
-    <string name="success">successo</string>
+    <string name="success">convalidato correttamente</string>
     <string name="try_again">Qualcosa è andato wrong.Please riprovare.</string>
+    <string name="empty_phonenumber">Vi preghiamo di compilare il tuo numero di cellulare</string>
+    <string name="reg_code_message">Grazie per esserti registrato con il nostro servizio convalide . Per completare la registrazione , inserisci il codice a 5 cifre che segue e fare clic su completa</string>
 
+    <string name="loading">caricamento...</string>
+    <string name="validateloading">Attendere prego.. Convalida..</string>
+
+    <string name="registering">Registrazione...</string>
+    <string name="completing_register">​Completamento registrazione...</string>
+
+
+    <string name="aiddescription">aiddescription</string>
+    <string name="servicedesc">servicedesc</string>
 </resources>

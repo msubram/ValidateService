@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Csharp</string>
+    <string name="app_name">Validations</string>
     <string name="action_settings">Settings</string>
 
 
@@ -27,9 +27,9 @@
     <string name="registration_step2_complete_button">Complete</string>
 
     <string name="user_info_title">User Information </string>
-    <string name="user_info_instruction_textview">Please update the following information </string>
-    <string name="user_info_work_number_textview">Your Work Telephone Number</string>
-    <string name="user_info_home_number_textview">Your Home Telephone Number</string>
+    <string name="user_info_instruction_textview">Please update the following</string>
+    <string name="user_info_work_number_textview">Work Telephone</string>
+    <string name="user_info_home_number_textview">Home Telephone</string>
     <string name="user_info_update_button">Update</string>
 
     <string name="validation_validate_button">Validate</string>
@@ -41,19 +41,30 @@
 
     <string name="check_wifi_string">Please Check your Wifi Connection</string>
     <string name="empty_fields">Please fill the empty fields</string>
-
+    <string name="empty_phonenumber">Please fill your mobile number</string>
     <string name="already_registered">Device is already registered on server.</string>
     <string name="gcm_registered">From GCM: device successfully registered!</string>
     <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
     <string name="gcm_message">From GCM: you got message!</string>
-    <string name="gcm_error">From GCM: error (%1$s).</string>
+    <string name="gcm_error">App Registration with GCM failed</string>
     <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
     <string name="title_activity_notification_handle">NotificationHandleActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
-    <string name="success">Success</string>
+    <string name="success">Successfully Validated</string>
     <string name="try_again">Something went wrong.Please try again.</string>
+    <string name="reg_code_message">Thank you for registering with our validations service. To complete your registration, please enter the following 5-digit code and click on complete</string>
 
+    <string name="loading">Loading...</string>
+    <string name="validateloading">Please wait.. Validating..</string>
+
+    <string name="registering">Registering...</string>
+    <string name="completing_register">​Completing registration...</string>
+
+
+
+    <string name="aiddescription">aiddescription</string>
+    <string name="servicedesc">servicedesc</string>
 </resources>

@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,6 +29,8 @@ import util.TypefaceUtil;
 /**
  * Created by Arputha on 04/07/2015.
  */
+/** UpdateScreen - This class will get the user Work and Home telephone number and saves it.*/
+
 public class UpdateScreen extends ActionBarActivity {
     /** Widgets declaration*/
     Button update;
@@ -40,31 +43,23 @@ public class UpdateScreen extends ActionBarActivity {
     SharedPreferences sharedPreferences;
 
 
-    /**GCM*/
-    String mGcmregId ="";
-    String mGcmID;
-
-    Context context = this;
     /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
     GlobalClass globalClass;
 
-    /** Progress dialog*/
-    ProgressDialog progressDialog;
 
     /** Tags declaration*/
-    String mTagCountryCode = GlobalClass.COUNTRY_CODE;
-    String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
     String mTagWorkNumber = GlobalClass.WORK_NUMBER;
     String mTagHomeNumber = GlobalClass.HOME_NUMBER;
-    String mTagInstanceId = GlobalClass.INSTANCE_ID;
-    String mTagGcmToken = GlobalClass.GCM_TOKEN;
-    String mTagIsGcmRegistered = GlobalClass.CHECK_GCMISREGISTERED;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.updatescreen);
 
+        /** Method to refer the views from xml*/
         addViews();
+
+
 
         sharedPreferences = new SecurePreferences(this);
         globalClass = (GlobalClass) getApplicationContext();
@@ -73,33 +68,6 @@ public class UpdateScreen extends ActionBarActivity {
 
         work_number.setText(sharedPreferences.getString(mTagWorkNumber,""));
         home_number.setText(sharedPreferences.getString(mTagHomeNumber,""));
-
-
-
-        mGcmID =  GCMRegistrar.getRegistrationId(UpdateScreen.this);
-
-        if(mGcmID.length()==0)
-        {
-            mGcmID = sharedPreferences.getString(globalClass.GCM_TOKEN,"");
-        }
-        System.out.println("GCMID"+ mGcmID);
-
-        /** Code to Send the GCM RegId to the server.
-         * Check whether we sent the RegId already or not*/
-        if(!sharedPreferences.getBoolean(mTagIsGcmRegistered,false))
-        {
-            if(mGcmID.length()!=0)
-            {
-                /** Commit the changes in the sharedpreference*/
-                SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
-                editor.putString(mTagGcmToken, mGcmID);
-                editor.putBoolean(mTagIsGcmRegistered,true);
-                editor.commit();
-
-                new GCMRegistrationRequest().execute(globalClass.getBase_url());
-            }
-        }
-
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,84 +141,6 @@ public class UpdateScreen extends ActionBarActivity {
 
     }
 
-
-
-    private class GCMRegistrationRequest extends AsyncTask<String, Integer, String> {
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            /** Custom progressdialog to show loading symbol*/
-            progressDialog = CustomProgressDialog.ctor(context);
-            progressDialog.show();
-        }
-
-        protected String doInBackground(String... urls) {
-
-
-            /** Sending the post data in JSON format in the body*/
-            String response_from_server = null;
-
-            try {
-                /** body_in_post  POST data in JSON format.
-                 * Country code - Selected by user
-                 * MobileNumber - Users mobile number
-                 * InstanceId - not mandatory
-                 * Token - GCM Registration ID
-                 * */
-                String body_in_post = new JSONObject().put(mTagCountryCode,sharedPreferences.getString(mTagCountryCode,"")).put(mTagMobileNumber, sharedPreferences.getString(mTagMobileNumber, "")).put(mTagInstanceId, "").put(mTagGcmToken, sharedPreferences.getString(mTagGcmToken, "")).toString();
-                System.out.println(globalClass.TAG+body_in_post);
-
-                /** Calling GCMRegistrationRequest(http://www.csharpsolutions.co.uk/ValidateApp/api/v1/GCMRegistrationRequest/) API  and the response will be a statuscode and actual response from server in JSON format.*/
-                response_from_server = globalClass.sendPost(urls[0]+globalClass.getGcm_Registration_Request(),body_in_post);
-
-                /** Parsing response to get Status code and response from server*/
-                globalClass.parseServerResponseJSON(response_from_server);
-
-                if(globalClass.getStatusCode() == 200)
-                {
-                    response_from_server = globalClass.getServerResponse();
-                }
-                else
-                {
-                    response_from_server = "error";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return response_from_server;
-        }
-
-
-
-        protected void onPostExecute(String result) {
-
-            if(progressDialog.isShowing())
-            {
-                progressDialog.dismiss();
-            }
-
-            /** Sometimes response can be in negatve value so it indicates error.*/
-            if(!result.equals("error")&&!result.equals("-1"))
-            {
-                Toast.makeText(UpdateScreen.this,
-                        getResources().getString(R.string.success),
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            else
-            {
-
-                Toast.makeText(UpdateScreen.this,
-                        getResources().getString(R.string.try_again),
-                        Toast.LENGTH_SHORT).show();
-            }
-
-
-
-        }
-    }
 
     @Override
     public void onBackPressed() {

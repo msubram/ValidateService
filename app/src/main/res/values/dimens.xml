@@ -12,4 +12,5 @@
     <dimen name="normal_textsize">16sp</dimen>
 
     <dimen name="small_button_textsize">16sp</dimen>
+    <dimen name="updatescreenphonenumbermargin">20dp</dimen>
 </resources>

@@ -15,17 +15,22 @@ public final class CommonUtilities {
 
     // Google project id
     public static final String SENDER_ID = "834527091831";
-   // public static final String SENDER_ID = "593726771235";
 
     /**
      * Tag used on log messages.
      */
-    public static final String TAG = "Validations";
+
 
     public static final String DISPLAY_MESSAGE_ACTION =
             "com.csharp.solutions.validations.DISPLAY_MESSAGE";
 
+
+    public static final String DISPLAY_NOTIFICATION_ACTION =
+            "com.csharp.solutions.validations.NOTIFICATION_MESSAGE";
+
     public static final String EXTRA_MESSAGE = "message";
+
+    public static final String NOTIFICATION_MESSAGE = "notification_message";
 
     /**
      * Notifies UI to display a message.
@@ -37,11 +42,17 @@ public final class CommonUtilities {
      * @param message message to be displayed.
      */
    public static void displayMessage(Context context, String message) {
-    	Log.i("message", message);
+
         Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
         intent.putExtra(EXTRA_MESSAGE, message);
         context.sendBroadcast(intent);
     }
 
+    public static void displayNotification(Context context, String message) {
+
+        Intent intent = new Intent(DISPLAY_NOTIFICATION_ACTION);
+        intent.putExtra(NOTIFICATION_MESSAGE, message);
+        context.sendBroadcast(intent);
+    }
 
 }

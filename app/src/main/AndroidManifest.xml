@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.NFC" />
 
     <!-- GCM permissions -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -24,63 +25,63 @@
         android:name="com.csharp.solutions.validations.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.csharp.solutions.validations.permission.C2D_MESSAGE" />
     <!-- This app has permission to register and receive data message. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <application
-        android:name="util.GlobalClass"
-        android:allowBackup="true"
-        android:icon="@drawable/app_logo"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name=".RegistrationStep1"
-            android:configChanges="orientation|screenSize"
-            android:imeOptions="actionDone|flagNoExtractUi"
+        <application
+            android:name="util.GlobalClass"
+            android:allowBackup="true"
+            android:icon="@drawable/app_logo"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light"
-            android:windowSoftInputMode="stateHidden|adjustResize" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/AppTheme"
+            >
+            <activity
+                android:name=".RegistrationStep1"
+                android:imeOptions="actionDone|flagNoExtractUi"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="adjustUnspecified"
+                android:theme="@style/AppTheme"
+                >
+                <intent-filter>
+                    <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".RegistrationStep2"
-            android:configChanges="orientation|screenSize"
-            android:imeOptions="actionDone|flagNoExtractUi"
-            android:label="@string/registration_step2_title_textview"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light"
-            android:windowSoftInputMode="stateHidden|adjustResize" >
-        </activity>
-        <activity
-            android:name=".UpdateScreen"
-            android:configChanges="orientation|screenSize"
-            android:imeOptions="actionDone|flagNoExtractUi"
-            android:label="@string/user_info_title"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light"
-            android:windowSoftInputMode="stateHidden|adjustResize" >
-        </activity>
-        <activity
-            android:name=".ValidateScreen"
-            android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
-            android:imeOptions="actionDone|flagNoExtractUi"
-            android:label="@string/validation_title"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" />
+                    <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
+            </activity>
 
-        <receiver
-            android:name="com.google.android.gcm.GCMBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
 
-                <!-- Receives the actual messages. -->
+
+            <activity
+                android:name=".RegistrationStep2"
+                android:imeOptions="actionDone|flagNoExtractUi"
+                android:label="@string/registration_step2_title_textview"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="adjustUnspecified"
+                android:theme="@style/AppTheme">
+            </activity>
+            <activity
+                android:name=".UpdateScreen"
+                android:imeOptions="actionDone|flagNoExtractUi"
+                android:label="@string/user_info_title"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="adjustUnspecified"
+                android:theme="@style/AppTheme">
+            </activity>
+            <activity
+                android:name=".ValidateScreen"
+                android:configChanges="orientation|screenSize"
+                android:imeOptions="actionDone|flagNoExtractUi"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme" />
+
+            <receiver
+                android:name="com.google.android.gcm.GCMBroadcastReceiver"
+                android:permission="com.google.android.c2dm.permission.SEND" >
+                <intent-filter>
+
+                    <!-- Receives the actual messages. -->
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -93,10 +94,23 @@
 
         <activity
             android:name=".NotificationHandleActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
+
+        <service
+            android:name="nfc.ValidateHostApduService"
+            android:exported="true"
+            android:permission="android.permission.BIND_NFC_SERVICE" >
+            <intent-filter>
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.cardemulation.host_apdu_service"
+                android:resource="@xml/apduservice" />
+        </service>
 
 
     </application>

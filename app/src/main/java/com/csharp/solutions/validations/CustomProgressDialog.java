@@ -6,24 +6,27 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import util.GlobalClass;
+
 
 public class CustomProgressDialog extends ProgressDialog {
-    AnimationDrawable animation;
     static Context context=null;
     ProgressDialog  dialog=null;
-    public static ProgressDialog ctor(Context ctxt) {
-    CustomProgressDialog dialog = new CustomProgressDialog(ctxt);
+
+    public static ProgressDialog ctor(Context ctxt, String loadingmessage) {
+
+    CustomProgressDialog dialog = new CustomProgressDialog(ctxt,loadingmessage);
     dialog.setIndeterminate(true);
     dialog.setCancelable(false);
-      context = ctxt;
+    context = ctxt;
     return dialog;
   }
 
-  public CustomProgressDialog(Context context) {
+  public CustomProgressDialog(Context context, String loadingmessage) {
 
       super(context);
       dialog = new ProgressDialog(context);
-      dialog.setMessage("Loading...");
+      dialog.setMessage(loadingmessage);
       dialog.setIndeterminate(true);
       dialog.setCancelable(false);
   }

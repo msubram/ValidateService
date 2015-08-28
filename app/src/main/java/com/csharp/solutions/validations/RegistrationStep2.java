@@ -41,6 +41,9 @@ import static gcm.CommonUtilities.SENDER_ID;
 /**
  * Created by Arputha on 04/07/2015.
  */
+
+/** RegistrationStep2 - This class reads the RegCode. and completes the Registration process*/
+
 public class RegistrationStep2 extends Activity {
 
 
@@ -60,9 +63,6 @@ public class RegistrationStep2 extends Activity {
     ProgressDialog progressDialog;
 
     Context context;
-
-    String originIncomingAddress = "644188";
-
 
     /** Intent filter to filter the incoming messages*/
     public static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
@@ -84,18 +84,14 @@ public class RegistrationStep2 extends Activity {
         /** Method to refer the views from xml*/
         addViews();
 
-
         sharedPreferences = new SecurePreferences(this);
         globalClass = (GlobalClass) getApplicationContext();
 
-
-        /** Complete button action listener. */
+        /** Complete button action listener. Listener to work after entering the RegCode*/
         complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-
-
                 if(firstdigit_regcode.getText().length()==0 || seconddigit_regcode.getText().length()==0 || thirddigit_regcode.getText().length()==0 || fourthdigit_regcode.getText().length()==0 || fifthdigit_regcode.getText().length()==0)
                 {
                     Toast.makeText(RegistrationStep2.this, getResources().getString(R.string.empty_fields),
@@ -115,11 +111,7 @@ public class RegistrationStep2 extends Activity {
 
                     }
 
-
                 }
-
-
-
             }
         });
 
@@ -135,8 +127,6 @@ public class RegistrationStep2 extends Activity {
                 Intent retryintent = new Intent(RegistrationStep2.this, RegistrationStep1.class);
                 retryintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(retryintent);
-
-
             }
         });
 
@@ -252,18 +242,15 @@ public class RegistrationStep2 extends Activity {
         retry.setTransformationMethod(null);
         }
 
-
-
-
     /** Background network operation can be performed in a separate thread. We must use AsyncTask for that.*/
     private class Complete_Registration_Task extends AsyncTask<String, Integer, String> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // publishProgress("");
+
             /** Custom progressdialog to show loading symbol*/
-            progressDialog = CustomProgressDialog.ctor(context);
+            progressDialog = CustomProgressDialog.ctor(context,getResources().getString(R.string.completing_register));
             progressDialog.show();
         }
 
@@ -286,9 +273,12 @@ public class RegistrationStep2 extends Activity {
 
                 String mPostBodyData = new JSONObject().put(RegistrationStep2.this.mRegCode,Integer.parseInt(sharedPreferences.getString(RegistrationStep2.this.mRegCode,""))).put(mTagMobileInfo,new JSONObject().put(mTagCountryCode,sharedPreferences.getString(mTagCountryCode,"")).put(mTagMobileNumber,sharedPreferences.getString(mTagMobileNumber,""))).toString();
 
-                System.out.println(globalClass.TAG+"Complete_registration_Task"+mPostBodyData);
+
 
                 /** Calling Registrations(http://www.csharpsolutions.co.uk/ValidateApp/api/v1/Registrations/) API  and the response will be a statuscode and actual response from server in JSON format.*/
+               /**
+                * sendPost(String url,String urlParameters)
+                * */
                 mResponseFromServer = globalClass.sendPost(urls[0]+globalClass.getComplete_Registration_Request_Routes(),mPostBodyData);
 
                 /** Parsing response to get Status code and response from server*/
@@ -312,31 +302,29 @@ public class RegistrationStep2 extends Activity {
 
 
         protected void onPostExecute(String mResult) {
-            if(progressDialog.isShowing())
+
+
+            /** Sometimes response can be in negative value so it indicates error.*/
+            if(!mResult.equals("error"))
             {
-                progressDialog.dismiss();
-            }
-
-            /** Sometimes response can be in negatve value so it indicates error.*/
-            if(!mResult.equals("error")&&!mResult.equals("-1"))
-            {
-
-                System.out.println(globalClass.TAG+"complete registration result"+mResult);
-
-
 
                 SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
                 editor.putBoolean(globalClass.getCheck_Login(),true);
                 editor.commit();
 
                 new GCMCredentials(context).execute();
-                /*Intent intent = new Intent(RegistrationStep2.this, UpdateScreen.class);
-                startActivity(intent);*/
+
             }
 
             else
             {
-
+                if(progressDialog!=null)
+                {
+                    if(progressDialog.isShowing())
+                    {
+                        progressDialog.dismiss();
+                    }
+                }
                 Toast.makeText(RegistrationStep2.this,
                         getResources().getString(R.string.try_again),
                         Toast.LENGTH_SHORT).show();
@@ -351,7 +339,7 @@ public class RegistrationStep2 extends Activity {
     class GCMCredentials extends AsyncTask<String, String, String> {
         private final ProgressDialog progressDialog;
         public GCMCredentials(Context ctx) {
-            progressDialog = CustomProgressDialog.ctor(context);
+            progressDialog = CustomProgressDialog.ctor(context,getResources().getString(R.string.completing_register));
             progressDialog.show();
         }
 
@@ -369,19 +357,12 @@ public class RegistrationStep2 extends Activity {
                     DISPLAY_MESSAGE_ACTION));
 
             // Get GCM registration id
-
-
-
             // Check if regid already presents
             if (GCMregId.equals("")) {
                 // Registration is not present, register now with GCM
                 GCMRegistrar.register(RegistrationStep2.this, SENDER_ID);
-                // Log.i("regId", "new");
-
-
             } else {
                 // Device is already registered on GCM
-                // Log.i("regId", "already");
                 if (GCMRegistrar.isRegisteredOnServer(RegistrationStep2.this)) {
                     // Skips registration.
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.already_registered), Toast.LENGTH_LONG).show();
@@ -391,14 +372,14 @@ public class RegistrationStep2 extends Activity {
         }
 
 
-        // Once Music File is downloaded
+
         @Override
         protected void onPostExecute(String file_url) {
-            progressDialog.dismiss();
+
             Intent intent = new Intent(RegistrationStep2.this, UpdateScreen.class);
             startActivity(intent);
-            /*Toast show = Toast.makeText(context,"Updated GCM"+GCMRegistrar.getRegistrationId(RegistrationActivity.this),Toast.LENGTH_LONG);
-            show.show();*/
+            finish();
+
         }
     }
 
@@ -421,16 +402,15 @@ public class RegistrationStep2 extends Activity {
 
                     for (SmsMessage message : messages)
                     {
-                        /** Now 9566510535 is the number which is sender later it will get changed. Before production change the number*/
-                        //if(message.getDisplayOriginatingAddress().contains(originIncomingAddress))
                         if(message.getDisplayMessageBody().contains(getResources().getString(R.string.reg_code_message)))
                         {
 
                             String mMessageBody = message.getDisplayMessageBody();
                             List<String> mMessageBodyItems = Arrays.asList(mMessageBody.split(":"));
-                            System.out.println(globalClass.TAG+"mMessageBodyItems"+mMessageBodyItems.toString());
-                            String mRegCode = mMessageBodyItems.get(1);
-                            System.out.println(globalClass.TAG+"reg_code"+mRegCode);
+
+
+                            String mRegCode = mMessageBodyItems.get(1).trim();
+
 
                             SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
                             editor.putString(RegistrationStep2.this.mRegCode,mRegCode);
@@ -449,10 +429,6 @@ public class RegistrationStep2 extends Activity {
                             }
 
                         }
-
-
-
-
                     }
                 }
             }
@@ -464,7 +440,7 @@ public class RegistrationStep2 extends Activity {
     private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String newMessage = intent.getExtras().getString(EXTRA_MESSAGE);
+
             // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
 
@@ -475,9 +451,6 @@ public class RegistrationStep2 extends Activity {
              * */
 
             // Showing received message
-
-            Toast.makeText(getApplicationContext(), "New Message: " + newMessage, Toast.LENGTH_LONG).show();
-
             // Releasing wake lock
             WakeLocker.release();
         }
@@ -490,13 +463,18 @@ public class RegistrationStep2 extends Activity {
         startActivity(intent);
     }
 
-
     @Override
-    protected void onPause() {
-        super.onPause();
-      //  unregisterReceiver(receiver_SMS);
+    public void onDestroy() {
+        super.onDestroy();
+        // TODO Auto-generated method stub
+        if(progressDialog!=null)
+        {
+            if(progressDialog.isShowing())
+            {
+                progressDialog.dismiss();
+            }
+        }
     }
-
 
 
 }

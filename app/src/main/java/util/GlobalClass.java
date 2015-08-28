@@ -47,7 +47,7 @@ public class GlobalClass extends Application{
     public static final String WORK_NUMBER = "WorkNumber";
     public static final String HOME_NUMBER = "HomeNumber";
     public static final String CHECK_GCMISREGISTERED = "isgcmregistered";
-
+    public static final String CHECK_MESSAGE_RECEIVED = "checkmessagereceived";
 
 
     int statuscode;

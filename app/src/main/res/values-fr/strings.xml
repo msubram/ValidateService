@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">csharp</string>
+    <string name="app_name">Validations</string>
     <string name="action_settings">paramètres</string>
 
 
@@ -27,9 +27,9 @@
     <string name="registration_step2_complete_button">complet</string>
 
     <string name="user_info_title">Informations utilisateur</string>
-    <string name="user_info_instruction_textview">S\'il vous plaît mettre à jour les informations suivantes</string>
-    <string name="user_info_work_number_textview">Votre numéro de téléphone au travail</string>
-    <string name="user_info_home_number_textview">ta Maison téléphone numéro</string>
+    <string name="user_info_instruction_textview">S\'il vous plaît mettre à jour les éléments suivants</string>
+    <string name="user_info_work_number_textview">Téléphone au travail</string>
+    <string name="user_info_home_number_textview">Accueil téléphonique</string>
     <string name="user_info_update_button">Mise À Jour</string>
 
     <string name="validation_validate_button">valider</string>
@@ -46,14 +46,25 @@
     <string name="gcm_registered">From GCM: device successfully registered!</string>
     <string name="gcm_unregistered">De GCM : dispositif enregistré avec succès!</string>
     <string name="gcm_message">De GCM : vous avez un message!</string>
-    <string name="gcm_error">De GCM : erreur(%1$s).</string>
+    <string name="gcm_error">App Enregistrement auprès GCM échoué.</string>
     <string name="gcm_recoverable_error">De GCM : erreur récupérable(%1$s).</string>
     <string name="gcm_deleted">De GCM : serveur supprimé %1$d les messages en attente!</string>
     <string name="title_activity_notification_handle">NotificationHandleActivity</string>
     <string name="dummy_button">Bouton dummy</string>
     <string name="dummy_content">MANNEQUIN\CONTENU</string>
 
-    <string name="success">succès</string>
+    <string name="success">succès validé</string>
     <string name="try_again">Une erreur sS\'est produite. Veuillez réessayer.</string>
+    <string name="reg_code_message">Merci de votre inscription avec notre service des validations . Pour terminer votre inscription , s\'il vous plaît entrer le code à 5 chiffres suivants et cliquez sur complète</string>
+    <string name="empty_phonenumber">S\'il vous plaît remplir votre numéro de téléphone mobile</string>
 
+    <string name="loading">chargement...</string>
+    <string name="validateloading">S\'il vous plaît, attendez.. Validation..</string>
+
+    <string name="registering">Enregistrement...</string>
+    <string name="completing_register">Fin de l\'enregistrement...</string>
+
+
+    <string name="aiddescription">aiddescription</string>
+    <string name="servicedesc">servicedesc</string>
 </resources>

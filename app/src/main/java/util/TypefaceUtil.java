@@ -16,7 +16,7 @@ public class TypefaceUtil {
     public static Typeface getMyFont(Context context) {
     	 Typeface customFontTypeface = null;
     	try {
-              customFontTypeface = Typeface.createFromAsset(context.getAssets(),"GothamBook.ttf");
+              customFontTypeface = Typeface.createFromAsset(context.getAssets(),"GothamMedium.ttf");
  
         } catch (Exception e) {
         }

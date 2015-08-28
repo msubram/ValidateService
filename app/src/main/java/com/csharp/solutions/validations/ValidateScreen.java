@@ -1,11 +1,17 @@
 package com.csharp.solutions.validations;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.IsoDep;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,18 +38,31 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 
+import gcm.WakeLocker;
+import nfc.IsoDepTransceiver;
 import util.GlobalClass;
 import util.TypefaceUtil;
 
+import static gcm.CommonUtilities.DISPLAY_NOTIFICATION_ACTION;
+import static gcm.CommonUtilities.NOTIFICATION_MESSAGE;
+
+import nfc.IsoDepTransceiver.OnMessageReceived;
 /**
  * Created by Arputha on 04/07/2015.
  */
-public class ValidateScreen extends ActionBarActivity {
+/** ValidateScreen - This class will send udp broadcast message and listen for the endpoint. After receiving the endpoint it transfers the stored data in the UpdateScreen to the endpoint.
+ * It also transfers the data to the NFC reader when a device is in contatct with the NFC reader.
+ * */
+
+@TargetApi(21)
+public class ValidateScreen extends ActionBarActivity implements OnMessageReceived, NfcAdapter.ReaderCallback {
 
     /**Widgets*/
     Button validate;
     ImageView logo;
+    ImageView note_icon;
     TextView textView;
+
 
 
     Context context = this;
@@ -76,18 +96,25 @@ public class ValidateScreen extends ActionBarActivity {
     /** Progress dialog*/
     ProgressDialog progressDialog;
 
+
+
+    /** NFC*/
+    private NfcAdapter nfcAdapter;
+
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.validatescreen);
-        System.out.println( mTag +"onCreate" ) ;
 
+        /** Initialising the UI Widgets*/
         addViews();
 
         globalClass = (GlobalClass) getApplicationContext();
-       // UDP_SERVER_PORT = Integer.parseInt(globalClass.get_Udp_port());
         sharedPreferences = new SecurePreferences(this);
 
-
+        registerReceiver(mHandleGCMNotificationReceiver, new IntentFilter(
+                DISPLAY_NOTIFICATION_ACTION));
         /** Validate button click event
          * Send the broadcast message and start the Datagramreceiver  to receive the UDP data.
          * */
@@ -98,17 +125,18 @@ public class ValidateScreen extends ActionBarActivity {
 
                 if(globalClass.checkWifiConnectivity())
                 {
-
-                    System.out.println("myDatagramReceiver Start");
-
                     WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
                     if (wifi != null){
                         WifiManager.MulticastLock lock = wifi.createMulticastLock("mylock");
                         lock.acquire();
                     }
 
+                    SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
+                    editor.putBoolean(GlobalClass.CHECK_MESSAGE_RECEIVED,false);
+                    editor.commit();
+
                     /** show progress dialog*/
-                    progressDialog = CustomProgressDialog.ctor(context);
+                    progressDialog = CustomProgressDialog.ctor(context,getResources().getString(R.string.validateloading));
                     progressDialog.show();
 
                     /** Start a thread to listen for incoming udp messages*/
@@ -125,6 +153,19 @@ public class ValidateScreen extends ActionBarActivity {
                 }
 
 
+
+            }
+        });
+
+
+        note_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+
+                /** Calling NotificationHandleActivity to show the GCM notification received.*/
+                Intent notificationIntent = new Intent(context, NotificationHandleActivity.class);
+                startActivity(notificationIntent);
 
             }
         });
@@ -163,8 +204,11 @@ public class ValidateScreen extends ActionBarActivity {
         context=this;
         validate=(Button)findViewById(R.id.button_validate);
         logo=(ImageView)findViewById(R.id.imageview_logo);
+        note_icon =(ImageView)findViewById(R.id.note_icon);
         validate.setTransformationMethod(null);
         textView = (TextView) findViewById(R.id.client_text);
+
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         /** Setting typeface for views*/
         validate.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
@@ -188,18 +232,18 @@ public class ValidateScreen extends ActionBarActivity {
 
             /** Broadcast data JSON formation*/
             JSONObject broadcaste_message_json = new JSONObject().put(mTagCountryCode,mcountryCode).put(mTagMobileNumber,mMobileNumber).put(mTagIpAddress,mLocalIpAddress).put(mTagName,"motoe").put(mTagEndPoint,"").put(mTagUdpListenPort,mListenPort);
-            System.out.println( mTag +"message"+broadcaste_message_json.toString() ) ;
+
 
             /** To get the broadcast address of a WIFI on which device is connected*/
             InetAddress host = getBroadcastAddress() ;
-            System.out.println( mTag +host.toString() ) ;
+
 
             // Construct the socket
             socket = new DatagramSocket();
 
             /** Setting the broadcast*/
             socket.setBroadcast(true);
-            System.out.println( mTag +"setBroadcast" );
+
 
             byte [] data = broadcaste_message_json.toString().getBytes() ;
 
@@ -211,7 +255,7 @@ public class ValidateScreen extends ActionBarActivity {
 
             // Send the packet in the socket
             socket.send( packet ) ;
-            System.out.println( mTag +"message sent" );
+      ;
 
             Thread.sleep(500);
 
@@ -250,7 +294,7 @@ public class ValidateScreen extends ActionBarActivity {
                                                           .put(mTagMobileNumber,sharedPreferences.getString(mTagMobileNumber,""))
                                                           .put(mTagMobileCountryCode,sharedPreferences.getString(mTagCountryCode,""));
 
-            System.out.println("Fillendpoint body"+endpointbodyJSON.toString());
+
 
             response_from_server = globalClass.sendPost(url,endpointbodyJSON.toString());
             /** Parsing response to get Status code and response from server*/
@@ -304,7 +348,7 @@ public class ValidateScreen extends ActionBarActivity {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            System.out.println("UDP"+ex.toString());
+
         }
         return null;
     }
@@ -350,8 +394,7 @@ public class ValidateScreen extends ActionBarActivity {
         public FillEndPointUrl(Context context) {
             super();
             mContext = context;
-          /*  progressDialog = CustomProgressDialog.ctor(context);
-            progressDialog.show();*/
+
         }
 
 
@@ -365,16 +408,21 @@ public class ValidateScreen extends ActionBarActivity {
         }
         protected void onPostExecute(String result) {
             /** Sometimes response can be in negatve value so it indicates error.*/
+
             if(progressDialog.isShowing())
             {
                 progressDialog.dismiss();
             }
 
-            if(!result.equals("error")&&!result.equals("-1"))
+            if(!result.equals("error"))
             {
                 Toast.makeText(ValidateScreen.this,
                         getResources().getString(R.string.success),
                         Toast.LENGTH_SHORT).show();
+
+                SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
+                editor.putBoolean(GlobalClass.CHECK_MESSAGE_RECEIVED, true);
+                editor.commit();
             }
             else
             {
@@ -387,20 +435,51 @@ public class ValidateScreen extends ActionBarActivity {
     }
 
 
+    public final BroadcastReceiver mHandleGCMNotificationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString(NOTIFICATION_MESSAGE);
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
+
+            if(newMessage.length()!=0)
+            {
+                note_icon.setVisibility(View.VISIBLE);
+            }
+
+            /**
+             * Take appropriate action on this message
+             * depending upon your app requirement
+             * For now i am just displaying it on the screen
+             * */
+
+            // Showing received message
+
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
+
 
     private MyDatagramReceiver myDatagramReceiver = null;
 
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println( mTag +"onResume" ) ;
-     //   myDatagramReceiver = new MyDatagramReceiver();
-       // myDatagramReceiver.start();
+
+        if(nfcAdapter!=null)
+        {
+            nfcAdapter.enableReaderMode(this, this, NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
+                    null);
+        }
+
+
     }
     @Override
     protected void onPause() {
         super.onPause();
-        System.out.println( mTag +"onPause" ) ;
+
         WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
         if (wifi != null){
             WifiManager.MulticastLock lock = wifi.createMulticastLock("mylock");
@@ -414,8 +493,36 @@ public class ValidateScreen extends ActionBarActivity {
         {
             myDatagramReceiver.kill();
         }
+        if(nfcAdapter!=null)
+        {
+            nfcAdapter.disableReaderMode(this);
+        }
 
 
+    }
+
+    @Override
+    public void onTagDiscovered(Tag tag) {
+        IsoDep isoDep = IsoDep.get(tag);
+        IsoDepTransceiver transceiver = new IsoDepTransceiver(isoDep, ValidateScreen.this);
+        Thread thread = new Thread(transceiver);
+        thread.start();
+    }
+
+    @Override
+    public void onMessage(final byte[] message) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+            }
+        });
+    }
+
+    @Override
+    public void onError(Exception exception) {
+        onMessage(exception.getMessage().getBytes());
     }
 
     /** Thread to listen for the UDP Message on the specified port*/
@@ -426,23 +533,18 @@ public class ValidateScreen extends ActionBarActivity {
         public void run() {
             String message;
 
-            System.out.println(mTag + "MyDatagramReceiver run");
+
             try {
                 rSocket= new DatagramSocket(UDP_LISTENER_PORT);
                 rSocket.setReuseAddress(true);
-                // SocketAddress socketAddr=new InetSocketAddress(UDP_SERVER_PORT);
-
                 rSocket.setBroadcast(true);
-                // rSocket.bind(socketAddr);
                 rSocket.setSoTimeout(10000);
 
                 while(bKeepRunning) {
                     byte[] lmessage = new byte[PACKETSIZE];
-                    System.out.println(mTag + "MyDatagramReceiver waiting for message");
-                    DatagramPacket packet = new DatagramPacket(lmessage, lmessage.length);
 
+                    DatagramPacket packet = new DatagramPacket(lmessage, lmessage.length);
                     rSocket.receive(packet);
-                    System.out.println(mTag + "Received"+new String(packet.getData()));
                     message = new String(lmessage, 0, packet.getLength());
                     lastMessage = message;
 
@@ -453,13 +555,18 @@ public class ValidateScreen extends ActionBarActivity {
                 e.printStackTrace();
                 System.out.println(mTag + e);
                 if (rSocket != null) {
-                    System.out.println(mTag + "Throwable rSocket close");
                     rSocket.close();
+
+                    if(!sharedPreferences.getBoolean(GlobalClass.CHECK_MESSAGE_RECEIVED,false))
+                    {
+                        runOnUiThread(errorMessage);
+                    }
+
                     if(progressDialog.isShowing())
                     {
                         progressDialog.dismiss();
                     }
-                    // rSocket.disconnect();
+
                 }
             }
 
@@ -484,13 +591,22 @@ public class ValidateScreen extends ActionBarActivity {
         }
     };
 
+
+    private Runnable errorMessage = new Runnable() {
+        public void run() {
+
+            Toast.makeText(ValidateScreen.this,
+                    getResources().getString(R.string.try_again),
+                    Toast.LENGTH_SHORT).show();
+        }
+    };
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(Intent.ACTION_MAIN);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);
-        finish();
+
     }
 
 

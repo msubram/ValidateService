@@ -22,7 +22,7 @@ import org.json.JSONObject;
 import util.GlobalClass;
 import util.TypefaceUtil;
 
-/** RegistrationStep1 - This class will get the users mobile number and their country code. */
+/** RegistrationStep1 - This class will get the users mobile number and their country code and send to the server get the RegCode. */
 public class RegistrationStep1 extends Activity {
 
     /**UI Widgets*/
@@ -34,14 +34,12 @@ public class RegistrationStep1 extends Activity {
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
     SharedPreferences sharedPreferences;
 
-
     /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
     GlobalClass globalClass;
     Context context  = this;
 
     /** Progress dialog*/
     ProgressDialog progressDialog;
-
 
     /** Tags used to access the Global Variables*/
     String mTagCountryCode = GlobalClass.COUNTRY_CODE;
@@ -53,10 +51,7 @@ public class RegistrationStep1 extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.registration_step_one);
-
         sharedPreferences = new SecurePreferences(this);
-        globalClass = (GlobalClass) getApplicationContext();
 
         /** Code to check the login status of the user*/
         if(sharedPreferences.getBoolean(GlobalClass.CHECK_LOGIN,false))
@@ -66,6 +61,9 @@ public class RegistrationStep1 extends Activity {
         }
         else
         {
+            setContentView(R.layout.registration_step_one);
+            globalClass = (GlobalClass) getApplicationContext();
+
             /** Storing the counrty code values for the country.
              * Key - country name, value - country code*/
             SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
@@ -73,11 +71,8 @@ public class RegistrationStep1 extends Activity {
             editor.putString("India","91");
             editor.commit();
 
-
             /** Initialising the UI Widgets*/
             addViews();
-
-
 
             /** Code to listen when Register button is clicked*/
             registration.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +83,6 @@ public class RegistrationStep1 extends Activity {
                     /**Validate mobile number and throw alert when mobile number is empty*/
 
                     if (user_mobile_number.getText().length() != 0) {
-
 
                         if(globalClass.checkWifiConnectivity())
                         {
@@ -101,20 +95,16 @@ public class RegistrationStep1 extends Activity {
 
                         }
 
-
                     } else {
                         Toast.makeText(RegistrationStep1.this, getResources().getString(R.string.empty_phonenumber),
                                 Toast.LENGTH_SHORT).show();
                     }
 
-
                 }
             });
         }
 
-
     }
-
 
     /** Method to refer the views that have been created in xml. Using te id of the view the widgets can be refered*/
     public void addViews(){
@@ -137,23 +127,17 @@ public class RegistrationStep1 extends Activity {
         id_reg_mobile_label.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
     }
 
-
-
     /** Background network operation can be performed in a separate thread. We must use AsyncTask for that.*/
     private class RegistrationStep1_Task extends AsyncTask<String, Integer, String> {
-
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             /** Custom progressdialog to show loading symbol*/
-            progressDialog = CustomProgressDialog.ctor(context);
+            progressDialog = CustomProgressDialog.ctor(context,getResources().getString(R.string.registering));
             progressDialog.show();
         }
 
         protected String doInBackground(String... urls) {
-
-
             /** Sending the post data in JSON format in the body*/
                 String mResponseFromServer = null;
 
@@ -163,10 +147,8 @@ public class RegistrationStep1 extends Activity {
                  * MobileNumber - Users mobile number
                  * */
                 String mPostBodyData = new JSONObject().put(mTagCountryCode, mcountryCode).put(mTagMobileNumber,user_mobile_number.getText().toString()).toString();
-                System.out.println(globalClass.TAG+mPostBodyData);
 
                 /** Calling RegistrationRequest(http://www.csharpsolutions.co.uk/ValidateApp/api/v1/RegistrationRequest/) API  and the response will be a statuscode and actual response from server in JSON format.*/
-                System.out.println(globalClass.TAG+urls[0]+globalClass.getRegistration_Request_Routes()+mPostBodyData);
                 mResponseFromServer = globalClass.sendPost(urls[0]+globalClass.getRegistration_Request_Routes(),mPostBodyData);
 
                /** Parsing response to get Status code and response from server*/
@@ -180,6 +162,7 @@ public class RegistrationStep1 extends Activity {
                 {
                     mResponseFromServer = "error";
                 }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -187,13 +170,9 @@ public class RegistrationStep1 extends Activity {
         }
 
 
-
         protected void onPostExecute(String mResult) {
-
-
-
             /** Sometimes response can be in negatve value so it indicates error.*/
-            if(!mResult.equals("error")&&!mResult.equals("-1"))
+           if(!mResult.equals("error"))
             {
 
                 /** Save RegId, MobileNumber and CountryCode in Sharedpreference*/
@@ -203,33 +182,20 @@ public class RegistrationStep1 extends Activity {
                 editor.putString(mTagCountryCode, mcountryCode);
                 editor.commit();
 
-
-                System.out.println(globalClass.TAG+ mTagRegId +sharedPreferences.getString(mTagRegId,""));
-
-                if(progressDialog.isShowing())
-                {
-                    progressDialog.dismiss();
-                }
-                Toast.makeText(context, getResources().getString(R.string.success), Toast.LENGTH_LONG).show();
-
                 /** When we successfully get RegId move from RegistrationStep1 to RegistrationStep1 Activity*/
                 Intent intent = new Intent(RegistrationStep1.this, RegistrationStep2.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            }
+                finish();
 
+            }
             else
             {
-                if(progressDialog.isShowing())
-                {
-                    progressDialog.dismiss();
-                }
+
                 Toast.makeText(RegistrationStep1.this,
                         getResources().getString(R.string.try_again),
                         Toast.LENGTH_SHORT).show();
             }
-
-
-
         }
     }
 
@@ -255,10 +221,23 @@ public class RegistrationStep1 extends Activity {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);
+        finish();
 
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // TODO Auto-generated method stub
+        if(progressDialog!=null)
+        {
+            if(progressDialog.isShowing())
+            {
+                progressDialog.dismiss();
+            }
+        }
+    }
 
 
 }
