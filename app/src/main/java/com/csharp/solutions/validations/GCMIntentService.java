@@ -107,7 +107,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     protected void onDeletedMessages(Context context, int total) {
 
         String message = getString(R.string.gcm_deleted, total);
-        displayMessage(context, message);
+
 
     }
 

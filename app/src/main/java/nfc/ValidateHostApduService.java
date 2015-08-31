@@ -1,38 +1,38 @@
 package nfc;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.securepreferences.SecurePreferences;
 
 import util.GlobalClass;
 
+import static gcm.CommonUtilities.SHOW_PROGRESS_DIALOG;
+import static gcm.CommonUtilities.TRIGGER_NFC_ACTION;
+
+
+/** The class to trigger when the NFC device is contacted with NFC reader*/
 @TargetApi(21)
 public class ValidateHostApduService extends HostApduService {
 
-
-    /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
-    SharedPreferences sharedPreferences;
-
-    /** Tags declaration*/
-    String mTagWorkNumber = GlobalClass.WORK_NUMBER;
-    String mTagHomeNumber = GlobalClass.HOME_NUMBER;
 
 
     /** Sending the message from NFC enable device to reader*/
     @Override
 	public byte[] processCommandApdu(byte[] apdu, Bundle extras) {
+        byte[] returnmessage=null;
 		if (selectAidApdu(apdu)) {
 
-			return getInitialMessage();
-		}
-		else {
+            returnmessage = getInitialMessage();
 
-			return getUserStoredMessage();
+            Intent intent = new Intent(TRIGGER_NFC_ACTION);
+            intent.putExtra(SHOW_PROGRESS_DIALOG, false);
+            sendBroadcast(intent);
 		}
+        return returnmessage;
 	}
 
     /** The first message from NFC enabled device to reader*/
@@ -40,14 +40,6 @@ public class ValidateHostApduService extends HostApduService {
 		return "Hello Desktop!".getBytes();
 	}
 
-    /** Consecutive message from NFC enabled device to reader*/
-	private byte[] getUserStoredMessage() {
-
-        /** Get the stored data of the user and pass to the NFC reader*/
-        sharedPreferences = new SecurePreferences(this);
-        String msendMessage =  sharedPreferences.getString(mTagWorkNumber,"")+","+sharedPreferences.getString(mTagHomeNumber,"");
-        return msendMessage.getBytes();
-	}
 
 
 	private boolean selectAidApdu(byte[] apdu) {

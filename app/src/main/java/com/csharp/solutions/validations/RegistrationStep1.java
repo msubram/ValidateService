@@ -84,7 +84,7 @@ public class RegistrationStep1 extends Activity {
 
                     if (user_mobile_number.getText().length() != 0) {
 
-                        if(globalClass.checkWifiConnectivity())
+                        if(globalClass.checkWifiConnectivity(context))
                         {
                             /** Asynctask to register the mobile number along with country code*/
                             new RegistrationStep1_Task().execute(globalClass.getBase_url());

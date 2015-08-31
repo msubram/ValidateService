@@ -14,8 +14,6 @@
         android:padding="@dimen/activity_horizontal_margin"
         android:layout_height="match_parent">
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -56,8 +54,6 @@
 
             </RelativeLayout>
 
-
-
         </LinearLayout>
 
 
@@ -95,8 +91,6 @@
                         android:gravity="center"/>
                 </LinearLayout>
             </RelativeLayout>
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -138,14 +132,12 @@
                 </LinearLayout>
             </RelativeLayout>
 
-
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="horizontal">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -168,10 +160,8 @@
                         android:text="@string/user_info_update_button"
                         android:gravity="center"/>
 
-
                 </RelativeLayout>
             </LinearLayout>
-
 
         </LinearLayout>
     </LinearLayout>

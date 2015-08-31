@@ -139,10 +139,10 @@ public class GlobalClass extends Application{
     }
 
 
-    public boolean checkWifiConnectivity()
+    public boolean checkWifiConnectivity(Context context)
     {
         boolean wifi_availability = false;
-        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
         if (mWifi.isConnected()) {

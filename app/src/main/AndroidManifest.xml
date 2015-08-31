@@ -92,12 +92,7 @@
 
         <service android:name=".GCMIntentService" />
 
-        <activity
-            android:name=".NotificationHandleActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
+
 
         <service
             android:name="nfc.ValidateHostApduService"
@@ -112,6 +107,11 @@
                 android:resource="@xml/apduservice" />
         </service>
 
+            <receiver android:name=".NFCBroadcastReceiver" >
+                <intent-filter >
+                    <action android:name="com.csharp.solutions.validations.NFC_TRIGGER" />
+                </intent-filter>
+            </receiver>
 
     </application>
 

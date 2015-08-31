@@ -28,9 +28,17 @@ public final class CommonUtilities {
     public static final String DISPLAY_NOTIFICATION_ACTION =
             "com.csharp.solutions.validations.NOTIFICATION_MESSAGE";
 
+    public static final String TRIGGER_NFC_ACTION =
+            "com.csharp.solutions.validations.NFC_TRIGGER";
+
+    public static final String CANCEL_PROGRESS_DIALOG =
+            "com.csharp.solutions.validations.CANCEL_PROGRESS_DIALOG";
+
     public static final String EXTRA_MESSAGE = "message";
 
     public static final String NOTIFICATION_MESSAGE = "notification_message";
+
+    public static final String SHOW_PROGRESS_DIALOG = "show_progress_dialog";
 
     /**
      * Notifies UI to display a message.

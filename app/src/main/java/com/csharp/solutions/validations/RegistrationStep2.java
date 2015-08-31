@@ -100,7 +100,7 @@ public class RegistrationStep2 extends Activity {
                 else
                 {
 
-                    if(globalClass.checkWifiConnectivity()) {
+                    if(globalClass.checkWifiConnectivity(context)) {
 
                         /** Asynctask to call when complete button is pressed*/
                         new Complete_Registration_Task().execute(globalClass.getBase_url());
@@ -440,9 +440,10 @@ public class RegistrationStep2 extends Activity {
     private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
+
+            Toast.makeText(context, getResources().getString(R.string.gcm_error), Toast.LENGTH_LONG).show();
 
             /**
              * Take appropriate action on this message
