@@ -1,10 +1,7 @@
 package util;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
- 
-import java.lang.reflect.Field;
- 
+
 public class TypefaceUtil {
  
     /**
@@ -18,7 +15,7 @@ public class TypefaceUtil {
     	try {
               customFontTypeface = Typeface.createFromAsset(context.getAssets(),"GothamMedium.ttf");
  
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return customFontTypeface;
     }

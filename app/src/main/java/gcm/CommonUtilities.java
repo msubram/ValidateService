@@ -2,13 +2,6 @@ package gcm;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public final class CommonUtilities {
 	
@@ -34,7 +27,7 @@ public final class CommonUtilities {
     public static final String CANCEL_PROGRESS_DIALOG =
             "com.csharp.solutions.validations.CANCEL_PROGRESS_DIALOG";
 
-    public static final String EXTRA_MESSAGE = "message";
+    private static final String EXTRA_MESSAGE = "message";
 
     public static final String NOTIFICATION_MESSAGE = "notification_message";
 

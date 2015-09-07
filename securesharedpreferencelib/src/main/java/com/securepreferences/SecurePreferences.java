@@ -256,7 +256,7 @@ public class SecurePreferences implements SharedPreferences {
      * @param prefKey
      * @return
      */
-    public static String hashPrefKey(String prefKey)  {
+    private static String hashPrefKey(String prefKey)  {
         final MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA-256");
@@ -571,11 +571,7 @@ public class SecurePreferences implements SharedPreferences {
 		}
 	}
 
-	public static boolean isLoggingEnabled() {
-		return sLoggingEnabled;
-	}
-
-	public static void setLoggingEnabled(boolean loggingEnabled) {
+    public static void setLoggingEnabled(boolean loggingEnabled) {
 		sLoggingEnabled = loggingEnabled;
 	}
 

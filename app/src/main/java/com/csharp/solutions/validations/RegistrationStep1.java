@@ -26,27 +26,24 @@ import util.TypefaceUtil;
 public class RegistrationStep1 extends Activity {
 
     /**UI Widgets*/
-    Button registration;
-    EditText user_mobile_number;
-    Spinner country_list;
-    TextView id_reg_step1_label1,id_reg_step1_label2,id_reg_country_label,id_reg_mobile_label;
+    private Button registration;
+    private EditText user_mobile_number;
 
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
-    GlobalClass globalClass;
-    Context context  = this;
+    private GlobalClass globalClass;
+    private final Context context  = this;
 
     /** Progress dialog*/
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     /** Tags used to access the Global Variables*/
-    String mTagCountryCode = GlobalClass.COUNTRY_CODE;
-    String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
-    String mTagRegId = GlobalClass.REG_ID;
+    private final String mTagCountryCode = GlobalClass.COUNTRY_CODE;
+    private final String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
 
-    String mcountryCode;
+    private String mcountryCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,16 +104,16 @@ public class RegistrationStep1 extends Activity {
     }
 
     /** Method to refer the views that have been created in xml. Using te id of the view the widgets can be refered*/
-    public void addViews(){
+    void addViews(){
         registration = (Button)findViewById(R.id.button_register);
         registration.setTransformationMethod(null);
         user_mobile_number = (EditText)findViewById(R.id.user_mobile_number);
-        country_list = (Spinner)findViewById(R.id.country_list);
+        Spinner country_list = (Spinner) findViewById(R.id.country_list);
         country_list.setOnItemSelectedListener(new CustomOnItemSelectedListener());
-        id_reg_step1_label1 = (TextView)findViewById(R.id.id_reg_step1_label1);
-        id_reg_step1_label2 = (TextView)findViewById(R.id.id_reg_step1_label2);
-        id_reg_country_label = (TextView)findViewById(R.id.id_reg_country_label);
-        id_reg_mobile_label = (TextView)findViewById(R.id.id_reg_mobile_label);
+        TextView id_reg_step1_label1 = (TextView) findViewById(R.id.id_reg_step1_label1);
+        TextView id_reg_step1_label2 = (TextView) findViewById(R.id.id_reg_step1_label2);
+        TextView id_reg_country_label = (TextView) findViewById(R.id.id_reg_country_label);
+        TextView id_reg_mobile_label = (TextView) findViewById(R.id.id_reg_mobile_label);
 
         /** Setting typeface for views*/
         registration.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
@@ -177,6 +174,7 @@ public class RegistrationStep1 extends Activity {
 
                 /** Save RegId, MobileNumber and CountryCode in Sharedpreference*/
                 SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();
+                String mTagRegId = GlobalClass.REG_ID;
                 editor.putString(mTagRegId,mResult);
                 editor.putString(mTagMobileNumber,user_mobile_number.getText().toString());
                 editor.putString(mTagCountryCode, mcountryCode);
@@ -201,7 +199,7 @@ public class RegistrationStep1 extends Activity {
 
 
     /** Custom Listener for Country Spinner selection*/
-    public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
+    private class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
 

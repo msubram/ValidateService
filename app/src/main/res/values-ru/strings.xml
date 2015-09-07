@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Проверки</string>
-    <string name="action_settings">настройки</string>
 
 
     <string name="registration_step1_instruction_textview">Пожалуйста, введите номер вашего мобильного телефона , чтобы зарегистрироваться для обслуживания</string>
@@ -33,9 +32,6 @@
     <string name="user_info_update_button">обновление</string>
 
     <string name="validation_validate_button">действительный</string>
-    <string name="validation_title">действительный</string>
-    <string name="validation_ack_title">действительный успех</string>
-    <string name="validation_ack_message">действительный</string>
     <string name="validation_menu_update">обновление</string>
     <string name="validation_menu_validate">действительный</string>
 
@@ -43,28 +39,18 @@
     <string name="empty_fields">Пожалуйста, заполните пустые поля</string>
 
     <string name="already_registered">Устройство уже зарегистрированы на сервере.</string>
-    <string name="gcm_registered">От ГКМ : устройство успешно зарегистрирован!</string>
-    <string name="gcm_unregistered">От ГКМ : устройство успешно незарегистрированный!</string>
-    <string name="gcm_message">От ГКМ : вы получили сообщение!</string>
     <string name="gcm_error">App регистрации с ГКМ удалось.</string>
-    <string name="gcm_recoverable_error">От ГКМ : возмещаемой ошибки (%1$s).</string>
-    <string name="gcm_deleted">От ГКМ : сервер удаляется %1$d до сообщения!</string>
-    <string name="title_activity_notification_handle">NotificationHandleActivity</string>
-    <string name="dummy_button">фиктивная кнопка</string>
-    <string name="dummy_content">МАНЕКЕН\nСОДЕРЖАНИЕ</string>
 
     <string name="success">успешно проверен</string>
     <string name="try_again">Что-то пошло не так. Пожалуйста, попробуйте еще раз.</string>
     <string name="empty_phonenumber">Pozhaluysta, zapolnite nomer vashego mobil\'nogo telefona</string>
     <string name="reg_code_message">Blagodarim vas za registratsiyu s nashim obsluzhivaniyem Proverki . Dlya zaversheniya registratsii , pozhaluysta, vvedite sleduyushchuyu 5 - znachnyy kod i nazhmite na polnoye</string>
 
-    <string name="loading">загрузка...</string>
     <string name="validateloading">Пожалуйста, подождите.. Пользователи..</string>
 
-    <string name="registering">регистрирующий...</string>
-    <string name="completing_register">Завершение регистрации...</string>
+    <string name="registering">регистрирующий…</string>
+    <string name="completing_register">Завершение регистрации…</string>
 
 
     <string name="aiddescription">aiddescription</string>
-    <string name="servicedesc">servicedesc</string>
 </resources>

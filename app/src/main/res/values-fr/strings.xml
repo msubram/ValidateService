@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Validations</string>
-    <string name="action_settings">paramètres</string>
 
 
     <string name="registration_step1_instruction_textview">S\'il vous plaît entrer votre numéro de téléphone mobile pour vous inscrire pour le service</string>
@@ -33,9 +32,6 @@
     <string name="user_info_update_button">Mise À Jour</string>
 
     <string name="validation_validate_button">valider</string>
-    <string name="validation_title">validation</string>
-    <string name="validation_ack_title">validation succès</string>
-    <string name="validation_ack_message">valider</string>
     <string name="validation_menu_update">Mise À Jour</string>
     <string name="validation_menu_validate">valider</string>
 
@@ -43,28 +39,19 @@
     <string name="empty_fields">S\'il vous plaît remplir les champs vides</string>
 
     <string name="already_registered">Périphérique est déjà enregistré sur le serveur.</string>
-    <string name="gcm_registered">From GCM: device successfully registered!</string>
-    <string name="gcm_unregistered">De GCM : dispositif enregistré avec succès!</string>
-    <string name="gcm_message">De GCM : vous avez un message!</string>
     <string name="gcm_error">App Enregistrement auprès GCM échoué.</string>
-    <string name="gcm_recoverable_error">De GCM : erreur récupérable(%1$s).</string>
-    <string name="gcm_deleted">De GCM : serveur supprimé %1$d les messages en attente!</string>
-    <string name="title_activity_notification_handle">NotificationHandleActivity</string>
-    <string name="dummy_button">Bouton dummy</string>
-    <string name="dummy_content">MANNEQUIN\CONTENU</string>
+
 
     <string name="success">succès validé</string>
     <string name="try_again">Une erreur sS\'est produite. Veuillez réessayer.</string>
     <string name="reg_code_message">Merci de votre inscription avec notre service des validations . Pour terminer votre inscription , s\'il vous plaît entrer le code à 5 chiffres suivants et cliquez sur complète</string>
     <string name="empty_phonenumber">S\'il vous plaît remplir votre numéro de téléphone mobile</string>
 
-    <string name="loading">chargement...</string>
     <string name="validateloading">S\'il vous plaît, attendez.. Validation..</string>
 
-    <string name="registering">Enregistrement...</string>
-    <string name="completing_register">Fin de l\'enregistrement...</string>
+    <string name="registering">Enregistrement…</string>
+    <string name="completing_register">Fin de l\'enregistrement…</string>
 
 
     <string name="aiddescription">aiddescription</string>
-    <string name="servicedesc">servicedesc</string>
 </resources>

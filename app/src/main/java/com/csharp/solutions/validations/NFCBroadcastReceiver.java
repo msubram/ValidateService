@@ -33,9 +33,9 @@ import static gcm.CommonUtilities.SHOW_PROGRESS_DIALOG;
  */
 public class NFCBroadcastReceiver extends BroadcastReceiver {
 
-    Context mContext;
+    private Context mContext;
 
-    String mTag = GlobalClass.TAG;
+    private final String mTag = GlobalClass.TAG;
 
     /**UDP Port and Packet Size*/
     private static final int UDP_LISTENER_PORT = 38798;
@@ -43,30 +43,21 @@ public class NFCBroadcastReceiver extends BroadcastReceiver {
     private final static int PACKETSIZE = 1000 ;
 
     /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
-    GlobalClass globalClass;
+    private GlobalClass globalClass;
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     /** Receiving Socket*/
-    DatagramSocket rSocket = null ;
+    private DatagramSocket rSocket = null ;
 
     /** Tags declaration*/
-    String mTagCountryCode = GlobalClass.COUNTRY_CODE;
-    String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
-    String mTagWorkNumber = GlobalClass.WORK_NUMBER;
-    String mTagHomeNumber = GlobalClass.HOME_NUMBER;
-    String mTagIpAddress = GlobalClass.IP_ADDRESS;
-    String mTagName = GlobalClass.SENDER_NAME;
-    String mTagEndPoint = GlobalClass.END_POINT;
-    String mTagUdpListenPort = GlobalClass.UDP_LISTEN_PORT;
-    String mTagEmail = GlobalClass.EMAIL;
-    String mTagMobileCountryCode = GlobalClass.MOBILE_COUNTRY_CODE;
-
+    private final String mTagCountryCode = GlobalClass.COUNTRY_CODE;
+    private final String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
 
 
     private final Handler mtoasthandler =new Handler();
 
-    boolean mcancelProgressdialog;
+    private boolean mcancelProgressdialog;
 
 
     @Override
@@ -131,11 +122,15 @@ public class NFCBroadcastReceiver extends BroadcastReceiver {
         String mLocalIpAddress = getLocalIpAddress();
         String mListenPort = Integer.toString(UDP_LISTENER_PORT);
 
-        DatagramSocket socket = null ;
+        DatagramSocket socket;
 
         try {
 
             /** Broadcast data JSON formation*/
+            String mTagIpAddress = GlobalClass.IP_ADDRESS;
+            String mTagName = GlobalClass.SENDER_NAME;
+            String mTagEndPoint = GlobalClass.END_POINT;
+            String mTagUdpListenPort = GlobalClass.UDP_LISTEN_PORT;
             JSONObject broadcaste_message_json = new JSONObject().put(mTagCountryCode,mcountryCode).put(mTagMobileNumber,mMobileNumber).put(mTagIpAddress,mLocalIpAddress).put(mTagName,"motoe").put(mTagEndPoint,"").put(mTagUdpListenPort,mListenPort);
 
             /** To get the broadcast address of a WIFI on which device is connected*/
@@ -188,7 +183,10 @@ public class NFCBroadcastReceiver extends BroadcastReceiver {
         try {
 
 
-
+            String mTagWorkNumber = GlobalClass.WORK_NUMBER;
+            String mTagHomeNumber = GlobalClass.HOME_NUMBER;
+            String mTagEmail = GlobalClass.EMAIL;
+            String mTagMobileCountryCode = GlobalClass.MOBILE_COUNTRY_CODE;
             JSONObject endpointbodyJSON = new JSONObject().put(mTagEmail,"")
                     .put(mTagHomeNumber,sharedPreferences.getString(mTagHomeNumber,""))
                     .put(mTagWorkNumber,sharedPreferences.getString(mTagWorkNumber,""))
@@ -236,7 +234,7 @@ public class NFCBroadcastReceiver extends BroadcastReceiver {
     }
 
     /** Method to get the local IP address of a device connected to the WIFI*/
-    public static String getLocalIpAddress() {
+    private static String getLocalIpAddress() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
                 NetworkInterface intf = en.nextElement();
@@ -259,11 +257,9 @@ public class NFCBroadcastReceiver extends BroadcastReceiver {
     /** Asynctask to SendBroadcast message*/
     private class SendBroadcast extends
             AsyncTask<String, Void, String> {
-        Context mContext;
 
         public SendBroadcast(Context context) {
             super();
-            mContext = context;
         }
 
 
@@ -291,7 +287,7 @@ public class NFCBroadcastReceiver extends BroadcastReceiver {
     private class FillEndPointUrl extends
             AsyncTask<String, Void, String> {
         Context mContext;
-        double type;
+
         public FillEndPointUrl(Context context) {
             super();
             mContext = context;

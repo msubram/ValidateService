@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.securepreferences.SecurePreferences;
 
@@ -45,20 +44,16 @@ import static gcm.CommonUtilities.SHOW_PROGRESS_DIALOG;
 public class ValidateScreen extends ActionBarActivity {
 
     /**Widgets*/
-    Button validate;
-    ImageView logo;
-    ImageView note_icon;
-    TextView textView;
+    private Button validate;
+    private ImageView note_icon;
 
-    Context context = this;
+    private Context context = this;
 
-    /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
-    GlobalClass globalClass;
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     /** Progress dialog*/
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +62,6 @@ public class ValidateScreen extends ActionBarActivity {
         /** Initialising the UI Widgets*/
         addViews();
 
-        globalClass = (GlobalClass) getApplicationContext();
         sharedPreferences = new SecurePreferences(this);
 
         /** receiver to handle the GCM Messages*/
@@ -153,13 +147,12 @@ public class ValidateScreen extends ActionBarActivity {
 
 
     /** Method to refer the views that have been created in xml. Using te id of the view the widgets can be refered*/
-    public void addViews(){
+    void addViews(){
         context=this;
         validate=(Button)findViewById(R.id.button_validate);
-        logo=(ImageView)findViewById(R.id.imageview_logo);
         note_icon =(ImageView)findViewById(R.id.note_icon);
         validate.setTransformationMethod(null);
-        textView = (TextView) findViewById(R.id.client_text);
+        TextView textView = (TextView) findViewById(R.id.client_text);
 
 
         /** Setting typeface for views*/
@@ -167,7 +160,7 @@ public class ValidateScreen extends ActionBarActivity {
         textView.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
     }
 
-    public final BroadcastReceiver mHandleGCMNotificationReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mHandleGCMNotificationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String newMessage = intent.getExtras().getString(NOTIFICATION_MESSAGE);
@@ -194,7 +187,7 @@ public class ValidateScreen extends ActionBarActivity {
     };
 
 
-    public final BroadcastReceiver mHandleprogressdialogReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mHandleprogressdialogReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Waking up mobile if it is sleeping

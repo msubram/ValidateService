@@ -17,14 +17,14 @@ import android.util.Log;
 
 public class TestSecurePreferences extends AndroidTestCase {
 
-    final static String DEFAULT_KEY = "testingkeyfoo";
-    final static String DEFAULT_VALUE = "testingvaluebar";
+    private final static String DEFAULT_KEY = "testingkeyfoo";
+    private final static String DEFAULT_VALUE = "testingvaluebar";
 
-    public static final String TAG = "TestSecurePreferences";
+    private static final String TAG = "TestSecurePreferences";
 
-    public static final String DEFAULT_PREFS_FILE_NAME = "com.securepreferences.test_preferences";
-    public static final String MY_CUSTOM_PREFS = "my_custom_prefs";
-    public static final String USER_PREFS_WITH_PASSWORD = "user_prefs_with_password";
+    private static final String DEFAULT_PREFS_FILE_NAME = "com.securepreferences.test_preferences";
+    private static final String MY_CUSTOM_PREFS = "my_custom_prefs";
+    private static final String USER_PREFS_WITH_PASSWORD = "user_prefs_with_password";
 
 
     public TestSecurePreferences() {

@@ -20,15 +20,6 @@ public class GlobalClass extends Application{
 
     public static final String TAG = "Validations";
 
-    /** URL's to access the server*/
-    String mBase_url = "http://www.csharpsolutions.co.uk/ValidateApp/api/v1/";
-    String mRegistration_request = "RegistrationRequest/";
-    String mComplete_registration_request = "Registrations/";
-    String mGcm_registration_request = "GCMRegistrationRequest/";
-
-    /** UDP Port to listen*/
-    String mPort = "38798";
-
     /** SharedPreference and JSON TAGS*/
     public static final String CHECK_LOGIN = "login";
     public static final String COUNTRY_CODE = "CountryCode";
@@ -46,12 +37,11 @@ public class GlobalClass extends Application{
     public static final String REG_CODE = "RegCode";
     public static final String WORK_NUMBER = "WorkNumber";
     public static final String HOME_NUMBER = "HomeNumber";
-    public static final String CHECK_GCMISREGISTERED = "isgcmregistered";
     public static final String CHECK_MESSAGE_RECEIVED = "checkmessagereceived";
 
 
-    int statuscode;
-    String response_from_server = null;
+    private int statuscode;
+    private String response_from_server = null;
 
 
     /**GCM Tags*/
@@ -62,24 +52,29 @@ public class GlobalClass extends Application{
     /** Base url to access the API*/
     public String getBase_url()
     {
+        /* URL's to access the server*/
+        String mBase_url = "http://www.csharpsolutions.co.uk/ValidateApp/api/v1/";
         return mBase_url;
     }
 
     /** Routes for Registration Request*/
     public String getRegistration_Request_Routes()
     {
+        String mRegistration_request = "RegistrationRequest/";
         return mRegistration_request;
     }
 
     /** Routes for Completing Registration Request*/
     public String getComplete_Registration_Request_Routes()
     {
+        String mComplete_registration_request = "Registrations/";
         return mComplete_registration_request;
     }
 
     /** Routes for GCM Registration Request*/
     public String getGcm_Registration_Request()
     {
+        String mGcm_registration_request = "GCMRegistrationRequest/";
         return mGcm_registration_request;
     }
 
@@ -87,12 +82,6 @@ public class GlobalClass extends Application{
     public String getCheck_Login()
     {
         return CHECK_LOGIN;
-    }
-
-    /**Port to listen and send messages*/
-    public String get_Udp_port()
-    {
-        return mPort;
     }
 
     /**Get methods*/
@@ -108,12 +97,12 @@ public class GlobalClass extends Application{
 
 
     /**Set methods*/
-    public void setStatusCode(int statusCode)
+    void setStatusCode(int statusCode)
     {
          this.statuscode = statusCode;
     }
 
-    public void setServerResponse(String response_from_server)
+    void setServerResponse(String response_from_server)
     {
         this.response_from_server = response_from_server;
     }
@@ -121,7 +110,7 @@ public class GlobalClass extends Application{
 
 
     /** Method to parse the response given by POST and GET method. Both POST and GET returns in the form of JSON with the StatusCode and Response from server.*/
-    public String parseServerResponseJSON(String response_from_server_json)
+    public void parseServerResponseJSON(String response_from_server_json)
     {
         try
         {
@@ -135,7 +124,6 @@ public class GlobalClass extends Application{
             e.printStackTrace();
         }
 
-        return response_from_server;
     }
 
 
@@ -152,44 +140,6 @@ public class GlobalClass extends Application{
         return wifi_availability;
     }
 
-
-
-    public String sendGet(String url, int connection_timeout) throws Exception {
-
-
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-        // optional default is GET
-        con.setRequestMethod("GET");
-        con.setConnectTimeout(connection_timeout);
-        //add request header
-
-        int responseCode = con.getResponseCode();
-        System.out.println("\nSending 'GET' request to URL : " + url);
-        System.out.println("Response Code : " + responseCode);
-
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        //print result
-        System.out.println(response.toString());
-
-        /** Form a JSONObjec with StatusCode and Response from the server*/
-        String responsejson = new JSONObject().put("statuscode",responseCode).put("response",response.toString()).toString();
-
-
-        return responsejson;
-
-
-    }
 
     public String sendPost(String url,String urlParameters) throws Exception {
 

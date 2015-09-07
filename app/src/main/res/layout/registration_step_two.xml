@@ -1,14 +1,16 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:fillViewport="true"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:ignore="Overdraw">
 
 <LinearLayout
    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="@dimen/activity_horizontal_margin"
     android:orientation="vertical">
 
@@ -25,7 +27,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_weight="1"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            tools:ignore="NestedWeights">
         <ImageView
             android:id="@+id/imageview_logo"
             android:layout_width="wrap_content"
@@ -33,7 +36,8 @@
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:src="@drawable/app_logo"
-            android:gravity="center"/>
+            android:gravity="center"
+            tools:ignore="ContentDescription" />
         </RelativeLayout>
 
     </LinearLayout>
@@ -45,7 +49,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_weight="1"
-            android:layout_height="match_parent">
+            android:layout_height="0dp">
             <TextView
                 style="@style/normal_text_style"
                 android:id="@+id/id_reg_step2_label1"
@@ -113,7 +117,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -131,7 +136,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_centerInParent="true"
                 android:orientation="horizontal">
 
@@ -219,7 +223,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -234,27 +239,26 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".2"
                     android:layout_centerInParent="true"
                     android:orientation="horizontal">
             <Button
                 style="@style/normal_red_button_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
                 android:layout_weight="1"
                 android:textSize="@dimen/small_textsize"
                 android:id="@+id/button_retry"
                 android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:text="@string/registration_step2_retry_button"
                 android:gravity="center"/>
             <Button
                 style="@style/normal_blue_button_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:id="@+id/button_complete"
                 android:text="@string/registration_step2_complete_button"
                 android:gravity="center"/>
@@ -283,7 +287,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_centerInParent="true"
                 android:textSize="@dimen/small_note_textsize"
                 android:text="@string/registration_step2_instruction2_note"/>
 

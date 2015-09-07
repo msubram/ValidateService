@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.csharp.solutions.validations" >
 
-    <uses-sdk android:minSdkVersion="14" />
 
     <uses-permission android:name="android.permission.INTERNET" >
     </uses-permission>

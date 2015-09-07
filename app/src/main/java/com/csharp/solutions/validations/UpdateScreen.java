@@ -1,27 +1,20 @@
 package com.csharp.solutions.validations;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gcm.GCMRegistrar;
 import com.securepreferences.SecurePreferences;
-
-import org.json.JSONObject;
 
 import util.GlobalClass;
 import util.TypefaceUtil;
@@ -33,23 +26,21 @@ import util.TypefaceUtil;
 
 public class UpdateScreen extends ActionBarActivity {
     /** Widgets declaration*/
-    Button update;
-    ImageView logo;
-    EditText work_number,home_number;
-    TextView update_screen_label1,update_work_telephone_label,update_home_telephone_label;
+    private Button update;
+    private EditText work_number;
+    private EditText home_number;
 
 
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
 
-    /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
-    GlobalClass globalClass;
+
 
 
     /** Tags declaration*/
-    String mTagWorkNumber = GlobalClass.WORK_NUMBER;
-    String mTagHomeNumber = GlobalClass.HOME_NUMBER;
+    private final String mTagWorkNumber = GlobalClass.WORK_NUMBER;
+    private final String mTagHomeNumber = GlobalClass.HOME_NUMBER;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +53,6 @@ public class UpdateScreen extends ActionBarActivity {
 
 
         sharedPreferences = new SecurePreferences(this);
-        globalClass = (GlobalClass) getApplicationContext();
 
         /** Show the updated values in the respective fields by getting the data from sharedpreference*/
 
@@ -121,15 +111,15 @@ public class UpdateScreen extends ActionBarActivity {
     }
 
     /** Method to refer the views that have been created in xml. Using te id of the view the widgets can be refered*/
-    public void addViews(){
+    void addViews(){
         update=(Button)findViewById(R.id.button_update);
-        logo=(ImageView)findViewById(R.id.imageview_logo);
+        ImageView logo = (ImageView) findViewById(R.id.imageview_logo);
         work_number = (EditText)findViewById(R.id.work_number);
         home_number = (EditText)findViewById(R.id.home_number);
         update.setTransformationMethod(null);
-        update_screen_label1 = (TextView)findViewById(R.id.update_screen_label1);
-        update_work_telephone_label = (TextView)findViewById(R.id.update_work_telephone_label);
-        update_home_telephone_label = (TextView)findViewById(R.id.update_home_telephone_label);
+        TextView update_screen_label1 = (TextView) findViewById(R.id.update_screen_label1);
+        TextView update_work_telephone_label = (TextView) findViewById(R.id.update_work_telephone_label);
+        TextView update_home_telephone_label = (TextView) findViewById(R.id.update_home_telephone_label);
 
         /** Setting typeface for views*/
         update_screen_label1.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));

@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Validations</string>
-    <string name="action_settings">Settings</string>
     <string name="registration_step1_instruction_textview">Please enter your mobile number to register for the service</string>
     <string name="registration_step1_mobile_number_textview">Your Mobile Number</string>
     <string name="registration_step1_country">Country</string>
@@ -27,32 +26,20 @@
     <string name="user_info_home_number_textview">Home Telephone</string>
     <string name="user_info_update_button">Update</string>
     <string name="validation_validate_button">Validate</string>
-    <string name="validation_title">Validation</string>
-    <string name="validation_ack_title">Validation Success</string>
-    <string name="validation_ack_message">Validate</string>
     <string name="validation_menu_update">Update</string>
     <string name="validation_menu_validate">Validate</string>
     <string name="check_wifi_string">Please Check your Wifi Connection</string>
     <string name="empty_fields">Please fill the empty fields</string>
     <string name="empty_phonenumber">Please fill your mobile number</string>
     <string name="already_registered">Device is already registered on server.</string>
-    <string name="gcm_registered">From GCM: device successfully registered!</string>
-    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
-    <string name="gcm_message">From GCM: you got message!</string>
     <string name="gcm_error">App Registration with GCM failed.</string>
-    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
-    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
-    <string name="title_activity_notification_handle">NotificationHandleActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+
     <string name="success">Successfully Validated</string>
     <string name="try_again">Something went wrong.Please try again.</string>
     <string name="reg_code_message">Thank you for registering with our validations service. To complete your registration, please enter the following 5-digit code and click on complete</string>
-    <string name="loading">Loading...</string>
     <string name="validateloading">Please wait.. Validating..</string>
-    <string name="registering">Registering...</string>
-    <string name="completing_register">​Completing registration...</string>
+    <string name="registering">Registering…</string>
+    <string name="completing_register">​Completing registration…</string>
     <string name="aiddescription">aiddescription</string>
-    <string name="servicedesc">servicedesc</string>
 
 </resources>

@@ -2,13 +2,10 @@ package nfc;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
 import android.util.Log;
 
-
-import util.GlobalClass;
 
 import static gcm.CommonUtilities.SHOW_PROGRESS_DIALOG;
 import static gcm.CommonUtilities.TRIGGER_NFC_ACTION;

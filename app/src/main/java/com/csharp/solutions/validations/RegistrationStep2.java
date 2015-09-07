@@ -17,7 +17,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +34,6 @@ import util.TypefaceUtil;
 
 
 import static gcm.CommonUtilities.DISPLAY_MESSAGE_ACTION;
-import static gcm.CommonUtilities.EXTRA_MESSAGE;
 import static gcm.CommonUtilities.SENDER_ID;
 
 /**
@@ -48,33 +46,29 @@ public class RegistrationStep2 extends Activity {
 
 
     /**Widgets*/
-    Button complete,retry;
-    ImageView logo;
-    EditText firstdigit_regcode, seconddigit_regcode, thirddigit_regcode, fourthdigit_regcode, fifthdigit_regcode;
-    TextView id_reg_step2_label1,id_reg_step2_label2,id_reg_step2_label3,id_reg_note;
+    private Button complete;
+    private Button retry;
+    private EditText firstdigit_regcode;
+    private EditText seconddigit_regcode;
+    private EditText thirddigit_regcode;
+    private EditText fourthdigit_regcode;
+    private EditText fifthdigit_regcode;
 
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
-    GlobalClass globalClass;
+    private GlobalClass globalClass;
 
     /** Progress dialog*/
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
-    Context context;
+    private Context context;
 
     /** Intent filter to filter the incoming messages*/
-    public static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
-    /**GCM*/
-    String GCMregId="";
-
-    /** Tags declaration*/
-    String mTagCountryCode = GlobalClass.COUNTRY_CODE;
-    String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
-    String mRegCode = GlobalClass.REG_CODE;
-    String mTagMobileInfo = GlobalClass.MOBILE_INFO;
+    private final String mRegCode = GlobalClass.REG_CODE;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -208,10 +202,9 @@ public class RegistrationStep2 extends Activity {
     }
 
         /** Method to refer the views that have been created in xml. Using te id of the view the widgets can be refered*/
-        public void addViews(){
+        void addViews(){
         complete=(Button)findViewById(R.id.button_complete);
         retry=(Button)findViewById(R.id.button_retry);
-        logo=(ImageView)findViewById(R.id.imageview_logo);
         firstdigit_regcode =(EditText)findViewById(R.id.edittext_ota_first_digit);
         seconddigit_regcode =(EditText)findViewById(R.id.edittext_ota_second_digit);
         thirddigit_regcode =(EditText)findViewById(R.id.edittext_ota_third_digit);
@@ -219,10 +212,10 @@ public class RegistrationStep2 extends Activity {
         fifthdigit_regcode =(EditText)findViewById(R.id.edittext_ota_fifth_digit);
 
 
-        id_reg_step2_label1=(TextView)findViewById(R.id.id_reg_step2_label1);
-        id_reg_step2_label2=(TextView)findViewById(R.id.id_reg_step2_label1);
-        id_reg_step2_label3=(TextView)findViewById(R.id.id_reg_step2_label1);
-        id_reg_note=(TextView)findViewById(R.id.id_reg_step2_label1);
+            TextView id_reg_step2_label1 = (TextView) findViewById(R.id.id_reg_step2_label1);
+            TextView id_reg_step2_label2 = (TextView) findViewById(R.id.id_reg_step2_label2);
+            TextView id_reg_step2_label3 = (TextView) findViewById(R.id.id_reg_step2_label3);
+            TextView id_reg_note = (TextView) findViewById(R.id.id_reg_step2_label1);
 
         /** Setting typeface for views*/
         id_reg_step2_label1.setTypeface(TypefaceUtil.getMyFont(getApplicationContext()));
@@ -271,6 +264,10 @@ public class RegistrationStep2 extends Activity {
                 editor.putString(RegistrationStep2.this.mRegCode,mRegCode);
                 editor.commit();
 
+                /* Tags declaration*/
+                String mTagCountryCode = GlobalClass.COUNTRY_CODE;
+                String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
+                String mTagMobileInfo = GlobalClass.MOBILE_INFO;
                 String mPostBodyData = new JSONObject().put(RegistrationStep2.this.mRegCode,Integer.parseInt(sharedPreferences.getString(RegistrationStep2.this.mRegCode,""))).put(mTagMobileInfo,new JSONObject().put(mTagCountryCode,sharedPreferences.getString(mTagCountryCode,"")).put(mTagMobileNumber,sharedPreferences.getString(mTagMobileNumber,""))).toString();
 
 
@@ -358,6 +355,8 @@ public class RegistrationStep2 extends Activity {
 
             // Get GCM registration id
             // Check if regid already presents
+            /*GCM*/
+            String GCMregId = "";
             if (GCMregId.equals("")) {
                 // Registration is not present, register now with GCM
                 GCMRegistrar.register(RegistrationStep2.this, SENDER_ID);
@@ -385,7 +384,7 @@ public class RegistrationStep2 extends Activity {
 
 
     /** Broadcast Receiver to get the 5-digit code from SMS*/
-    BroadcastReceiver receiver_SMS = new BroadcastReceiver()
+    private final BroadcastReceiver receiver_SMS = new BroadcastReceiver()
     {
         public void onReceive(Context context, Intent intent)
         {

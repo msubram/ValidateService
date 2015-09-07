@@ -2,17 +2,19 @@
 
    <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:fillViewport="true"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:ignore="Overdraw">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:padding="@dimen/activity_horizontal_margin"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,7 +24,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_weight="1"
-                android:layout_height="match_parent">
+                android:layout_height="0dp"
+                tools:ignore="NestedWeights">
                 <ImageView
                     android:id="@+id/imageview_logo"
                     android:layout_width="wrap_content"
@@ -30,7 +33,8 @@
                     android:layout_centerInParent="true"
                     android:layout_gravity="center"
                     android:src="@drawable/app_logo"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    tools:ignore="ContentDescription" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -74,7 +78,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="left"
                         android:lineSpacingExtra="2dp"
 
                         android:text="@string/user_info_work_number_textview"/>
@@ -96,11 +99,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
                 <LinearLayout
@@ -114,7 +118,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="left"
                         android:lineSpacingExtra="2dp"
                         android:text="@string/user_info_home_number_textview"/>
 
@@ -137,10 +140,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -153,10 +157,7 @@
                         style="@style/normal_blue_button_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_weight="1"
                         android:id="@+id/button_update"
-                        android:layout_marginRight="5dp"
                         android:text="@string/user_info_update_button"
                         android:gravity="center"/>
 

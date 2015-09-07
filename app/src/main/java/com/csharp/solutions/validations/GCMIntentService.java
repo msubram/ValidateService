@@ -1,16 +1,10 @@
 package com.csharp.solutions.validations;
 
-import android.annotation.TargetApi;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gcm.GCMBaseIntentService;
@@ -27,20 +21,13 @@ import static gcm.CommonUtilities.displayNotification;
 
 public class GCMIntentService extends GCMBaseIntentService {
 
-    Context context = this;
+    private final Context context = this;
 
     /** SharedPreferences to store and retrieve values. SecurePreferences is used for securely storing and retrieving.*/
-    static SharedPreferences sharedPreferences;
-	private static final String TAG = "Validations GCMIntentService";
-
-    /** Tags declaration*/
-    String mTagCountryCode = GlobalClass.COUNTRY_CODE;
-    String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
-    String mTagInstanceId = GlobalClass.INSTANCE_ID;
-    String mTagGcmToken = GlobalClass.GCM_TOKEN;
+    private static SharedPreferences sharedPreferences;
 
     /** GlobalClass - Extends Application class in which the values can be set and accessed from a single place*/
-    GlobalClass globalClass;
+    private GlobalClass globalClass;
     public GCMIntentService() {
         super(SENDER_ID);
 
@@ -146,6 +133,11 @@ public class GCMIntentService extends GCMBaseIntentService {
                  * InstanceId - not mandatory
                  * Token - GCM Registration ID
                  * */
+                String mTagInstanceId = GlobalClass.INSTANCE_ID;
+                String mTagGcmToken = GlobalClass.GCM_TOKEN;
+                /* Tags declaration*/
+                String mTagCountryCode = GlobalClass.COUNTRY_CODE;
+                String mTagMobileNumber = GlobalClass.MOBILE_NUMBER;
                 String body_in_post = new JSONObject().put(mTagCountryCode,sharedPreferences.getString(mTagCountryCode,"")).put(mTagMobileNumber, sharedPreferences.getString(mTagMobileNumber, "")).put(mTagInstanceId, "").put(mTagGcmToken, sharedPreferences.getString(mTagGcmToken, "")).toString();
                 System.out.println(GlobalClass.TAG+body_in_post);
 

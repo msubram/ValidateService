@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Validazioni</string>
-    <string name="action_settings">Impostazioni</string>
 
 
     <string name="registration_step1_instruction_textview">Inserisci il tuo numero di cellulare per la registrazione al servizio</string>
@@ -33,9 +32,6 @@
     <string name="user_info_update_button">aggiornare</string>
 
     <string name="validation_validate_button">convalidare</string>
-    <string name="validation_title">Validazione</string>
-    <string name="validation_ack_title">Successo di convalida</string>
-    <string name="validation_ack_message">convalidare</string>
     <string name="validation_menu_update">aggiornare</string>
     <string name="validation_menu_validate">convalidare</string>
 
@@ -43,28 +39,20 @@
     <string name="empty_fields">Si prega di compilare i campi vuoti</string>
 
     <string name="already_registered">Il dispositivo è già registrato su un server.</string>
-    <string name="gcm_registered">Da GCM : dispositivo con successo registrato!</string>
-    <string name="gcm_unregistered">Da GCM : dispositivo registrato con successo!</string>
-    <string name="gcm_message">Da GCM : hai un messaggio!</string>
+
     <string name="gcm_error">App Registrazione presso GCM fallita.</string>
-    <string name="gcm_recoverable_error">Da GCM : errore recuperabile(%1$s).</string>
-    <string name="gcm_deleted">Da GCM : server eliminato %1$d messaggi in sospeso!</string>
-    <string name="title_activity_notification_handle">NotificationHandleActivity</string>
-    <string name="dummy_button">Button Dummy</string>
-    <string name="dummy_content">DUMMY\CONTENUTO</string>
+
 
     <string name="success">convalidato correttamente</string>
     <string name="try_again">Qualcosa è andato wrong.Please riprovare.</string>
     <string name="empty_phonenumber">Vi preghiamo di compilare il tuo numero di cellulare</string>
     <string name="reg_code_message">Grazie per esserti registrato con il nostro servizio convalide . Per completare la registrazione , inserisci il codice a 5 cifre che segue e fare clic su completa</string>
 
-    <string name="loading">caricamento...</string>
     <string name="validateloading">Attendere prego.. Convalida..</string>
 
-    <string name="registering">Registrazione...</string>
-    <string name="completing_register">​Completamento registrazione...</string>
+    <string name="registering">Registrazione…</string>
+    <string name="completing_register">​Completamento registrazione…</string>
 
 
     <string name="aiddescription">aiddescription</string>
-    <string name="servicedesc">servicedesc</string>
 </resources>
