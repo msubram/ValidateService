@@ -66,5 +66,6 @@ vii) Fill the following data in the received Endpoint and see the validation is 
     "MobileCountryCode": "44"
 }
 
+If the validation is not successfull it will return -1
 
 
