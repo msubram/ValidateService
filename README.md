@@ -1,19 +1,31 @@
 # ValidateService
-ValidateService 
-An application used to store information of the user and validate it based on the country. The Endpoint used to validate the stored information changes often, hence we use UDP Broadcast and receive process to get the Endpoint and sends the stored information in that Endpoint.
+
+####Version 1.2
+
+####Minimum SDK 4.0 +
+
+####compileSdkVersion 21
+####buildToolsVersion 21.1.2
+
+###Install
+Download this project and import in Android Studio.
+
+####Overview 
+An application used to store information of the user and validate it. The Endpoint used to validate the stored information changes often, hence we use UDP Broadcast and receive process to get the Endpoint and sends the stored information in that Endpoint.
 
 ###Requirements
-i) Android Setup(SDK, Studio)
+i) Android Setup(SDK, Studio,windows)
 
 ii) NFC Reader - ACR-122U NFC MIFARE (http://www.amazon.in/dp/B00CBPIJG4/ref=pe_386221_48200641_TE_item)
 
-iii) Android device with 4.0 and above. NFC enabled device is optional
+iii) Android device with 4.0 and above. NFC enabled device(optional)
+
+iv) Mobile application and the server should be connecetd on the same network.
 
 ###Project Workflow
 
 i) Run the server program created using .net in the windows. 
-        This server program runs on a port #32233. This program generates the Endpoint and send it back to the request. The Endpoint which is going to change often.
-        So  when running this it starts to listen on the port #32233
+        This server program runs on a port #32233. This program generates the Endpoint and send it back to the request. The Endpoint which is going to change often is generated in the server program. By running this program make this server to listen on the port #32233.
         
 ii) Download this project and execute it on Android device.
 
@@ -24,22 +36,22 @@ iii) First step is the Registration.
       
       Complete the Registration.
       
-iv) User can save the informtion in the update screen. This screen has Home Telephone number and Work Telephone number fields. Enter the details and update it.
+iv) Next is Update Screen. User can save the informtion in the update screen. This screen has Home Telephone number and Work Telephone number fields. Enter the details and update it.
 
 v) Now click the Validate button. 
 
 App will perform two actions
 
-  1) Application will listen on the port #39798 to receive the packet.
+  1) Application will listen on the port  #39798(UDPListenPort) to receive the packet(Endpoint).
   
   2) Broadcast the Country Code, Mobile Number,Name, Endpoint, IP address of the device and listening port of the device in the network.
 
 ######Broadcast Data Format : 
 {CountryCode:'44', MobileNumber:'07900989998', IP: '192.168.0.98', Name: 'MyDevice', EndPoint: '', UDPListenPort: '38798'}
   
-vi) Already the server is listening on the port #32233 and we are broadcasting the data. So the server on the port #32233 will receive the data and parse it and fills the Endpoint and send it back to the UDPListenPort/
+vi) Already the .net server is listening on the port #32233 and we are broadcasting the data. So the server on the port #32233 will receive the data and parse it and fills the Endpoint and send it back to the UDPListenPort.
 
-vi) The server on the port #39798 will receive the packet which has Endpoint in it.
+vi) The application which is listening on the port #39798(UDPListenPort) will receive the packet which has Endpoint in it.
 
 vii) Fill the following data in the received Endpoint and see the validation is successfull or not.
 ######Validate Endpoint Data Format:
