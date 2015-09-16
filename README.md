@@ -31,6 +31,7 @@ v) Now click the Validate button.
 App will perform two actions
 
   1) Application will listen on the port #39798 to receive the packet.
+  
   2) Broadcast the Country Code, Mobile Number,Name, Endpoint, IP address of the device and listening port of the device in the network.
 
 ######Broadcast Data Format : 
@@ -38,9 +39,9 @@ App will perform two actions
   
 vi) Already the server is listening on the port #32233 and we are broadcasting the data. So the server on the port #32233 will receive the data and parse it and fills the Endpoint and send it back to the UDPListenPort/
 
-vi) The server on the port #39798 will receive the packet which has Endpoint.
+vi) The server on the port #39798 will receive the packet which has Endpoint in it.
 
-vii) Fill the following data in the Endpoint and see the validation is successfull or not.
+vii) Fill the following data in the received Endpoint and see the validation is successfull or not.
 ######Validate Endpoint Data Format:
 {
     "Email": "email@domain.com",
