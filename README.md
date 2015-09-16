@@ -6,7 +6,9 @@ An application used to store information of the user and validate it based on th
 i) Android Setup(SDK, Studio)
 
 ii) NFC Reader - ACR-122U NFC MIFARE (http://www.amazon.in/dp/B00CBPIJG4/ref=pe_386221_48200641_TE_item)
-iii) A server running in windows. 
+
+iii) A server running in windows.
+
 iv) Android device with 4.0 and above. NFC is optional
 
 
