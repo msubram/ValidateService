@@ -13,6 +13,9 @@ Download this project and import in Android Studio.
 ####Overview 
 An application used to store information of the user and validate it. The Endpoint used to validate the stored information changes often, hence we use UDP Broadcast and receive process to get the Endpoint and sends the stored information in that Endpoint.
 
+####UDPListening Port - Mobile - 39798
+####UDPListening Port - Server - 32233
+
 ###Requirements
 i) Android Setup(SDK, Studio,windows)
 
