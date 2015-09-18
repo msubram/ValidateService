@@ -52,7 +52,7 @@ App will perform two actions
 ######Broadcast Data Format : 
 {CountryCode:'44', MobileNumber:'07900989998', IP: '192.168.0.98', Name: 'MyDevice', EndPoint: '', UDPListenPort: '38798'}
   
-vi) Already the .net server is listening on the port #32233 and we are broadcasting the data. So the server on the port #32233 will receive the data and parse it and fills the Endpoint and send it back to the UDPListenPort.
+vi) Already the .net server is listening on the port #32233 and we are broadcasting the data. So the server on the port #32233 will receive the data and parse it and fills the Endpoint and send it back to the UDPListenPort(Mobile).
 
 vi) The mobile application which is listening on the port #39798(UDPListenPort) will receive the packet which has Endpoint in it. (Endpoint sent by server running on windows)
 
@@ -66,6 +66,6 @@ vii) Fill the following data in the received Endpoint and see the validation is 
     "MobileCountryCode": "44"
 }
 
-If the validation is not successfull it will return -1
+If the validation is not successfull it will return -1.
 
 
