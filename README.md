@@ -7,15 +7,6 @@
 ####compileSdkVersion 21
 ####buildToolsVersion 21.1.2
 
-###Install
-Download this project and import in Android Studio.
-
-####Overview 
-An application used to store information of the user and validate it. The Endpoint used to validate the stored information changes often, hence we use UDP Broadcast and receive process to get the Endpoint and sends the stored information in that Endpoint.
-
-######UDPListen Port - Mobile - 39798
-######UDPListen Port - Server - 32233
-
 ###Requirements
 i) Android Setup(SDK, Studio,windows)
 
@@ -24,6 +15,15 @@ ii) NFC Reader - ACR-122U NFC MIFARE (http://www.amazon.in/dp/B00CBPIJG4/ref=pe_
 iii) Android device with 4.0 and above. NFC enabled device(optional)
 
 iv) Mobile application and the server should be connecetd on the same WIFI network.
+
+###Install
+Download this project and import in Android Studio.
+
+####Overview 
+An application used to store information of the user and validate it. The Endpoint used to validate the stored information changes often, hence we use UDP Broadcast and receive process to get the Endpoint and sends the stored information in that Endpoint.
+
+######UDPListen Port - Mobile - 39798
+######UDPListen Port - Server - 32233
 
 ###Project Workflow
 
