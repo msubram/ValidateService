@@ -28,7 +28,7 @@ import util.TypefaceUtil;
 
 import static gcm.CommonUtilities.DISPLAY_NOTIFICATION_ACTION;
 import static gcm.CommonUtilities.NOTIFICATION_MESSAGE;
-import static gcm.CommonUtilities.TRIGGER_NFC_ACTION;
+import static gcm.CommonUtilities.TRIGGER_UDP_ACTION;
 import static gcm.CommonUtilities.CANCEL_PROGRESS_DIALOG;
 import static gcm.CommonUtilities.SHOW_PROGRESS_DIALOG;
 
@@ -92,7 +92,7 @@ public class ValidateScreen extends ActionBarActivity {
                 progressDialog.show();
 
                 /** Send a broadcast message to broadcastreceiver to validate*/
-                Intent intent = new Intent(TRIGGER_NFC_ACTION);
+                Intent intent = new Intent(TRIGGER_UDP_ACTION);
                 intent.putExtra(SHOW_PROGRESS_DIALOG, true);
                 sendBroadcast(intent);
 

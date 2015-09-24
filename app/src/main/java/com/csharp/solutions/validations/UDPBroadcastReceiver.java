@@ -31,7 +31,7 @@ import static gcm.CommonUtilities.SHOW_PROGRESS_DIALOG;
 /**
  * Created by srinath on 31-08-2015.
  */
-public class NFCBroadcastReceiver extends BroadcastReceiver {
+public class UDPBroadcastReceiver extends BroadcastReceiver {
 
     private Context mContext;
 

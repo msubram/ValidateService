@@ -302,7 +302,7 @@ public class RegistrationStep2 extends Activity {
 
 
             /** Sometimes response can be in negative value so it indicates error.*/
-            if(!mResult.equals("error"))
+            if(!mResult.equals("error")&&!mResult.equals("-1"))
             {
 
                 SecurePreferences.Editor editor = (SecurePreferences.Editor) sharedPreferences.edit();

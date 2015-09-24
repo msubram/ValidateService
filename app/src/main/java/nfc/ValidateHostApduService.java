@@ -8,7 +8,7 @@ import android.util.Log;
 
 
 import static gcm.CommonUtilities.SHOW_PROGRESS_DIALOG;
-import static gcm.CommonUtilities.TRIGGER_NFC_ACTION;
+import static gcm.CommonUtilities.TRIGGER_UDP_ACTION;
 
 
 /** The class to trigger when the NFC device is contacted with NFC reader*/
@@ -25,7 +25,7 @@ public class ValidateHostApduService extends HostApduService {
 
             returnmessage = getInitialMessage();
 
-            Intent intent = new Intent(TRIGGER_NFC_ACTION);
+            Intent intent = new Intent(TRIGGER_UDP_ACTION);
             intent.putExtra(SHOW_PROGRESS_DIALOG, false);
             sendBroadcast(intent);
 		}

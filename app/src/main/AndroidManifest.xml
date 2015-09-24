@@ -105,9 +105,9 @@
                 android:resource="@xml/apduservice" />
         </service>
 
-            <receiver android:name=".NFCBroadcastReceiver" >
+            <receiver android:name=".UDPBroadcastReceiver" >
                 <intent-filter >
-                    <action android:name="com.csharp.solutions.validations.NFC_TRIGGER" />
+                    <action android:name="com.csharp.solutions.validations.UDP_TRIGGER" />
                 </intent-filter>
             </receiver>
 
